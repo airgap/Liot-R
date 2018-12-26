@@ -155,3 +155,51 @@ select {
 #add-filter {
   cursor: pointer;
 }
+
+input[type=checkbox] {
+  display: inline-block;
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid rgba(0, 0, 0, .25);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  background-image: url(checkx4.svg);
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position-y: 15px;
+  transition: .25s;
+}
+input[type=checkbox]:checked {
+  background-position-y: 0;
+}
+.l2-box {
+  margin-left: 27px;
+}
+.new-box input[type=checkbox] + label {
+  display: inline-block;
+  margin-top: 0px;
+  transition: .25s;
+}
+
+#distributor-push:not(:checked) ~ #distributor-queue,
+#distributor-push:not(:checked) + * + br,
+#distributor-push:not(:checked) ~ label[for=distributor-queue],
+#distributor-callback:not(:checked) ~ #distributor-url,
+#distributor-callback:not(:checked) ~ #distributor-accessor,
+#distributor-callback:not(:checked) + * + br,
+#distributor-callback:not(:checked) ~ label[for=distributor-url] {
+  height: 0;
+  border-color: transparent;
+  margin-top:0;
+  padding:0;
+  color:transparent;
+  font-size: 0;
+  box-shadow: none;
+}
+
+.new-box input[type=text] {
+  transition: .25s;
+  height: auto !important;
+}

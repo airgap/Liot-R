@@ -61,3 +61,13 @@ Lir.listCollators = (data, callback) => {
 	data.action = "list collators";
 	return Lir.post(data, callback);
 }
+
+Lir.addDistributors = (data, callback) => {
+	data.action = "add distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.listDistributors = (data, callback) => {
+	data.action = "list distributors";
+	return Lir.post(data, callback);
+}

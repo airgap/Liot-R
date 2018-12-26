@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Liot R: Filters</title>
+    <title>Liot R: New Distributor</title>
     <?php include 'head.php'?>
     <script>
     var COMPARATORS = [
@@ -22,26 +22,26 @@
       "SAME",
     ]
 
-      var filterList;
+      var collatorList;
       var reg = location.href.match(/after=(-?[0-9]+)/);
       var after = reg ? reg[1]*1 : 0;
-      var filters = [];
+      var collators = [];
       load(()=>{
-        Lir.listFilters({}, res => {
+        Lir.listCollators({}, res => {
           if(res.err) {
             console.log(res.err)
             return;
           }
-          filters = res.filters;
-          //for(var filter of res.filters)filters.push({id:filter.id,name:filter.name})
+          collators = res.collators;
+          //for(var collator of res.collators)collators.push({id:collator.id,name:collator.name})
         })
       })
-      function addFilter() {
+      function addCollator() {
         var select = document.createElement('select');
-        for(var filter of filters) {
+        for(var collator of collators) {
           var option = document.createElement('option');
-          option.value = filter.id;
-          option.innerHTML = filter.name;
+          option.value = collator.id;
+          option.innerHTML = collator.name || `[ ${collator.id} ]`;
           select.appendChild(option);
         }
         var rem = document.createElement('label');
@@ -56,22 +56,30 @@
       }
       function save() {
         //addc('save-button', 'disabled');
-        err('Creating collator...');
-        var name = grab('collator-name').value;
+        err('Creating distributor...');
+        var name = grab('distributor-name').value;
+        var push = grab('distributor-push').checked;
+        var queue = grab('distributor-queue').checked;
+        var callback = grab('distributor-callback').checked;
+        var url = grab('distributor-url').value;
         var filtrets = [];
         var selects = document.getElementsByTagName('select');
         for(var i of selects)
           filtrets.push(i.value);
-        Lir.addCollators({
-          collators:[{
+        Lir.addDistributors({
+          distributors:[{
           name: name,
-          filters: filtrets
+          push: push,
+          queue: queue,
+          callback: callback,
+          url: url,
+          collators: filtrets
         }]}, res => {
           if(res.err) {
             console.log(res.err);
             return;
           }
-          location.href = "/collators.php";
+          location.href = "/distributors.php";
         })
       }
       function err(text) {
@@ -86,14 +94,22 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
-      <h1>New Collator</h1>
-      <div class="bubbles new-box" id="filter-box">
+      <h1>New Distributor</h1>
+      <div class="bubbles new-box" id="collator-box">
         <div class="bubble">
-          <label for="collator-name">Name:</label>
-          <input id="collator-name" placeholder="New Collator" type="text" value="Dangerous Temperature Collator">
-          <label>Filters:</label>
+          <label for="distributor-name">Name:</label>
+          <input id="distributor-name" placeholder="New Distributor" type="text" value="Dangerous Temperature Distributor">
+            <label>Updates:</label>
+            <input id="distributor-push" type="checkbox" value=true><label for="distributor-push">Push</label>
+            <br>
+            <input id="distributor-queue" type="checkbox" value=true class="l2-box"><label for="distributor-queue">Queue new updates</label>
+            <br>
+            <input id="distributor-callback" type="checkbox" value=true><label for="distributor-callback">Callback</label>
+            <input id="distributor-url" type="text" value = "" placeholder="Callback URI" class="l2-box">
+            <input id="distributor-accessor" type="text" value = "" placeholder="Accessor ID" class="l2-box">
+          <label>Collators:</label>
           <div class="bubble" id="filter-list">
-            <a onclick="addFilter()" id="add-filter">+ Filter</a>
+            <a onclick="addCollator()" id="add-filter">+ Collator</a>
           </div>
           <span id="compile-errors" class="valid-json">Ready</span>
           <a id="save-button" onclick="save()" class="a-button">Save</a>

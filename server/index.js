@@ -22,6 +22,7 @@ var OPERATORS = [
 var r = require('rethinkdb');
 var express = require('express');
 var bodyParser = require('body-parser');
+var validUrl = require('valid-url')
 const app = express();
 var fs = require('fs');
 var CONFIG = {};
@@ -306,7 +307,7 @@ function actionListDistributors(req, res, dat) {
       after = Math.max(0,after);
       var query = r.table('Distributors')
         .orderBy(order)
-          .slice(after, after + count)
+          .slice(after, after + count).merge(doc=>{return {collets:r.table('Collators').getAll(r.args(doc('collators'))).coerceTo('array')}})
             .coerceTo('array')
               .run(CONNECTION, (err, distributors) => {
                 if(err) {
@@ -342,7 +343,10 @@ function actionAddCollectors(req, res, dat) {
         if(typeof collector.name === 'string' && collector.name.length < 100)
           trec.name = collector.name;
         trec.value = 0;
-        trec.smart = sortify(collector.name);
+        trec.smart = sortify(collector.name || "");
+        trec.aggregate = !!collector.aggregate
+        trec.accessor = r.uuid();//rename collators to funnels?
+        //trec.funnel = r.uuid();//rename collators to funnels?
         collectors.push(trec);
       }
     }
@@ -412,12 +416,21 @@ function actionAddDistributors(req, res, dat) {
   if(Array.isArray(dat.distributors)) {
     var distributors = [];
     for(var distributor of dat.distributors) {
-      var trans = {sources:[]}
-      if(Array.isArray(distributor.sources)) {
-        for(var source of distributor.sources) {
-          trans.sources.push(source);
+      var trans = {collators:[]}
+      if(Array.isArray(distributor.collators)) {
+        for(var collator of distributor.collators) {
+          trans.collators.push(collator);
         }
       }
+      if(typeof distributor.url === 'string' && validUrl.isUri(distributor.url)) {
+        trans.url = distributor.url;
+      }
+      if(typeof distributor.name === 'string' && distributor.name.length > 0) {
+        trans.name = distributor.name;
+      }
+      trans.push = !!distributor.push;
+      trans.queue = !!distributor.queue;
+      trans.callback = !!distributor.callback;
       distributors.push(trans);
     }
     r.table('Distributors').insert(distributors).run(CONNECTION, (err, created) => {
@@ -538,4 +551,95 @@ function actionModDistributors(req, res, dat) {
       }
     })
   }
+}
+
+/*
+function actionPushUpdates(req, res, dat) {
+  if(!Array.isArray(dat.updates)) {
+    res.send({err: 'No updates specified.'});
+    return;
+  }
+  var toPush = [];
+  var idsAndAccessors = [];
+  var ids = [];
+
+  for(var update of dat.updates) {
+    var newUpdate = {};
+    if(typeof dat.accessor != 'string') {
+      res.send({err: 'No accessor specified.'});
+      return;
+    }
+    var tv = typeof dat.value;
+    if(tv == 'undefined' || tv == 'null') {
+      res.send({err: 'No value specified.'});
+      return;
+    }
+    newUpdate.accessor = dat.accessor;
+    newUpdate.value = dat.value;
+    idsAndAccessors.push({id:dat.id,accessor:dat.accessor});
+  }
+  var idsExpr = r.expr(idsAndAccessors);
+  r.table('Collectors').filter(collector=>{
+    //if(collector('accessor').eq())
+  })
+}
+*/
+
+function actionPushUpdate(req, res, dat) {
+  var newUpdate = {};
+  if(typeof dat.accessor != 'string') {
+    res.send({err: 'No accessor specified.'});
+    return;
+  }
+  var tv = typeof dat.value;
+  if(tv == 'undefined' || tv == 'null') {
+    res.send({err: 'No value specified.'});
+    return;
+  }
+  if(typeof dat.id == 'string') {
+    newUpdate.id = dat.id;
+    return;
+  }
+  newUpdate.accessor = dat.accessor;
+  newUpdate.value = dat.value;
+  idsAndAccessors.push({id:dat.id,accessor:dat.accessor});
+  var idsExpr = r.expr(idsAndAccessors);
+  if(newUpdate.id) {
+    r.branch(
+      r.table('Collectors')
+        .getAll(newUpdate.accessor, {index:'accessor'})
+          .filter({aggregate:true})
+            .limit(1)
+              .count()
+                .eq(1),
+      r.table('Collectors')
+        .get(newUpdate.id)
+          .update({value:newUpdate.value},{kRETURN_CHANGES}),
+      {replaced:0}
+    ).run(CONNECTION, updated)
+    /*r.table('Collectors')
+      .getAll(newUpdate.accessor,{index:"accessor"})
+        .filter({aggregate:true})
+          .count()
+            .run(CONNECTION, (err, count) => {
+              console.log(count);
+              if(count) {
+                updateDocument();
+              }
+    })*/
+  } else {
+    r.table('Collectors')
+      .getAll(newUpdate.accessor,{index:"accessor"})
+        .update({value:newUpdate.value},{kRETURN_CHANGES})
+          .run(CONNECTION, updated)
+  }
+  function updated(err, updated) {
+    if(updated && typeof updated.new_val == 'object') {
+      var nv = udpate.new_val;
+      
+    }
+  }
+  r.table('Collectors').filter(collector=>{
+    //if(collector('accessor').eq())
+  })
 }
