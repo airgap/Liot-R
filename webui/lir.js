@@ -71,3 +71,8 @@ Lir.listDistributors = (data, callback) => {
 	data.action = "list distributors";
 	return Lir.post(data, callback);
 }
+
+Lir.pushUpdate = (data, callback) => {
+	data.action = "push update";
+	return Lir.post(data, callback);
+}

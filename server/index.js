@@ -2,6 +2,7 @@
 var COMPARATORS = [
   "EQUALS",
   "NEQUALS",
+  "TFEQUALS",
   "TFNEQUALS",
   "OVER",
   "OVEROR",
@@ -49,7 +50,8 @@ var ADMINACTIONS = {
   "add collators": actionAddCollators,
   "list distributors": actionListDistributors,
   "add distributors": actionAddDistributors,
-  "alter distributors": actionModDistributors
+  "alter distributors": actionModDistributors,
+  "push update": actionPushUpdate
 }
 
 var PUBLICACTIONS = {
@@ -602,8 +604,8 @@ function actionPushUpdate(req, res, dat) {
   }
   newUpdate.accessor = dat.accessor;
   newUpdate.value = dat.value;
-  idsAndAccessors.push({id:dat.id,accessor:dat.accessor});
-  var idsExpr = r.expr(idsAndAccessors);
+  //idsAndAccessors.push({id:dat.id,accessor:dat.accessor});
+  //var idsExpr = r.expr(idsAndAccessors);
   if(newUpdate.id) {
     r.branch(
       r.table('Collectors')
@@ -614,7 +616,7 @@ function actionPushUpdate(req, res, dat) {
                 .eq(1),
       r.table('Collectors')
         .get(newUpdate.id)
-          .update({value:newUpdate.value},{kRETURN_CHANGES}),
+          .update({value:newUpdate.value},{return_changes:'always'}),
       {replaced:0}
     ).run(CONNECTION, updated)
     /*r.table('Collectors')
@@ -630,16 +632,132 @@ function actionPushUpdate(req, res, dat) {
   } else {
     r.table('Collectors')
       .getAll(newUpdate.accessor,{index:"accessor"})
-        .update({value:newUpdate.value},{kRETURN_CHANGES})
+        .update({value:newUpdate.value},{return_changes:'always'})
           .run(CONNECTION, updated)
   }
   function updated(err, updated) {
-    if(updated && typeof updated.new_val == 'object') {
-      var nv = udpate.new_val;
-      
+    console.log( err || updated)
+    if(updated && typeof updated.changes[0].new_val == 'object') {
+      var nv = updated.changes[0].new_val;
+      r.table('Distributors')
+      	.without('name')
+          .merge(doc=>{
+            return {
+              collators:
+                r.table('Collators')
+                  .getAll(r.args(doc('collators')))
+                    .pluck('id','filters')
+                      .merge(doc=>{
+                        return {
+                          filters:
+                            r.table('Filters')
+                              .getAll(r.args(doc('filters')))
+                                .pluck("id","json","code")
+                                  .coerceTo('array')
+                        }
+                      }).coerceTo('array')
+              }
+            }).coerceTo('array').run(CONNECTION, (err, rows) => {
+              //console.log(err || rows)
+              var filters = {};
+              for(var distributor of rows)
+                for(var collator of distributor.collators)
+                  for(var filter of collator.filters)
+                    if(!filters.hasOwnProperty(filter.id))filters[filter.id] = filter.json;
+              console.log(filters);
+              var pass = false;
+              var keys = Object.keys(filters);
+              for(k of keys)
+                if(recur(filters[k], nv, 'ROOT')) {
+                  pass = true;
+                  break;
+                }
+              if(pass) {
+                console.log("PASS");
+              } else {
+                console.log("FAIL");
+              }
+            })
     }
   }
-  r.table('Collectors').filter(collector=>{
+  /*r.table('Collectors').filter(collector=>{
     //if(collector('accessor').eq())
-  })
+  })*/
+}
+
+function recur(root, update, gate) {
+  //console.log(gate)
+  var left, right, res = false;
+  left = evaluateProperty(root, update, 0);
+  right = evaluateProperty(root, update, 1);
+  switch(gate) {
+    case 'ROOT':
+      res = !!left;
+      break;
+    case 'AND':
+      res = left && right;
+      break;
+    case 'OR':
+      res = left || right;
+      break;
+    case 'NAND':
+      res = !(left && right);
+      break;
+    case 'NOR':
+      res = !(left || right);
+      break;
+    case 'XOR':
+      res = (left || right) && !(left && right);
+      break;
+
+    case 'UNDER':
+      res = left < right;
+      break;
+    case 'OVER':
+      res = left > right;
+      break;
+    case 'EQUALS':
+      res = left == right;
+      break;
+    case 'TFEQUALS':
+      res = left === right;
+      break;
+    case 'NEQUALS':
+      res = left != right;
+      break;
+    case 'TFNEQUALS':
+      res = left !== right;
+      break;
+    case 'OVEROR':
+      res = left >= right;
+      break;
+    case 'UNDEROR':
+      res = left <= right;
+      break;
+  }
+  console.log(root, left, right, gate, res)
+  return res;
+}
+function getProperty(object, key) {
+  for(var k of key.substring(1).split('.')) {
+      console.log(k, object[k])
+      if(typeof object[k] != 'undefined' && typeof object[k] != 'null')object = object[k];
+      else return null;
+    }
+    console.log('PROP', object)
+    return object;
+}
+function evaluateProperty(object, update, child) {
+  var keys = Object.keys(object);
+  var key = keys[child];
+  var side = object[key];
+  switch(typeof side) {
+    case 'object':
+      side = recur(side, update, key);
+      break;
+    case 'string':
+      if(side[0] === "$") side = getProperty(update, side);
+      break;
+  }
+  return side;
 }
