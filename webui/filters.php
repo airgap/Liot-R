@@ -13,47 +13,10 @@
             alert(res.err);
           } else {
             console.log(res.filters);
-            appendFilters(res.filters);
+            appendFilters(res.filters, filterList);
           }
         })
       })
-      function appendFilters(filters) {
-        for(var i = 0; i < filters.length; i ++) {
-          var rec = filters[i];
-          var bubble = nelem('div');
-          addc(bubble, 'bubble');
-          var nameBox = nelem('label');
-          nameBox.innerHTML = xss((rec.name || rec.id) + ":");
-          var idBox = nelem('label');
-          idBox.innerHTML = xss(rec.id);
-
-          var valBox = nelem('label');
-          valBox.innerHTML = xss(rec.code.split('\n')[0])
-          bubble.appendChild(nameBox);
-          bubble.appendChild(valBox);
-          //bubble.appendChild(idBox);
-          filterList.appendChild(bubble);
-        }
-      }
-      function stringValue(value) {
-        switch(typeof value) {
-          case 'object':
-            value = JSON.stringify(value);
-          case 'string':
-            if(value.length < 30) {
-              if(value.length == 0)
-                value = "NO VALUE";
-              return value;
-            } else {
-              return value.substring(0,27)+"...";
-            }
-            break;
-          case 'number':
-            return value+"";
-            break;
-        }
-        return value;
-      }
       function populate() {
         var filters = [];
         for(var i = 0; i < 100; i ++)
@@ -88,6 +51,7 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
+      <h1>Filters <a href="new-filter.php">New</a></h1>
       <div class="bubbles" id="filter-list">
       </div>
       <div class="botnav">

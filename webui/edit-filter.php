@@ -1,8 +1,9 @@
 <html>
   <head>
-    <title>Liot R: Filters</title>
+    <title>Liot R: Edit Filter</title>
     <?php include 'head.php'?>
     <script>
+    var ID = '<?=$_GET['id']?>';
     var COMPARATORS = [
       "EQUALS",
       "NEQUALS",
@@ -26,6 +27,38 @@
       var reg = location.href.match(/after=(-?[0-9]+)/);
       var after = reg ? reg[1]*1 : 0;
       load(()=>{
+        Lir.getFilters({ids:[ID]}, res=>{
+          var filter;
+          //console.log(res)
+          if(res.filters && (filter = res.filters[0])) {
+          grab('item-id').innerHTML = '['+filter.id+']';
+            grab('filter-name').value = filter.name||'';
+            grab('filter-code').value = filter.code||'{}';
+          }
+          Lir.listFilterReferrers({ids:[ID]}, res => {
+            if(res.err || !res.filters.length) {
+              console.log(err || "No filter found.");
+              return;
+            }
+            console.log(res)
+            var filt = res.filters[0];
+              grab('reference-count').innerHTML = "Used by " + filt.referrers.length + " collators."
+              var referrerList = grab('referrer-list')
+              appendCollators(filt.referrers, referrerList, ID);
+              /*for(var referrer of filt.referrers) {
+                var refbox = nelem('div');
+                addc(refbox, 'bubble')
+                refbox.innerHTML = referrer.name || "["+referrer.id+"]";
+                bind(refbox, ()=>{
+                  location.href = 'edit-collator.php?id='+referrer.id;
+                })
+                referrerList.appendChild(refbox);
+              }*/
+            console.log(filt.refcount);
+            if(filt.referrers.length)addc('delete-button', 'disabled')
+            if(filt.referrers.length)grab('delete-button').innerHTML = "Undeletable";
+          })
+        })
         var compileErrors = grab('compile-errors');
         var codeBox = grab('filter-code');
         bind(codeBox, 'input', () => {
@@ -93,13 +126,14 @@
       })
       function save() {
         //addc('save-button', 'disabled');
-        err('Creating filter...');
+        err('Updating filter...');
         var name = grab('filter-name').value;
         var code = grab('filter-code').value;
         Lir.addFilters({
           filters:[{
           name: name,
-          code: code
+          code: code,
+          id: ID
         }]}, res => {
           if(res.err) {
             console.log(res.err);
@@ -107,6 +141,13 @@
           }
           location.href = "/filters.php";
         })
+      }
+      function deletef() {
+        if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
+          Lir.deleteFilters({ids:[ID]},res=>{
+            location.href = 'filters.php';
+          })
+        }
       }
       function err(text) {
         grab('compile-errors').innerHTML = text||"Ready";
@@ -120,11 +161,12 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
-      <h1>New Filter</h1>
+      <h1>Edit Filter</h1>
+      <h2 id="item-id">[abcdefgh-ijkl-mnop-qrst-uvwxyz012345]</h2>
       <div class="bubbles new-box" id="filter-box">
         <div class="bubble max-bubble">
           <label for="filter-name">Name:</label>
-          <input id="filter-name" placeholder="New Filter" type="text" value="Body Temperature Range Alert">
+          <input id="filter-name" placeholder="Unnamed Filter" type="text">
           <label for="filter-code">Code:</label>
           <textarea id="filter-code" placeholder="Enter a JSON filter...">{
   "AND": {
@@ -135,8 +177,10 @@
     "EQUALS": [ "$device_info.manufacturer", "MeasureStat" ]
   }
 }</textarea>
-          <span id="compile-errors" class="valid-json">Ready</span>
           <a id="save-button" onclick="save()" class="a-button">Save</a>
+          <a id="delete-button" onclick="deletef()" class="a-button">Delete</a>
+                    <span id="reference-count">Ready</span>
+                    <div id="referrer-list"></div>
         </div>
       </div>
     </div>

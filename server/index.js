@@ -1,3 +1,4 @@
+var DEBUG = 1||false;
 
 var COMPARATORS = [
   "EQUALS",
@@ -24,6 +25,7 @@ var r = require('rethinkdb');
 var express = require('express');
 var bodyParser = require('body-parser');
 var validUrl = require('valid-url')
+var request = require('request');
 const app = express();
 var fs = require('fs');
 var CONFIG = {};
@@ -42,15 +44,32 @@ app.use((req, res, next) => {
 var kRETURN_CHANGES = {return_changes: true};
 
 var ADMINACTIONS = {
+  /*Collectors*/
   "list collectors": actionListCollectors,
   "add collectors": actionAddCollectors,
+  "get collectors": actionGetCollectors,
+  "delete collectors": actionDeleteCollectors,
+  //"get referenced collectors": actionGetReferencedCollectors,
+  /*Filters*/
   "list filters": actionListFilters,
   "add filters": actionAddFilters,
+  "get filters": actionGetFilters,
+  "delete filters": actionDeleteFilters,
+  "count filter references": actionCountFilterReferences,
+  "list filter referrers": actionListFilterReferrers,
+  /*Collators*/
   "list collators": actionListCollators,
   "add collators": actionAddCollators,
+  "get collators": actionGetCollators,
+  "delete collators": actionDeleteCollators,
+  "count collator references": actionCountCollatorReferences,
+  /*Distributors*/
   "list distributors": actionListDistributors,
   "add distributors": actionAddDistributors,
+  "get distributors": actionGetDistributors,
+  "delete distributors": actionDeleteDistributors,
   "alter distributors": actionModDistributors,
+  /*Misc*/
   "push update": actionPushUpdate
 }
 
@@ -65,7 +84,7 @@ function readConfig() {
     if(buffer) {
       var json = JSON.parse(buffer.toString());
       if(json.port)CONFIG.port = json.port;
-      console.log(json);
+      if(DEBUG)console.log(json);
       startRethinkServer();
       launchHttpServer();
     } else {
@@ -78,7 +97,7 @@ function readConfig() {
 function startRethinkServer() {/* 1.db.yup.place => localhost */
 	r.connect({host:'localhost'},(err, conn)=>{
     if(err || !conn) {
-      console.log("Cannot connect to RethinkDB");
+      if(DEBUG)console.log("Cannot connect to RethinkDB");
     } else {
       r.dbList().contains('LiotR')
         .do(exists=>{
@@ -89,16 +108,16 @@ function startRethinkServer() {/* 1.db.yup.place => localhost */
           );
         }).run(conn, (err, status) => {
       		if(err || !conn) {
-      			console.log('Could not ensure existence of database for Liot R.');
+      			if(DEBUG)console.log('Could not ensure existence of database for Liot R.');
       			return false;
       		} else {
       			CONNECTION = conn;
             conn.use('LiotR');
             if(status.dbs_created)
-              console.log("Created database for Liot R.")
+              if(DEBUG)console.log("Created database for Liot R.")
             else
-              console.log("Found database for Liot R.")
-      			console.log('Connected to database for Liot R.');
+              if(DEBUG)console.log("Found database for Liot R.")
+      			if(DEBUG)console.log('Connected to database for Liot R.');
       			return true;
       		}
         })
@@ -116,8 +135,8 @@ function launchHttpServer() {
 function rcvdPost(req, res) {
   var address = req.connection.remoteAddress;
   var isLocal = address.match(/^(127.0.0.1|::ffff:127.0.0.1|::1)$/)&&true;
-  console.log(isLocal)
-  console.log(req.body);
+  if(DEBUG)console.log(isLocal)
+  if(DEBUG)console.log(req.body);
   var json = req.body;
   var action = json.action
 	res.header('Access-Control-Allow-Origin','*')
@@ -167,11 +186,11 @@ function actionListCollators(req, res, dat) {
               .run(CONNECTION, (err, collators) => {
                 if(err) {
                   res.send({err: 'Unable to query.'});
-                  console.log(err);
+                  if(DEBUG)console.log(err);
                 } else {
                   res.send({collators:collators});
-                  console.log('Queried collators.');
-                  console.log(collators);
+                  if(DEBUG)console.log('Queried collators.');
+                  if(DEBUG)console.log(collators);
                 }
               })
     }
@@ -216,11 +235,11 @@ function actionListCollectors(req, res, dat) {
               .run(CONNECTION, (err, collectors) => {
                 if(err) {
                   res.send({err: 'Unable to query.'});
-                  console.log(err);
+                  if(DEBUG)console.log(err);
                 } else {
                   res.send({collectors:collectors});
-                  console.log('Queried collectors.');
-                  console.log(collectors);
+                  if(DEBUG)console.log('Queried collectors.');
+                  if(DEBUG)console.log(collectors);
                 }
               })
     }
@@ -265,11 +284,11 @@ function actionListFilters(req, res, dat) {
               .run(CONNECTION, (err, collators) => {
                 if(err) {
                   res.send({err: 'Unable to query.'});
-                  console.log(err);
+                  if(DEBUG)console.log(err);
                 } else {
                   res.send({filters:collators});
-                  console.log('Queried filters.');
-                  console.log(collators);
+                  if(DEBUG)console.log('Queried filters.');
+                  if(DEBUG)console.log(collators);
                 }
               })
     }
@@ -309,16 +328,18 @@ function actionListDistributors(req, res, dat) {
       after = Math.max(0,after);
       var query = r.table('Distributors')
         .orderBy(order)
-          .slice(after, after + count).merge(doc=>{return {collets:r.table('Collators').getAll(r.args(doc('collators'))).coerceTo('array')}})
+          .slice(after, after + count).merge(doc=>{return {collets:r.table('Collators').getAll(r.args(doc('collators')))
+.merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
+          .coerceTo('array')}})
             .coerceTo('array')
               .run(CONNECTION, (err, distributors) => {
                 if(err) {
                   res.send({err: 'Unable to query.'});
-                  console.log(err);
+                  if(DEBUG)console.log(err);
                 } else {
                   res.send({distributors:distributors});
-                  console.log('Queried distributors.');
-                  console.log(distributors);
+                  if(DEBUG)console.log('Queried distributors.');
+                  if(DEBUG)console.log(distributors);
                 }
               })
     }
@@ -352,7 +373,7 @@ function actionAddCollectors(req, res, dat) {
         collectors.push(trec);
       }
     }
-    r.table('Collectors').insert(collectors).run(CONNECTION, (err, inserted) => {
+    r.table('Collectors').insert(collectors, { conflict: 'replace' }).run(CONNECTION, (err, inserted) => {
       var obj = err ? {err: 'Could not create collectors.'} : {}
       res.send(obj)
     });
@@ -384,6 +405,9 @@ function actionAddCollators(req, res, dat) {
     var collators = [];
     for(var collator of dat.collators) {
       var tcol = {};
+      if(typeof collator.id === "string") {
+        tcol.id = collator.id;
+      }
       if(typeof collator.name === "string" && collator.name.length)
         tcol.name = collator.name;
       if(Array.isArray(collator.filters)) {
@@ -403,13 +427,13 @@ function actionAddCollators(req, res, dat) {
       collators.push(tcol);
     }
   }
-  r.table('Collators').insert(collators).run(CONNECTION, (err, inserted) => {
+  r.table('Collators').insert(collators, { conflict: 'replace' }).run(CONNECTION, (err, inserted) => {
     if(err) {
       res.send({err:"Unable to create collators."});
-        console.log(err);
+        if(DEBUG)console.log(err);
     } else {
       res.send({});
-      console.log("Created collators.");
+      if(DEBUG)console.log("Created collators.");
     }
   })
 }
@@ -419,6 +443,9 @@ function actionAddDistributors(req, res, dat) {
     var distributors = [];
     for(var distributor of dat.distributors) {
       var trans = {collators:[]}
+      if(typeof distributor.id === "string") {
+        trans.id = distributor.id;
+      }
       if(Array.isArray(distributor.collators)) {
         for(var collator of distributor.collators) {
           trans.collators.push(collator);
@@ -435,13 +462,13 @@ function actionAddDistributors(req, res, dat) {
       trans.callback = !!distributor.callback;
       distributors.push(trans);
     }
-    r.table('Distributors').insert(distributors).run(CONNECTION, (err, created) => {
+    r.table('Distributors').insert(distributors, { conflict: 'replace' }).run(CONNECTION, (err, created) => {
       if(err) {
         res.send({err:'Error creating distributors.'});
-        console.log(err);
+        if(DEBUG)console.log(err);
       } else {
         res.send({});
-        console.log('Created distributors.');
+        if(DEBUG)console.log('Created distributors.');
       }
     })
   }
@@ -455,6 +482,9 @@ function actionAddFilters(req, res, dat) {
       if(typeof distributor.name === "string") {
         trans.name = distributor.name;
       }
+      if(typeof distributor.id === "string") {
+        trans.id = distributor.id;
+      }
       if(typeof distributor.code === "string") {
         var code = distributor.code;
         var json;
@@ -465,10 +495,10 @@ function actionAddFilters(req, res, dat) {
           err('Invalid JSON.');
           return;
         }
-        console.log(json)
+        if(DEBUG)console.log(json)
         recur(json);
         function recur(tree, current) {
-        //console.log(tree, current);
+        //if(DEBUG)console.log(tree, current);
         var top = typeof current == 'undefined';
           if(!top && (typeof tree[current] === 'number' || typeof tree[current] === 'string')) {
             if(!COMPARATORS.includes(current)) {
@@ -481,7 +511,7 @@ function actionAddFilters(req, res, dat) {
               return;
             }
             var keys = Object.keys(tree);
-            console.log(top && keys.length != 1)
+            if(DEBUG)console.log(top && keys.length != 1)
               if(top && keys.length != 1) {
                 err("Root object must contain exactly one object, not " + keys.length);
                 return;
@@ -502,7 +532,7 @@ function actionAddFilters(req, res, dat) {
               return;
             }
           } else if(Array.isArray(tree)) {
-            console.log('array: ' + current);
+            if(DEBUG)console.log('array: ' + current);
             if(!COMPARATORS.includes(current)) {
               err('Invalid comparator.');
               return;
@@ -518,17 +548,17 @@ function actionAddFilters(req, res, dat) {
       }
       distributors.push(trans);
     }
-    r.table('Filters').insert(distributors).run(CONNECTION, (err, created) => {
+    r.table('Filters').insert(distributors, { conflict: 'replace' }).run(CONNECTION, (err, created) => {
       if(err) {
         res.send({err:'Error creating filters.'});
-        console.log(err);
+        if(DEBUG)console.log(err);
       } else {
         res.send({});
-        console.log('Created filters.');
+        if(DEBUG)console.log('Created filters.');
       }
     })
   }
-  function err(text) { res.send({err: text}); console.log(text) }
+  function err(text) { res.send({err: text}); if(DEBUG)console.log(text) }
 }
 
 function actionModDistributors(req, res, dat) {
@@ -546,10 +576,10 @@ function actionModDistributors(req, res, dat) {
     r.table('Distributors').update(distributors).run(CONNECTION, (err, updated) => {
       if(err) {
         res.send({err:'Error updating distributors.'});
-        console.log(err);
+        if(DEBUG)console.log(err);
       } else {
         res.send({});
-        console.log('Updated distributors.');
+        if(DEBUG)console.log('Updated distributors.');
       }
     })
   }
@@ -624,7 +654,7 @@ function actionPushUpdate(req, res, dat) {
         .filter({aggregate:true})
           .count()
             .run(CONNECTION, (err, count) => {
-              console.log(count);
+              if(DEBUG)console.log(count);
               if(count) {
                 updateDocument();
               }
@@ -634,9 +664,12 @@ function actionPushUpdate(req, res, dat) {
       .getAll(newUpdate.accessor,{index:"accessor"})
         .update({value:newUpdate.value},{return_changes:'always'})
           .run(CONNECTION, updated)
+          /*r.table('Collectors')
+            .getAll(newUpdate.accessor,{index:"accessor"})
+              .map({changes:[{new_val:r.row()}]})*/
   }
   function updated(err, updated) {
-    console.log( err || updated)
+    if(DEBUG)console.log( err || updated)
     if(updated && typeof updated.changes[0].new_val == 'object') {
       var nv = updated.changes[0].new_val;
       r.table('Distributors')
@@ -658,25 +691,50 @@ function actionPushUpdate(req, res, dat) {
                       }).coerceTo('array')
               }
             }).coerceTo('array').run(CONNECTION, (err, rows) => {
-              //console.log(err || rows)
+              //if(DEBUG)console.log(err || rows)
               var filters = {};
+              var dostributors = [];
+              var distributedData = [];
               for(var distributor of rows)
                 for(var collator of distributor.collators)
                   for(var filter of collator.filters)
                     if(!filters.hasOwnProperty(filter.id))filters[filter.id] = filter.json;
-              console.log(filters);
+              if(DEBUG)console.log(filters);
               var pass = false;
               var keys = Object.keys(filters);
               for(k of keys)
                 if(recur(filters[k], nv, 'ROOT')) {
-                  pass = true;
-                  break;
+                  filters[k] = true;
                 }
-              if(pass) {
-                console.log("PASS");
-              } else {
-                console.log("FAIL");
-              }
+              for(var distributor of rows)
+                for(var collator of distributor.collators) {
+                  var pass = false;
+                  for(var filter of collator.filters)
+                    if(filters[filter.id]) {
+                      var data = JSON.parse(JSON.stringify(newUpdate));
+                      if(distributor.accessor) {
+                        data.accessor = distributor.accessor;
+                      }
+                      if(distributor.push && !distributor.queue)
+                        data.id = r.uuid(data.id + " " + distributor.id);
+                      data.distributor = distributor.id;
+                      //dostributors.push({id:distributor.id,accessor:distributor.accessor})
+                      distributedData.push(data);
+                      if(distributor.callback && validUrl.isUri(distributor.url)) {
+                        sendDataToCallback(data, distributor.url);
+                      } else if(distributor.push) {
+
+                        r.table('DistributedData').insert(distributedData).run(CONNECTION, (err, inserted) => {
+                          if(DEBUG)console.log(err || inserted)
+                        })
+                      }
+                      pass = true;
+                      break;
+                    }
+                  if(pass)break;
+                }
+              if(DEBUG)console.log("PASS");
+              res.send({});
             })
     }
   }
@@ -685,8 +743,21 @@ function actionPushUpdate(req, res, dat) {
   })*/
 }
 
+function sendDataToCallback(data, url) {
+  if(!url.match(/^[A-Za-z]+:\/\//))url="http://"+url;
+  request.post({
+    headers: {'content-type': 'application/json'},
+    url: url,
+    body: data,
+    json: true
+  }, (err, res, bod) => {
+    if(DEBUG)console.log("Called back");
+    //if(DEBUG)console.log(err || res || body);
+  })
+}
+
 function recur(root, update, gate) {
-  //console.log(gate)
+  //if(DEBUG)console.log(gate)
   var left, right, res = false;
   left = evaluateProperty(root, update, 0);
   right = evaluateProperty(root, update, 1);
@@ -735,16 +806,16 @@ function recur(root, update, gate) {
       res = left <= right;
       break;
   }
-  console.log(root, left, right, gate, res)
+  if(DEBUG)console.log(root, left, right, gate, res)
   return res;
 }
 function getProperty(object, key) {
   for(var k of key.substring(1).split('.')) {
-      console.log(k, object[k])
+      if(DEBUG)console.log(k, object[k])
       if(typeof object[k] != 'undefined' && typeof object[k] != 'null')object = object[k];
       else return null;
     }
-    console.log('PROP', object)
+    if(DEBUG)console.log('PROP', object)
     return object;
 }
 function evaluateProperty(object, update, child) {
@@ -760,4 +831,321 @@ function evaluateProperty(object, update, child) {
       break;
   }
   return side;
+}
+
+function actionGetFilters(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Filters')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+        .coerceTo('array')
+          .run(CONNECTION, (err, collators) => {
+            if(err) {
+              res.send({err: 'Unable to query.'});
+              if(DEBUG)console.log(err);
+            } else {
+              res.send({filters:collators});
+              if(DEBUG)console.log('Queried filters.');
+              if(DEBUG)console.log(collators);
+            }
+          })
+
+
+}
+
+function actionDeleteFilters(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Filters')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .delete()
+        .run(CONNECTION, (err, collators) => {
+          if(err) {
+            res.send({err: 'Unable to query.'});
+            if(DEBUG)console.log(err);
+          } else {
+            res.send({filters:collators});
+            if(DEBUG)console.log('Queried filters.');
+            if(DEBUG)console.log(collators);
+          }
+        })
+
+
+}
+
+function actionGetCollators(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Collators')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
+        .coerceTo('array')
+          .run(CONNECTION, (err, collators) => {
+            if(err) {
+              res.send({err: 'Unable to query.'});
+              if(DEBUG)console.log(err);
+            } else {
+              res.send({collators:collators});
+              if(DEBUG)console.log('Queried collators.');
+              if(DEBUG)console.log(collators);
+            }
+          })
+
+
+}
+
+function actionDeleteCollators(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Collators')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .delete()
+        .run(CONNECTION, (err, collators) => {
+          if(err) {
+            res.send({err: 'Unable to query.'});
+            if(DEBUG)console.log(err);
+          } else {
+            //res.send({filters:collators});
+            if(DEBUG)console.log('Queried collators.');
+            if(DEBUG)console.log(collators);
+          }
+        })
+
+
+}
+
+function actionGetDistributors(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Distributors')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .merge(doc=>{
+        return {
+          collators:
+            r.table('Collators')
+              .getAll(r.args(doc('collators')))
+                .merge(doc=>{
+                  return {
+                    filters:
+                      r.table('Filters')
+                        .getAll(r.args(doc('filters')))
+                            .coerceTo('array')
+                  }
+                }).coerceTo('array')
+          }
+        })
+        .coerceTo('array')
+          .run(CONNECTION, (err, collators) => {
+            if(err) {
+              res.send({err: 'Unable to query.'});
+              if(DEBUG)console.log(err);
+            } else {
+              res.send({distributors:collators});
+              if(DEBUG)console.log('Queried distributors.');
+              if(DEBUG)console.log(collators);
+            }
+          })
+
+
+}
+
+function actionDeleteDistributors(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Distributors')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .delete()
+        .run(CONNECTION, (err, collators) => {
+          if(err) {
+            res.send({err: 'Unable to query.'});
+            if(DEBUG)console.log(err);
+          } else {
+            //res.send({filters:collators});
+            if(DEBUG)console.log('Queried distributors.');
+            if(DEBUG)console.log(collators);
+          }
+        })
+
+
+}
+
+function actionGetCollectors(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Collectors')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .coerceTo('array')
+        .run(CONNECTION, (err, collators) => {
+          if(err) {
+            res.send({err: 'Unable to query.'});
+            if(DEBUG)console.log(err);
+          } else {
+            res.send({collectors:collators});
+            if(DEBUG)console.log('Queried collectors.');
+            if(DEBUG)console.log(collators);
+          }
+        })
+
+
+}
+
+function actionDeleteCollectors(req, res, dat) {
+  if(!Array.isArray(dat.ids)) {
+    res.send({err: "No list of IDs provided."});
+    return;
+  }
+  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  var query = r.table('Collectors')
+    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
+      .delete()
+        .run(CONNECTION, (err, collators) => {
+          if(err) {
+            res.send({err: 'Unable to query.'});
+            if(DEBUG)console.log(err);
+          } else {
+            //res.send({filters:collators});
+            if(DEBUG)console.log('Queried collectors.');
+            if(DEBUG)console.log(collators);
+          }
+        })
+
+
+}
+
+function actionCountFilterReferences(req, res, dat) {
+  query = buildFilterReferenceCounterQuery(Array.isArray(dat.ids) ? dat.ids : null);
+  query.coerceTo('array').run(CONNECTION, (err, filters) => {
+    if(err) {
+      res.send('Error counting filter references.');
+      return;
+    }
+    res.send({filters:filters});
+  })
+}
+
+function buildFilterReferenceCounterQuery(ids, callback) {
+  //referenced = !!referenced;
+  var query = r.table('Filters');
+  if(Array.isArray(ids))
+    query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
+  //var isReferencedFilter = //r.table("Collators").group('id')('filters')(0).contains(f('id')).ungroup().contains(true);
+  //For counting
+  //('reduction').filter(r=>{return r.eq(true)}).count()
+  //if(!referenced)isReferencedFilter = isReferencedFilter.not();
+  query = query.map(filt=>{return {id:filt('id'),refcount:r.table("Collators").group('id')('filters')(0).contains(filt('id')).ungroup()('reduction').filter(r=>{return r.eq(true)}).count()}})
+  //query = query.filter(isReferencedFilter);
+  return query;
+}
+
+function actionCountCollatorReferences(req, res, dat) {
+  query = buildCollatorReferenceCounterQuery(Array.isArray(dat.ids) ? dat.ids : null);
+  query.coerceTo('array').run(CONNECTION, (err, collators) => {
+    if(err) {
+      res.send('Error counting collator references.');
+      return;
+    }
+    res.send({collators:collators});
+  })
+}
+
+function buildCollatorReferenceCounterQuery(ids, callback) {
+  var query = r.table('Collators');
+  if(Array.isArray(ids))
+    query = query.filter(d=>{
+      return r.expr(ids).contains(d('id'))
+    });
+  query = query.map(filt=>{
+    return {
+      id:filt('id'),
+      refcount:r.table("Distributors")
+        .group('id')('collators')(0)
+          .contains(filt('id'))
+            .ungroup()('reduction')
+              .filter(r=>{
+                return r.eq(true)
+              }).count()
+    }
+  })
+  return query;
+}
+
+function actionListFilterReferrers(req, res, dat) {
+  var query = buildFilterReferrerListerQuery(Array.isArray(dat.ids) ? dat.ids : null);
+  query.coerceTo('array').run(CONNECTION, (err, filters) => {
+    if(err) {
+      res.send('Error listing filter referrers.');
+      return;
+    }
+    res.send({filters:filters});
+  })
+}
+
+function buildFilterReferrerListerQuery(ids, callback) {
+  var query = r.table('Filters');
+  if(Array.isArray(ids))
+    query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
+  query = query.map(filt=>{
+    return {
+      id:filt('id'),
+      referrers:r.db('LiotR')
+        .table("Collators")
+            .filter(col=>{
+              return col('filters')
+                .contains(filt('id'))
+              }).merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
+              .coerceTo('array')
+    }
+  })
+  return query;
+}
+
+function actionListFilterDistributors(req, res, dat) {
+  var query = buildFilterReferrerListerQuery(Array.isArray(dat.ids) ? dat.ids : null);
+  query.coerceTo('array').run(CONNECTION, (err, filters) => {
+    if(err) {
+      res.send('Error listing filter referrers.');
+      return;
+    }
+    res.send({filters:filters});
+  })
+}
+
+function buildFilterDistributorListerQuery(ids, callback) {
+  var query = r.table('Filters');
+  if(Array.isArray(ids))
+    query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
+  query = query.map(filt=>{
+    return {
+      id:filt('id'),
+      referrers:r.db('LiotR')
+        .table("Collators")
+            .filter(col=>{
+              return col('filters')
+                .contains(filt('id'))
+              }).merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
+              .coerceTo('array')
+    }
+  })
+  return query;
 }

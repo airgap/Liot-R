@@ -5,14 +5,7 @@
     <script>
 
       load(()=>{
-        Lir.listCollators({}, res => {
-          if(res.err) {
-            console.log(res.err)
-            return;
-          }
-          collators = res.collators;
-          //for(var collator of res.collators)collators.push({id:collator.id,name:collator.name})
-        })
+
       })
 
       function save() {
@@ -27,6 +20,8 @@
           }
           location.href = "/distributors.php";
         })
+
+        //Lir.pushUpdate({value:98,accessor:'<AUTH_CODE>'});
       }
       function err(text) {
         grab('compile-errors').innerHTML = text||"Ready";
@@ -40,7 +35,7 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
-      <h1>New Distributor</h1>
+      <h1>Push Update</h1>
       <div class="bubbles new-box" id="collator-box">
         <div class="bubble">
           <label for="distributor-name">Name:</label>

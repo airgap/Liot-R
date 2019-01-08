@@ -1,8 +1,9 @@
 <html>
   <head>
-    <title>Liot R: New Distributor</title>
+    <title>Liot R: Edit Distributor</title>
     <?php include 'head.php'?>
     <script>
+    var ID = '<?=$_GET['id']?>';
     var COMPARATORS = [
       "EQUALS",
       "NEQUALS",
@@ -33,16 +34,31 @@
             return;
           }
           collators = res.collators;
+          Lir.getDistributors({ids:[ID]}, res => {
+            if(res.distributors && res.distributors.length) {
+              var dist = res.distributors[0];
+                console.log(dist);
+              grab('distributor-name').value = dist.name || '';
+              grab('distributor-push').checked = dist.push;
+              grab('distributor-queue').checked = dist.queue;
+              grab('distributor-callback').checked = dist.callback;
+              grab('distributor-url').value = dist.url || '';
+              grab('distributor-accessor').value = dist.accessor || '';
+              grab('item-id').innerHTML = '['+dist.id+']';
+              for(var collator of dist.collators)addCollator(collator.id)
+            }
+          })
           //for(var collator of res.collators)collators.push({id:collator.id,name:collator.name})
         })
       })
-      function addCollator() {
+      function addCollator(id) {
         var select = document.createElement('select');
         for(var collator of collators) {
           var option = document.createElement('option');
           option.value = collator.id;
           option.innerHTML = collator.name || `[ ${collator.id} ]`;
           select.appendChild(option);
+          if(id&&(collator.id==id))option.selected = true;
         }
         var rem = document.createElement('label');
         rem.innerHTML = '-';
@@ -62,6 +78,7 @@
         var queue = grab('distributor-queue').checked;
         var callback = grab('distributor-callback').checked;
         var url = grab('distributor-url').value;
+        var accessor = grab('distributor-accessor').value;
         var filtrets = [];
         var selects = document.getElementsByTagName('select');
         for(var i of selects)
@@ -73,7 +90,9 @@
           queue: queue,
           callback: callback,
           url: url,
-          collators: filtrets
+          accessor: accessor,
+          collators: filtrets,
+          id:ID
         }]}, res => {
           if(res.err) {
             console.log(res.err);
@@ -81,6 +100,13 @@
           }
           location.href = "/distributors.php";
         })
+      }
+      function deletef() {
+        if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
+          Lir.deleteDistributors({ids:[ID]},res=>{
+            location.href = 'filters.php';
+          })
+        }
       }
       function err(text) {
         grab('compile-errors').innerHTML = text||"Ready";
@@ -94,11 +120,12 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
-      <h1>New Distributor</h1>
+      <h1>Edit Distributor</h1>
+      <h2 id="item-id">[abcdefgh-ijkl-mnop-qrst-uvwxyz012345]</h2>
       <div class="bubbles new-box" id="collator-box">
         <div class="bubble max-bubble">
           <label for="distributor-name">Name:</label>
-          <input id="distributor-name" placeholder="New Distributor" type="text" value="Dangerous Temperature Distributor">
+          <input id="distributor-name" placeholder="Unnamed Distributor" type="text">
             <label>Updates:</label>
             <input id="distributor-push" type="radio" checked name="distributor-type" value=true><label for="distributor-push">Push</label>
             <br>
@@ -113,6 +140,7 @@
           </div>
           <span id="compile-errors" class="valid-json">Ready</span>
           <a id="save-button" onclick="save()" class="a-button">Save</a>
+          <a id="delete-button" onclick="deletef()" class="a-button">Delete</a>
         </div>
       </div>
     </div>

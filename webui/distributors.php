@@ -22,8 +22,11 @@
           var rec = distributors[i];
           var bubble = nelem('div');
           addc(bubble, 'bubble');
+          var top = nelem('div');
+          addc(top, 'bubble-top');
+          bubble.appendChild(top);
           var nameBox = nelem('label');
-          nameBox.innerHTML = xss((rec.name || rec.id) + "");
+          nameBox.innerHTML = namify(rec, 'distributor');//xss((rec.name || rec.id) + "");
           var idBox = nelem('label');
           idBox.innerHTML = xss(rec.id);
 
@@ -33,30 +36,16 @@
           for(var filtret of rec.collets)filternames += (filtret.name || "[" + filtret.id.substring(0,9)+"]") + ', ';
           filternames = "("+filternames.substring(0,filternames.length-2)+")";
           valBox.innerHTML = xss(filternames)
-          bubble.appendChild(nameBox);
-          bubble.appendChild(valBox);
+          top.appendChild(nameBox);
+          //top.appendChild(valBox);
           //bubble.appendChild(idBox);
+          appendCollators(rec.collets, bubble);
+          appendDropper(bubble);
           distributorList.appendChild(bubble);
+          appendSpecifics(bubble, rec.id, 'distributor');
+          //bindBubble(bubble,rec)
         }
-      }
-      function stringValue(value) {
-        switch(typeof value) {
-          case 'object':
-            value = JSON.stringify(value);
-          case 'string':
-            if(value.length < 30) {
-              if(value.length == 0)
-                value = "NO VALUE";
-              return value;
-            } else {
-              return value.substring(0,27)+"...";
-            }
-            break;
-          case 'number':
-            return value+"";
-            break;
-        }
-        return value;
+        if(!distributors.length) appendPlaceholder('filters', distributorList);
       }
       function populate() {
         var distributors = [];
@@ -92,13 +81,16 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
+      <h1>Distributors <a href="new-distributor.php">New</a></h1>
       <div class="bubbles" id="distributor-list">
       </div>
-      <a onclick="gotoStart()">&lt;&lt;</a>
-      <a onclick="gotoPrevious()">&lt;</a>
-      <a onclick="gotoNext()">&gt;</a>
-      <a onclick="gotoLast()">&gt;&gt;</a>
-      <button onclick="populate()">Populate</button>
+      <div class="botnav">
+        <a onclick="gotoStart()">&lt;&lt;</a>
+        <a onclick="gotoPrevious()">&lt;</a>
+        <a onclick="gotoNext()">&gt;</a>
+        <a onclick="gotoLast()">&gt;&gt;</a>
+        <button onclick="populate()">Populate</button>
+      </div>
     </div>
   </body>
 </html>

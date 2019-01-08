@@ -1,8 +1,9 @@
 <html>
   <head>
-    <title>Liot R: Filters</title>
+    <title>Liot R: Edit Collator</title>
     <?php include 'head.php'?>
     <script>
+    var ID = '<?=$_GET['id']?>';
     var COMPARATORS = [
       "EQUALS",
       "NEQUALS",
@@ -33,16 +34,39 @@
             return;
           }
           filters = res.filters;
-          //for(var filter of res.filters)filters.push({id:filter.id,name:filter.name})
+          Lir.getCollators({ids:[ID]}, res => {
+            if(res.err || !res.collators || !res.collators.length) {
+              console.log(res.err);
+              return;
+            }
+            console.log(res.collators[0])
+            grab('item-id').innerHTML = '['+res.collators[0].id+']';
+              grab('collator-name').value = res.collators[0].name||'';
+            for(var filter of res.collators[0].filtrets)addFilter(filter.id)
+            Lir.countCollatorReferences({ids:[ID]}, res => {
+              if(res.err || !res.collators.length) {
+                console.log(err || "No filter found.");
+                return;
+              }
+              var cool = res.collators[0];
+                grab('reference-count').innerHTML = "Used by " + cool.referrers.length + " distributors."
+              console.log(cool.refcount);
+              if(cool.refcount)addc('delete-button', 'disabled')
+              if(cool.refcount)grab('delete-button').innerHTML = "Undeletable";
+            })
+          })
+          //filters.push({id:filter.id,name:filter.name})
         })
       })
-      function addFilter() {
+      function addFilter(id) {
         var select = document.createElement('select');
         for(var filter of filters) {
           var option = document.createElement('option');
           option.value = filter.id;
           option.innerHTML = filter.name;
           select.appendChild(option);
+          console.log(id)
+          if(id&&(filter.id==id))option.selected = true;
         }
         var rem = document.createElement('label');
         rem.innerHTML = '-';
@@ -65,7 +89,8 @@
         Lir.addCollators({
           collators:[{
           name: name,
-          filters: filtrets
+          filters: filtrets,
+          id: ID
         }]}, res => {
           if(res.err) {
             console.log(res.err);
@@ -73,6 +98,13 @@
           }
           location.href = "/collators.php";
         })
+      }
+      function deletef() {
+        if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
+          Lir.deleteCollators({ids:[ID]},res=>{
+            location.href = 'filters.php';
+          })
+        }
       }
       function err(text) {
         grab('compile-errors').innerHTML = text||"Ready";
@@ -86,17 +118,19 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
-      <h1>New Collator</h1>
+      <h1>Edit Collator</h1>
+      <h2 id="item-id">[abcdefgh-ijkl-mnop-qrst-uvwxyz012345]</h2>
       <div class="bubbles new-box" id="filter-box">
         <div class="bubble max-bubble">
           <label for="collator-name">Name:</label>
-          <input id="collator-name" placeholder="New Collator" type="text" value="Dangerous Temperature Collator">
+          <input id="collator-name" placeholder="Unnamed Collator" type="text">
           <label>Filters:</label>
           <div class="bubble max-bubble" id="filter-list">
             <a onclick="addFilter()" id="add-filter">+ Filter</a>
           </div>
-          <span id="compile-errors" class="valid-json">Ready</span>
           <a id="save-button" onclick="save()" class="a-button">Save</a>
+          <a id="delete-button" onclick="deletef()" class="a-button">Delete</a>
+          <span id="reference-count">Ready</span>
         </div>
       </div>
     </div>

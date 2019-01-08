@@ -13,11 +13,11 @@
             alert(res.err);
           } else {
             console.log(res.collectors);
-            appendCollectors(res.collectors);
+            appendCollectors(res.collectors, collectorList);
           }
         })
       })
-      function appendCollectors(collectors) {
+      /*function appendCollectors(collectors) {
         for(var i = 0; i < collectors.length; i ++) {
           var rec = collectors[i];
           var bubble = nelem('div');
@@ -33,27 +33,9 @@
           bubble.appendChild(valBox);
           //bubble.appendChild(idBox);
           collectorList.appendChild(bubble);
+          bindBubble(bubble,rec)
         }
-      }
-      function stringValue(value) {
-        switch(typeof value) {
-          case 'object':
-            value = JSON.stringify(value);
-          case 'string':
-            if(value.length < 30) {
-              if(value.length == 0)
-                value = "NO VALUE";
-              return value;
-            } else {
-              return value.substring(0,27)+"...";
-            }
-            break;
-          case 'number':
-            return value+"";
-            break;
-        }
-        return value;
-      }
+      }*/
       function populate() {
         var collectors = [];
         for(var i = 0; i < 100; i ++)
@@ -88,13 +70,17 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
+      <h1>Collectors <a href="new-collector.php">New</a></h1>
+
       <div class="bubbles" id="collector-list">
       </div>
-      <a onclick="gotoStart()">&lt;&lt;</a>
-      <a onclick="gotoPrevious()">&lt;</a>
-      <a onclick="gotoNext()">&gt;</a>
-      <a onclick="gotoLast()">&gt;&gt;</a>
-      <button onclick="populate()">Populate</button>
+      <div class="botnav">
+        <a onclick="gotoStart()">&lt;&lt;</a>
+        <a onclick="gotoPrevious()">&lt;</a>
+        <a onclick="gotoNext()">&gt;</a>
+        <a onclick="gotoLast()">&gt;&gt;</a>
+        <button onclick="populate()">Populate</button>
+      </div>
     </div>
   </body>
 </html>

@@ -42,6 +42,16 @@ Lir.listCollectors = (data, callback) => {
 	return Lir.post(data, callback);
 }
 
+Lir.getCollectors = (data, callback) => {
+	data.action = "get collectors";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteCollectors = (data, callback) => {
+	data.action = "delete collectors";
+	return Lir.post(data, callback);
+}
+
 Lir.listFilters = (data, callback) => {
 	data.action = "list filters";
 	return Lir.post(data, callback);
@@ -49,6 +59,26 @@ Lir.listFilters = (data, callback) => {
 
 Lir.addFilters = (data, callback) => {
 	data.action = "add filters";
+	return Lir.post(data, callback);
+}
+
+Lir.getFilters = (data, callback) => {
+	data.action = "get filters";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteFilters = (data, callback) => {
+	data.action = "delete filters";
+	return Lir.post(data, callback);
+}
+
+Lir.countFilterReferences = (data, callback) => {
+	data.action = "count filter references";
+	return Lir.post(data, callback);
+}
+
+Lir.listFilterReferrers = (data, callback) => {
+	data.action = "list filter referrers";
 	return Lir.post(data, callback);
 }
 
@@ -62,6 +92,21 @@ Lir.listCollators = (data, callback) => {
 	return Lir.post(data, callback);
 }
 
+Lir.getCollators = (data, callback) => {
+	data.action = "get collators";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteCollators = (data, callback) => {
+	data.action = "delete collators";
+	return Lir.post(data, callback);
+}
+
+Lir.countCollatorReferences = (data, callback) => {
+	data.action = "count collator references";
+	return Lir.post(data, callback);
+}
+
 Lir.addDistributors = (data, callback) => {
 	data.action = "add distributors";
 	return Lir.post(data, callback);
@@ -69,6 +114,16 @@ Lir.addDistributors = (data, callback) => {
 
 Lir.listDistributors = (data, callback) => {
 	data.action = "list distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.getDistributors = (data, callback) => {
+	data.action = "get distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteDistributors = (data, callback) => {
+	data.action = "delete distributors";
 	return Lir.post(data, callback);
 }
 
