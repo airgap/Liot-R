@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: webui/lir.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: webui/lir.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/* YupDev API v0 */
+
+function Lir() {
+	//var SERVER = "https://1.db.yup.place:4430";
+	//var SESSION;
+	//return self;
+}
+
+/**
+ * The URL of the Liot R server to connect to.
+ */
+Lir.SERVER = "http://localhost:7474";//eye.lyku.org
+
+/**
+* Session ID of the current login session. Currently unused.
+*/
+Lir.SESSION = null;
+
+/**
+ * Post data to the Liot R server
+ * @namespace API
+ * @function post
+ * @param {object} data - the JSON to send to the server. Should contain an action.
+ * @param {function} callback - the function to call when the post completes or errors (response = {err: 'Description'}).
+ * @returns {object} the XMLHttpRequest creating for the post.
+ */
+Lir.post = (data, callback) => {
+	var xml = new XMLHttpRequest();
+	if(typeof callback == "function") {
+		xml.addEventListener('load', ()=> {
+	//alert(xml.response)
+			callback(JSON.parse(xml.responseText))
+		});
+		xml.addEventListener('error', () => {
+			callback({err: 'Unable to contact server.'})
+		});
+	}
+
+
+
+	if(Lir.SESSION)data.sessionid = Lir.SESSION;
+
+	//alert(JSON.stringify(data))
+	xml.open('POST', Lir.SERVER);
+	xml.setRequestHeader("Content-type", "application/json")
+	xml.send(JSON.stringify(data));
+	return xml;
+}
+
+/**
+ * Creates one or more packet collectors.
+ * @namespace API
+ * @function addCollectors
+ * @param {object} data - the parameters of the query
+ * @param {array} data.filters - the details of the filters to insert
+ * @param {function} callback - the function to call when the post completes or errors.
+ * @returns {object} the XMLHttpRequest creating for the post.
+ */
+
+Lir.addCollectors = (data, callback) => {
+	data.action = "add collectors";
+	return Lir.post(data, callback);
+}
+
+/**
+ * Lists any packet collectors.
+ * @namespace API
+ * @function listCollectors
+ * @param {object} data - The parameters of the query
+ * @param {number} [data.after = 0] - Skip this many collectors. Default 0.
+ * @param {number} [data.count = 100] - Return up to this many collectors. Default 100.
+ * @param {function} callback - The function to call when the post completes or errors.
+ * @returns {object} The XMLHttpRequest creating for the post.
+ */
+
+Lir.listCollectors = (data, callback) => {
+	data.action = "list collectors";
+	return Lir.post(data, callback);
+}
+
+Lir.getCollectors = (data, callback) => {
+	data.action = "get collectors";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteCollectors = (data, callback) => {
+	data.action = "delete collectors";
+	return Lir.post(data, callback);
+}
+
+Lir.listFilters = (data, callback) => {
+	data.action = "list filters";
+	return Lir.post(data, callback);
+}
+
+Lir.addFilters = (data, callback) => {
+	data.action = "add filters";
+	return Lir.post(data, callback);
+}
+
+Lir.getFilters = (data, callback) => {
+	data.action = "get filters";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteFilters = (data, callback) => {
+	data.action = "delete filters";
+	return Lir.post(data, callback);
+}
+
+Lir.countFilterReferences = (data, callback) => {
+	data.action = "count filter references";
+	return Lir.post(data, callback);
+}
+
+Lir.listFilterReferrers = (data, callback) => {
+	data.action = "list filter referrers";
+	return Lir.post(data, callback);
+}
+
+Lir.addCollators = (data, callback) => {
+	data.action = "add collators";
+	return Lir.post(data, callback);
+}
+
+Lir.listCollators = (data, callback) => {
+	data.action = "list collators";
+	return Lir.post(data, callback);
+}
+
+Lir.getCollators = (data, callback) => {
+	data.action = "get collators";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteCollators = (data, callback) => {
+	data.action = "delete collators";
+	return Lir.post(data, callback);
+}
+
+Lir.countCollatorReferences = (data, callback) => {
+	data.action = "count collator references";
+	return Lir.post(data, callback);
+}
+
+Lir.addDistributors = (data, callback) => {
+	data.action = "add distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.listDistributors = (data, callback) => {
+	data.action = "list distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.getDistributors = (data, callback) => {
+	data.action = "get distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.deleteDistributors = (data, callback) => {
+	data.action = "delete distributors";
+	return Lir.post(data, callback);
+}
+
+Lir.pushUpdate = (data, callback) => {
+	data.action = "push update";
+	return Lir.post(data, callback);
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Action:AddCollators">Action: Add Collators</a></li><li><a href="global.html#Action:AddCollectors">Action: Add Collectors</a></li><li><a href="global.html#Action:AddDistributors">Action: Add Distributors</a></li><li><a href="global.html#Action:AddFilters">Action: Add Filters</a></li><li><a href="global.html#Action:CountCollatorReferences">Action: Count Collator References</a></li><li><a href="global.html#Action:CountFilterReferences">Action: Count Filter References</a></li><li><a href="global.html#Action:DeleteCollators">Action: Delete Collators</a></li><li><a href="global.html#Action:DeleteCollectors">Action: Delete Collectors</a></li><li><a href="global.html#Action:DeleteDistributors">Action: Delete Distributors</a></li><li><a href="global.html#Action:DeleteFilters">Action: Delete Filters</a></li><li><a href="global.html#Action:GetCollators">Action: Get Collators</a></li><li><a href="global.html#Action:GetDistributors">Action: Get Distributors</a></li><li><a href="global.html#Action:GetFilters">Action: Get Filters</a></li><li><a href="global.html#Action:ListCollators">Action: List Collators</a></li><li><a href="global.html#Action:ListCollectors">Action: List Collectors</a></li><li><a href="global.html#Action:ListDistributors">Action: List Distributors</a></li><li><a href="global.html#Action:ListFilterDistributors">Action: List Filter Distributors</a></li><li><a href="global.html#Action:ListFilters">Action: List Filters</a></li><li><a href="global.html#Action:ModifyDistributors">Action: Modify Distributors</a></li><li><a href="global.html#Action:PushUpdate">Action: Push Update</a></li><li><a href="global.html#Action:PushUpdates">Action: Push Updates</a></li><li><a href="global.html#addCollectors">addCollectors</a></li><li><a href="global.html#Helper:BuildCollatorReferenceCounterQuery">Helper: Build Collator Reference Counter Query</a></li><li><a href="global.html#Helper:BuildFilterReferenceCounterQuery">Helper: Build Filter Reference Counter Query</a></li><li><a href="global.html#Helper:BuildFilterReferrerListerQuery">Helper: Build Filter Referrer Lister Query</a></li><li><a href="global.html#Helper:BuildFilterReferrerReferrerListerQuery">Helper: Build Filter Referrer Referrer Lister Query</a></li><li><a href="global.html#Helper:Sortify">Helper: Sortify</a></li><li><a href="global.html#listCollectors">listCollectors</a></li><li><a href="global.html#post">post</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 09 2019 12:02:31 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

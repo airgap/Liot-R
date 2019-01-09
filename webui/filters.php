@@ -8,7 +8,7 @@
       var after = reg ? reg[1]*1 : 0;
       load(()=>{
         filterList = grab('filter-list');
-        Lir.listFilters({after: after, count: 30},res => {
+        LiotR.listFilters({after: after, count: 30},res => {
           if(res.err) {
             alert(res.err);
           } else {
@@ -28,7 +28,7 @@
                series: 'UNKNOWN'
              }
            });
-        Lir.addFilters({filters: filters}, res => {
+        LiotR.addFilters({filters: filters}, res => {
           console.log(res.err || res)
         })
       }

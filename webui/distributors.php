@@ -8,7 +8,7 @@
       var after = reg ? reg[1]*1 : 0;
       load(()=>{
         distributorList = grab('distributor-list');
-        Lir.listDistributors({after: after, count: 30},res => {
+        LiotR.listDistributors({after: after, count: 30},res => {
           if(res.err) {
             alert(res.err);
           } else {
@@ -58,7 +58,7 @@
                series: 'UNKNOWN'
              }
            });
-        Lir.addDistributors({distributors: distributors}, res => {
+        LiotR.addDistributors({distributors: distributors}, res => {
           console.log(res.err || res)
         })
       }

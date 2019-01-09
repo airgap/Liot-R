@@ -33,7 +33,7 @@
       load(()=>{
 
         //Get the details for the selected filter
-        Lir.getFilters({ids:[ID]}, res=>{
+        LiotR.getFilters({ids:[ID]}, res=>{
           var filter;
           //Ensure a filter was actually returned; if so, populate form
           if(res.filters && (filter = res.filters[0])) {
@@ -42,7 +42,7 @@
             grab('filter-code').value = filter.code||'{}';
           }
           //List all the collators referring to the filter
-          Lir.listFilterReferrers({ids:[ID]}, res => {
+          LiotR.listFilterReferrers({ids:[ID]}, res => {
             if(res.err || !res.filters.length) {
               console.log(err || "No filter found.");
               return;
@@ -133,7 +133,7 @@
         err('Updating filter...');
         var name = grab('filter-name').value;
         var code = grab('filter-code').value;
-        Lir.addFilters({
+        LiotR.addFilters({
           filters:[{
           name: name,
           code: code,
@@ -149,7 +149,7 @@
       //Delete the filter
       function deletef() {
         if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
-          Lir.deleteFilters({ids:[ID]},res=>{
+          LiotR.deleteFilters({ids:[ID]},res=>{
             location.href = 'filters.php';
           })
         }

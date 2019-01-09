@@ -27,7 +27,7 @@
       var after = reg ? reg[1]*1 : 0;
       var filters = [];
       load(()=>{
-        Lir.listFilters({}, res => {
+        LiotR.listFilters({}, res => {
           if(res.err) {
             console.log(res.err)
             return;
@@ -62,7 +62,7 @@
         var selects = document.getElementsByTagName('select');
         for(var i of selects)
           filtrets.push(i.value);
-        Lir.addCollators({
+        LiotR.addCollators({
           collators:[{
           name: name,
           filters: filtrets

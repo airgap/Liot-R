@@ -13,7 +13,7 @@
         err('Creating distributor...');
         var update = grab('update').value;
 
-        Lir.pushUpdate(JSON.parse(update), res => {
+        LiotR.pushUpdate(JSON.parse(update), res => {
           if(res.err) {
             console.log(res.err);
             return;
@@ -21,7 +21,7 @@
           location.href = "/distributors.php";
         })
 
-        //Lir.pushUpdate({value:98,accessor:'<AUTH_CODE>'});
+        //LiotR.pushUpdate({value:98,accessor:'<AUTH_CODE>'});
       }
       function err(text) {
         grab('compile-errors').innerHTML = text||"Ready";

@@ -96,7 +96,7 @@
         err('Creating filter...');
         var name = grab('filter-name').value;
         var code = grab('filter-code').value;
-        Lir.addFilters({
+        LiotR.addFilters({
           filters:[{
           name: name,
           code: code

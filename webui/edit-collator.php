@@ -28,13 +28,13 @@
       var after = reg ? reg[1]*1 : 0;
       var filters = [];
       load(()=>{
-        Lir.listFilters({}, res => {
+        LiotR.listFilters({}, res => {
           if(res.err) {
             console.log(res.err)
             return;
           }
           filters = res.filters;
-          Lir.getCollators({ids:[ID]}, res => {
+          LiotR.getCollators({ids:[ID]}, res => {
             if(res.err || !res.collators || !res.collators.length) {
               console.log(res.err);
               return;
@@ -43,7 +43,7 @@
             grab('item-id').innerHTML = '['+res.collators[0].id+']';
               grab('collator-name').value = res.collators[0].name||'';
             for(var filter of res.collators[0].filtrets)addFilter(filter.id)
-            Lir.countCollatorReferences({ids:[ID]}, res => {
+            LiotR.countCollatorReferences({ids:[ID]}, res => {
               if(res.err || !res.collators.length) {
                 console.log(err || "No filter found.");
                 return;
@@ -86,7 +86,7 @@
         var selects = document.getElementsByTagName('select');
         for(var i of selects)
           filtrets.push(i.value);
-        Lir.addCollators({
+        LiotR.addCollators({
           collators:[{
           name: name,
           filters: filtrets,
@@ -101,7 +101,7 @@
       }
       function deletef() {
         if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
-          Lir.deleteCollators({ids:[ID]},res=>{
+          LiotR.deleteCollators({ids:[ID]},res=>{
             location.href = 'filters.php';
           })
         }

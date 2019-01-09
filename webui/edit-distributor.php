@@ -28,13 +28,13 @@
       var after = reg ? reg[1]*1 : 0;
       var collators = [];
       load(()=>{
-        Lir.listCollators({}, res => {
+        LiotR.listCollators({}, res => {
           if(res.err) {
             console.log(res.err)
             return;
           }
           collators = res.collators;
-          Lir.getDistributors({ids:[ID]}, res => {
+          LiotR.getDistributors({ids:[ID]}, res => {
             if(res.distributors && res.distributors.length) {
               var dist = res.distributors[0];
                 console.log(dist);
@@ -83,7 +83,7 @@
         var selects = document.getElementsByTagName('select');
         for(var i of selects)
           filtrets.push(i.value);
-        Lir.addDistributors({
+        LiotR.addDistributors({
           distributors:[{
           name: name,
           push: push,
@@ -103,7 +103,7 @@
       }
       function deletef() {
         if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
-          Lir.deleteDistributors({ids:[ID]},res=>{
+          LiotR.deleteDistributors({ids:[ID]},res=>{
             location.href = 'filters.php';
           })
         }

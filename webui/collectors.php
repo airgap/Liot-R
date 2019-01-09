@@ -8,7 +8,7 @@
       var after = reg ? reg[1]*1 : 0;
       load(()=>{
         collectorList = grab('collector-list');
-        Lir.listCollectors({after: after, count: 30},res => {
+        LiotR.listCollectors({after: after, count: 30},res => {
           if(res.err) {
             alert(res.err);
           } else {
@@ -47,7 +47,7 @@
                series: 'UNKNOWN'
              }
            });
-        Lir.addCollectors({collectors: collectors}, res => {
+        LiotR.addCollectors({collectors: collectors}, res => {
           console.log(res.err || res)
         })
       }

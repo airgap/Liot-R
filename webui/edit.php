@@ -9,7 +9,7 @@
     </style>
     <script>
       load(()=>{
-        Lir.getType({id:<?=$_GET['id']?>}, res => {
+        LiotR.getType({id:<?=$_GET['id']?>}, res => {
           if(!res.err) {
             location.href=
           }

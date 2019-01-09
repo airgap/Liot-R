@@ -8,7 +8,7 @@
       var after = reg ? reg[1]*1 : 0;
       load(()=>{
         collatorList = grab('collator-list');
-        Lir.listCollators({after: after, count: 30},res => {
+        LiotR.listCollators({after: after, count: 30},res => {
           if(res.err) {
             alert(res.err);
           } else {
@@ -28,7 +28,7 @@
                series: 'UNKNOWN'
              }
            });
-        Lir.addCollators({collators: collators}, res => {
+        LiotR.addCollators({collators: collators}, res => {
           console.log(res.err || res)
         })
       }
