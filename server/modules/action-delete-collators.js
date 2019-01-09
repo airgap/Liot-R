@@ -1,4 +1,15 @@
-function actionDeleteCollators(req, res, dat) {
+var r = require('rethinkdb');
+/**
+ * Delete one or more filter collators.
+ * @name Action: Delete Collators
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+function actionDeleteCollators(DEBUG, CONNECTION, req, res, dat) {
   if(!Array.isArray(dat.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
@@ -20,4 +31,4 @@ function actionDeleteCollators(req, res, dat) {
 
 
 }
-exports = actionDeleteCollators;
+module.exports = actionDeleteCollators;

@@ -3,7 +3,11 @@
     <title>Liot R: Edit Filter</title>
     <?php include 'head.php'?>
     <script>
+
+    //The filter ID from the URL
     var ID = '<?=$_GET['id']?>';
+
+    //Comparators for the Liot filter code JSON parser
     var COMPARATORS = [
       "EQUALS",
       "NEQUALS",
@@ -14,6 +18,8 @@
       "UNDEROR",
     ]
 
+    //Operators for the Liot filter code JSON parser
+
     var OPERATORS = [
       "AND",
       "OR",
@@ -23,44 +29,41 @@
       "SAME",
     ]
 
-      var filterList;
-      var reg = location.href.match(/after=(-?[0-9]+)/);
-      var after = reg ? reg[1]*1 : 0;
+      //Prep form when page is loaded
       load(()=>{
+
+        //Get the details for the selected filter
         Lir.getFilters({ids:[ID]}, res=>{
           var filter;
-          //console.log(res)
+          //Ensure a filter was actually returned; if so, populate form
           if(res.filters && (filter = res.filters[0])) {
-          grab('item-id').innerHTML = '['+filter.id+']';
+            grab('item-id').innerHTML = '['+filter.id+']';
             grab('filter-name').value = filter.name||'';
             grab('filter-code').value = filter.code||'{}';
           }
+          //List all the collators referring to the filter
           Lir.listFilterReferrers({ids:[ID]}, res => {
             if(res.err || !res.filters.length) {
               console.log(err || "No filter found.");
               return;
             }
+            //Dump the list to console
             console.log(res)
+            //Only one filter was queried; select it
             var filt = res.filters[0];
+            //Count the number of collators referencing it
               grab('reference-count').innerHTML = "Used by " + filt.referrers.length + " collators."
+              //List and link to the collators referencing it
               var referrerList = grab('referrer-list')
               appendCollators(filt.referrers, referrerList, ID);
-              /*for(var referrer of filt.referrers) {
-                var refbox = nelem('div');
-                addc(refbox, 'bubble')
-                refbox.innerHTML = referrer.name || "["+referrer.id+"]";
-                bind(refbox, ()=>{
-                  location.href = 'edit-collator.php?id='+referrer.id;
-                })
-                referrerList.appendChild(refbox);
-              }*/
-            console.log(filt.refcount);
+              //disable the delete button if the filter is referenced by any
             if(filt.referrers.length)addc('delete-button', 'disabled')
             if(filt.referrers.length)grab('delete-button').innerHTML = "Undeletable";
           })
         })
-        var compileErrors = grab('compile-errors');
+        //Get the filter's code box in the form
         var codeBox = grab('filter-code');
+        //Validate the filter code
         bind(codeBox, 'input', () => {
           var code = codeBox.value;
           var json;
@@ -124,6 +127,7 @@
           }
         })
       })
+      //Save the filter to the database
       function save() {
         //addc('save-button', 'disabled');
         err('Updating filter...');
@@ -142,6 +146,7 @@
           location.href = "/filters.php";
         })
       }
+      //Delete the filter
       function deletef() {
         if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
           Lir.deleteFilters({ids:[ID]},res=>{
@@ -149,12 +154,17 @@
           })
         }
       }
+
+      //Logging
       function err(text) {
-        grab('compile-errors').innerHTML = text||"Ready";
-        setc('compile-errors', 'invalid-json', text)
+        /*grab('compile-errors').innerHTML = text||"Ready";
+        setc('compile-errors', 'invalid-json', text)*/
+        console.log(text)
         setc('save-button', 'disabled', text)
       }
+      //Prevent tags from being embedded anywhere
       function xss(text) { return text.replace('<', '&lt') }
+      //Create a new element
       function nelem(type) { return document.createElement(type) }
     </script>
   </head>

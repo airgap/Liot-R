@@ -1,4 +1,16 @@
-exports = (req, res, dat) => {
+var r = require('rethinkdb');
+var sortify = require('./sortify');
+/**
+ * Creates one or more packet collectors.
+ * @name Action: Add Collectors
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   var collectors = [];
   var manufacturer_attributes = ['manufacture_date', 'manufacturer', 'model', 'series'];
   if(Array.isArray(dat.collectors)) {

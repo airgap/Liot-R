@@ -1,4 +1,15 @@
-exports = (req, res, dat) => {
+var r = require('rethinkdb');
+/**
+ * Creates one or more packet distributors.
+ * @name Action: Add Distributors
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(Array.isArray(dat.distributors)) {
     var distributors = [];
     for(var distributor of dat.distributors) {

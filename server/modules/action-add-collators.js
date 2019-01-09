@@ -1,4 +1,15 @@
-exports = (req, res, dat) => {
+var r = require('rethinkdb');
+/**
+ * Creates one or more filter collators.
+ * @name Action: Add Collators
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(Array.isArray(dat.collators)) {
     var collators = [];
     for(var collator of dat.collators) {

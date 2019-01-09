@@ -1,4 +1,15 @@
-exports = (CONNECTION, req, res, dat) => {
+var r = require('rethinkdb');
+/**
+ * Lists packet collectors.
+ * @name Action: List Collectors
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   var after = 0,
   count = 100,
   orders = ['smart','name', 'id'],

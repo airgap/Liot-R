@@ -1,4 +1,16 @@
-exports = (req, res, dat) => {
+var r = require('rethinkdb');
+/**
+ * Push an update to a collector.
+ * Does not require admin access to perform; any client with a valid Accessor can push an update.
+ * @name Action: Push Update
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   var newUpdate = {};
   if(typeof dat.accessor != 'string') {
     res.send({err: 'No accessor specified.'});
@@ -122,4 +134,92 @@ exports = (req, res, dat) => {
   /*r.table('Collectors').filter(collector=>{
     //if(collector('accessor').eq())
   })*/
+}
+function sendDataToCallback(data, url) {
+  if(!url.match(/^[A-Za-z]+:\/\//))url="http://"+url;
+  request.post({
+    headers: {'content-type': 'application/json'},
+    url: url,
+    body: data,
+    json: true
+  }, (err, res, bod) => {
+    if(DEBUG)console.log("Called back");
+    //if(DEBUG)console.log(err || res || body);
+  })
+}
+function recur(root, update, gate) {
+  //if(DEBUG)console.log(gate)
+  var left, right, res = false;
+  left = evaluateProperty(root, update, 0);
+  right = evaluateProperty(root, update, 1);
+  switch(gate) {
+    case 'ROOT':
+      res = !!left;
+      break;
+    case 'AND':
+      res = left && right;
+      break;
+    case 'OR':
+      res = left || right;
+      break;
+    case 'NAND':
+      res = !(left && right);
+      break;
+    case 'NOR':
+      res = !(left || right);
+      break;
+    case 'XOR':
+      res = (left || right) && !(left && right);
+      break;
+
+    case 'UNDER':
+      res = left < right;
+      break;
+    case 'OVER':
+      res = left > right;
+      break;
+    case 'EQUALS':
+      res = left == right;
+      break;
+    case 'TFEQUALS':
+      res = left === right;
+      break;
+    case 'NEQUALS':
+      res = left != right;
+      break;
+    case 'TFNEQUALS':
+      res = left !== right;
+      break;
+    case 'OVEROR':
+      res = left >= right;
+      break;
+    case 'UNDEROR':
+      res = left <= right;
+      break;
+  }
+  if(DEBUG)console.log(root, left, right, gate, res)
+  return res;
+}
+function getProperty(object, key) {
+  for(var k of key.substring(1).split('.')) {
+      if(DEBUG)console.log(k, object[k])
+      if(typeof object[k] != 'undefined' && typeof object[k] != 'null')object = object[k];
+      else return null;
+    }
+    if(DEBUG)console.log('PROP', object)
+    return object;
+}
+function evaluateProperty(object, update, child) {
+  var keys = Object.keys(object);
+  var key = keys[child];
+  var side = object[key];
+  switch(typeof side) {
+    case 'object':
+      side = recur(side, update, key);
+      break;
+    case 'string':
+      if(side[0] === "$") side = getProperty(update, side);
+      break;
+  }
+  return side;
 }

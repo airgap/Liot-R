@@ -1,4 +1,15 @@
-exports = (CONNECTION, req, res, dat) => {
+var r = require('rethinkdb');
+/**
+ * Lists packet filters.
+ * @name Action: List Filters
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   var after = 0,
   count = 100,
   orders = ['smart','name', 'id'],
@@ -33,11 +44,10 @@ exports = (CONNECTION, req, res, dat) => {
               .run(CONNECTION, (err, collators) => {
                 if(err) {
                   res.send({err: 'Unable to query.'});
-                  if(DEBUG)console.log(err);
+                  console.log(err);
                 } else {
                   res.send({filters:collators});
-                  if(DEBUG)console.log('Queried filters.');
-                  if(DEBUG)console.log(collators);
+                  console.log('Queried filters.');
                 }
               })
     }

@@ -1,16 +1,46 @@
-exports = (req, res, dat) => {
+var r = require('rethinkdb');
+var COMPARATORS = [
+  "EQUALS",
+  "NEQUALS",
+  "TFEQUALS",
+  "TFNEQUALS",
+  "OVER",
+  "OVEROR",
+  "UNDER",
+  "UNDEROR",
+]
+
+var OPERATORS = [
+  "AND",
+  "OR",
+  "NAND",
+  "NOR",
+  "XOR",
+  "SAME",
+]
+/**
+ * Creates one or more packet filters.
+ * @name Action: Add Filters
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(Array.isArray(dat.filters)) {
-    var distributors = [];
-    for(var distributor of dat.filters) {
+    var filters = [];
+    for(var filter of dat.filters) {
       var trans = {};
-      if(typeof distributor.name === "string") {
-        trans.name = distributor.name;
+      if(typeof filter.name === "string") {
+        trans.name = filter.name;
       }
-      if(typeof distributor.id === "string") {
-        trans.id = distributor.id;
+      if(typeof filter.id === "string") {
+        trans.id = filter.id;
       }
-      if(typeof distributor.code === "string") {
-        var code = distributor.code;
+      if(typeof filter.code === "string") {
+        var code = filter.code;
         var json;
         try {
           json = JSON.parse(code);
@@ -67,12 +97,12 @@ exports = (req, res, dat) => {
             }
           }
         }
-        trans.code = distributor.code;
+        trans.code = filter.code;
         trans.json = json;
       }
-      distributors.push(trans);
+      filters.push(trans);
     }
-    r.table('Filters').insert(distributors, { conflict: 'replace' }).run(CONNECTION, (err, created) => {
+    r.table('Filters').insert(filters, { conflict: 'replace' }).run(CONNECTION, (err, created) => {
       if(err) {
         res.send({err:'Error creating filters.'});
         if(DEBUG)console.log(err);

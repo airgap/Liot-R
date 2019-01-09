@@ -1,4 +1,15 @@
-function actionDeleteCollectors(req, res, dat) {
+var r = require('rethinkdb');
+/**
+ * Delete one or more packet collectors.
+ * @name Action: Delete Collectors
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+function actionDeleteCollectors(DEBUG, CONNECTION, req, res, dat) {
   if(!Array.isArray(dat.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
@@ -20,4 +31,4 @@ function actionDeleteCollectors(req, res, dat) {
 
 
 }
-exports = actionDeleteCollectors
+module.exports = actionDeleteCollectors

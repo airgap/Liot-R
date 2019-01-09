@@ -124,9 +124,9 @@ function rcvdPost(req, res) {
   if(action) {
     var dat = req.body;
     if(isLocal && action in ADMINACTIONS) {
-      ADMINACTIONS[action](req, res, dat);
+      ADMINACTIONS[action](DEBUG, CONNECTION, req, res, dat);
     } else if(action in PUBLICACTIONS) {
-      PUBLICACTIONS[action](req, res, dat);
+      PUBLICACTIONS[action](DEBUG, CONNECTION, req, res, dat);
     }
   }
   sinceLast++;

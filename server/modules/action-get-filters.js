@@ -1,4 +1,15 @@
-exports = (req, res, dat) => {
+var r = require('rethinkdb');
+/**
+ * Retreived the contents of one or more packet filters.
+ * @name Action: Get Filters
+ * @function
+ * @param {boolean} DEBUG - enable verbose logging
+ * @param {object} CONNECTION - connection to the RethinkDB database
+ * @param {object} req - Express request
+ * @param {object} res - Express response
+ * @param {object} dat - JSON data of the request
+ */
+module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(!Array.isArray(dat.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
