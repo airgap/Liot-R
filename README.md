@@ -54,7 +54,7 @@ Linky IoT stands not for Internet of Things, but _Intranets_ of Things. Many of 
 
 The strength behind a successful Intranet of Things network is the ability to filter out unneeded data packets. By only egressing the packets that matter, the useless barrage of unnecessary packets can be entirely avoided. Liot R is a piece of software that functions as a logical router between IoT devices and their servers. Multiple Liot Routers can be chained together in hierarchies, meshes, circles, and any other topology. Although currently in development, Liot R is capable of running on Windows, Mac, and Linux, provided you don't mind a bit of manual configuration.
 
-### Use Case: Temperature Monitoring
+### Use Case 1: Temperature Monitoring
 
 In this scenario, there are ten facilities all connected to a central IoT server. Each of these ten facilities contains 1,000 thermometers, each of which reports the current temperature once per minute. The central server then determines if any temperatures are out of range (less than 32F or more than 105F); if one is, it reports the data to whichever facility contains the sensor.
 
@@ -96,6 +96,24 @@ We now have a setup that:
 3. Compresses and transfers large amounts of data to the central server for backup
 
 These filters and Queued Distributors can be created and modified via a JSON-based RESTful API, using the JavaScript library, or with the easy-to-use admin panel included with Liot R.
+
+### Use Case 2: Airgapped IoT Network
+
+In this scenario, there is a single facility containing 5,000 panic buttons. If one of these buttons is pressed, a signal is to be sent to the alarm system and trigger a floor-wide lockdown. Such an alarm system requires maximum security and thus must be isolated from the Internet entirely in order to prevent external hackers from gaining control of alarm system and wreaking havoc. Thus, traditional 3rd-party centralized IoT systems are not possible to use as many require a constant or at least intermittent Internet connection to operate.
+
+Liot Router, however, can be run on an airgapped network without issue as no connection to an external server is required for operation or even initial setup. This network, pictured below, has a panic button in each room, a Liot Router on each floor, and a central router on the first floor.
+
+![Isolated network](/images/2019/01/iso.png)
+
+
+Here's how the setup functions:
+1. When a panic button is pressed, it sends a signal to the floor's Liot Router.
+2. The Liot Router sends a signal to the security systems on that floor, triggering a lockdown.
+3. The Liot Router also sends a signal to the central Liot Router, which logs the event but does not disseminate the lockdown notification to the other floors as only a floor-wide lockdown is necessary.
+4. If the central router is deactivated or destroyed, the floor routers continue to function with only the facility-wide backup functionality disabled.
+5. If a floor router is deactivated or destroyed, the remaining floor routers continue to function with no issue.
+
+This decentralized setup allows not only for an entirely airgapped network, but for segments of the network to continue functioning even if other segments are disabled.
 
 ### The Liot Architecture
 
