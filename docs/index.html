@@ -1,0 +1,175 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- common.css -->
+      <style>* {-webkit-tap-highlight-color: rgba(0,0,0,0);}html {-webkit-text-size-adjust: none;}body {font-family: -apple-system, Helvetica, Arial, sans-serif;margin: 0;padding: 20px;color: #333;word-wrap: break-word;}h1, h2, h3, h4, h5, h6 {line-height: 1.1;}img {max-width: 100% !important;height: auto;}blockquote {margin: 0;padding: 0 15px;color: #777;border-left: 4px solid #ddd;}hr {background-color: #ddd;border: 0;height: 1px;margin: 15px 0;}code {font-family: Menlo, Consolas, 'Ubuntu Mono', Monaco, 'source-code-pro', monospace;line-height: 1.4;margin: 0;padding: 0.2em 0;font-size: 90%;background-color: rgba(0,0,0,0.04);border-radius: 3px;}pre > code {margin: 0;padding: 0;font-size: 100%;word-break: normal;background: transparent;border: 0;}ol {list-style-type: decimal;}ol ol, ul ol {list-style-type: lower-latin;}ol ol ol, ul ol ol, ul ul ol, ol ul ol {list-style-type: lower-roman;}table {border-spacing: 0;border-collapse: collapse;margin-top: 0;margin-bottom: 16px;}table th {font-weight: bold;}table th, table td {padding: 6px 13px;border: 1px solid #ddd;}table tr {border-top: 1px solid #ccc;}table tr:nth-child(even) {background-color: #f8f8f8;}input[type="checkbox"] {cursor: default;margin-right: 0.5em;font-size: 13px;}.task-list-item {list-style-type: none;}.task-list-item+.task-list-item {margin-top: 3px;}.task-list-item input {float: left;margin: 0.3em 1em 0.25em -1.6em;vertical-align: middle;}#tag-field {margin: 8px 2px 10px;}#tag-field .tag {display: inline-block;background: #cadff3;border-radius: 4px;padding: 1px 8px;color: black;font-size: 12px;margin-right: 10px;line-height: 1.4;}</style>
+      <!-- ace-static.css -->
+      <style>.ace_static_highlight {white-space: pre-wrap;}.ace_static_highlight .ace_gutter {width: 2em;text-align: right;padding: 0 3px 0 0;margin-right: 3px;}.ace_static_highlight.ace_show_gutter > .ace_line {padding-left: 2.6em;}.ace_static_highlight .ace_line {position: relative;}.ace_static_highlight .ace_gutter-cell {-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;top: 0;bottom: 0;left: 0;position: absolute;}.ace_static_highlight .ace_gutter-cell:before {content: counter(ace_line, decimal);counter-increment: ace_line;}.ace_static_highlight {counter-reset: ace_line;}</style>
+      <style>.ace-chrome .ace_gutter {background: #ebebeb;color: #333;overflow : hidden;}.ace-chrome .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-chrome {background-color: #FFFFFF;color: black;}.ace-chrome .ace_cursor {color: black;}.ace-chrome .ace_invisible {color: rgb(191, 191, 191);}.ace-chrome .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-chrome .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-chrome .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-chrome .ace_invalid {background-color: rgb(153, 0, 0);color: white;}.ace-chrome .ace_fold {}.ace-chrome .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-chrome .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-chrome .ace_support.ace_type,.ace-chrome .ace_support.ace_class.ace-chrome .ace_support.ace_other {color: rgb(109, 121, 222);}.ace-chrome .ace_variable.ace_parameter {font-style:italic;color:#FD971F;}.ace-chrome .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-chrome .ace_comment {color: #236e24;}.ace-chrome .ace_comment.ace_doc {color: #236e24;}.ace-chrome .ace_comment.ace_doc.ace_tag {color: #236e24;}.ace-chrome .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-chrome .ace_variable {color: rgb(49, 132, 149);}.ace-chrome .ace_xml-pe {color: rgb(104, 104, 91);}.ace-chrome .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-chrome .ace_heading {color: rgb(12, 7, 255);}.ace-chrome .ace_list {color:rgb(185, 6, 144);}.ace-chrome .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-chrome .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-chrome .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-chrome .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-chrome .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-chrome .ace_gutter-active-line {background-color : #dcdcdc;}.ace-chrome .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-chrome .ace_storage,.ace-chrome .ace_keyword,.ace-chrome .ace_meta.ace_tag {color: rgb(147, 15, 128);}.ace-chrome .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-chrome .ace_string {color: #1A1AA6;}.ace-chrome .ace_entity.ace_other.ace_attribute-name {color: #994409;}.ace-chrome .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}</style>
+      <!-- export.css -->
+      <style>
+        body{margin:0 auto;max-width:800px;line-height:1.4}
+        #nav{margin:5px 0 10px;font-size:15px}
+        #titlearea{border-bottom:1px solid #ccc;font-size:17px;padding:10px 0;}
+        #contentarea{font-size:15px;margin:16px 0}
+        .cell{outline:0;min-height:20px;margin:5px 0;padding:5px 0;}
+        .code-cell{font-family:Menlo,Consolas,'Ubuntu Mono',Monaco,'source-code-pro',monospace;font-size:12px;}
+        .latex-cell{white-space:pre-wrap;}
+      </style>
+      <!-- User CSS -->
+      <style> .text-cell {font-size: 15px;}.code-cell {font-size: 12px;}.markdown-cell {font-size: 15px;}.latex-cell {font-size: 15px;}</style>
+      <style>
+        #navigation {
+          *padding: 2px;
+          text-align: center;
+        }
+        #navigation a {
+          padding: 10px;
+          color: grey;
+          text-decoration: none;
+          display: inline-block;
+        }
+        .page {
+          padding: 10px;
+          margin-left: auto;
+          margin-right: auto;
+          width: 600px;
+          max-width: 100%;
+        }
+        .page:not(:target) {
+          display: none;
+        }
+
+        .main-bg {
+          background: url(liotrbg.png);
+          width: 100%;
+          height: 30vw;
+          background-position: center center;
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+        body {
+          max-width: 100%;
+          margin:0;
+          padding:0;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="navigation"><a href="#">Home</a><a href="#why">Intranets of Things</a><a href="#arch">Liot R Architecture</a><a href="#use-cases">Use Cases</a></div>
+<div class="main-bg"></div>
+      <div id="contentarea"><div class="cell markdown-cell"><!--<h1>README</h1>-->
+            <div id="why" class="page">
+<p>A brief overview of the advantages Linky's Intranets of Things provides over traditional Internet of Things approaches.</p>
+<p><strong>Please note that Liot R is still heavily in development and as such not all features are available or stable.</strong> Documentation is far from complete as well.</p>
+<h2>The Problems with IoT</h2>
+<p>Traditional IoT configurations rely third-party servers to transfer data between devices. However, this introduces numerous weaknesses.</p>
+<p><img src="images/2019/01/traditional-iot.png" alt="Traditional IoT"></p>
+<h3>Mass Outage</h3>
+<p>If the server goes down, all connected devices from all customer companies are disconnected and sent offline.</p>
+<p><img src="images/2019/01/mass-outage.png" alt="Mass Outage"></p>
+<h3>Mass Breach</h3>
+<p>If the server is hacked, data from all parties is vulnerable to leaks and theft.</p>
+<p><img src="images/2019/01/mass-breach.png" alt="Mass Breach"></p>
+<h3>Reduced Security</h3>
+<p>IoT devices existing on each company's internal network must maintain a connection to the Internet.<br>
+<img src="images/2019/01/reduced-security.png" alt="Reduced Security"></p>
+<h3>Increased Bandwidth Usage</h3>
+<p>All data must pass through the central server, even if it is only going to be accessed by servers internal to your network. On a large scale, such as an IoT network spanning an entire city, this can prove prohibitively expensive.<br>
+<img src="images/2019/01/increased-bandwidth.png" alt="Increased Bandwidth"></p>
+<h2>The Solution</h2>
+<p>One possible solution to these problems is to internalize IoT servers into each company's network. Normally, this would require complex combinations of hardware and software, with each company creating their own standards. Linky IoT is a client/server software package that not only ships with an easy-to-use, drag-and-drop network designer, but is compatible with every device capable of connecting to your company's intranet.<br>
+<img src="images/2019/01/local-intranets-of-things.png" alt="Local Intranets of Things"></p>
+<h3>Outage Insulation</h3>
+<p>If one or more IoT servers are downed, none of the other companies are affected. Even if one facility of one company goes down, its other facility can remain online.<img src="images/2019/01/outage-insulation.png" alt="Outage Insulation"></p>
+<h3>Hacking Insulation</h3>
+<p>If one server is hacked, no other servers are affected.<br>
+<img src="images/2019/01/hacking-insulation.png" alt="Hacking Insulation"></p>
+<h3>Maximum Security</h3>
+<p>Linky IoT devices require no Internet connection, allowing your network to be fully air-gapped.<img src="images/2019/01/airgapped.png" alt="Airgapped"></p>
+<h3>Reduced Bandwidth Usage</h3>
+<p>Only data that needed at another facility needs to leave its facility of origin, reducing bandwidth requirements, latency, and risk of data leak.<br>
+<img src="images/2019/01/reduced-bandwidth.png" alt="Reduced Bandwidth"></p>
+<h2>Introducing the Intranets of Things</h2>
+<p>Linky IoT stands not for Internet of Things, but <em>Intranets</em> of Things. Many of the problems IoT faces are simply inherent to its nature and cannot be solved without changing the paradigm entirely. Your data is safest in your own hands, under your control, not that of some big corporation.<br>
+<strong>Keep your data yours. Create an Intranet of Things.</strong></p>
+<h2>Liot R: The IoT Router</h2>
+<p>The strength behind a successful Intranet of Things network is the ability to filter out unneeded data packets. By only egressing the packets that matter, the useless barrage of unnecessary packets can be entirely avoided. Liot R is a piece of software that functions as a logical router between IoT devices and their servers. Multiple Liot Routers can be chained together in hierarchies, meshes, circles, and any other topology. Although currently in development, Liot R is capable of running on Windows, Mac, and Linux, provided you don't mind a bit of manual configuration.</p>
+</div>
+<div id="use-cases" class="page">
+<h3>Use Case 1: Temperature Monitoring</h3>
+<p>In this scenario, there are ten facilities all connected to a central IoT server. Each of these ten facilities contains 1,000 thermometers, each of which reports the current temperature once per minute. The central server then determines if any temperatures are out of range (less than 32F or more than 105F); if one is, it reports the data to whichever facility contains the sensor.</p>
+<p>This setup is problematic as each facility must send 1.4 million requests daily to the central server to continuously report the current temperatures, even though only reports containing temperatures out of an acceptable range are relevant.</p>
+<p>Now let's install a Liot Router inside each of these facilities. These routers are programmed to collect data from the thermometers, determine which sensors are reporting data that is outside of the acceptable range, and only send these packets on to the central server. Now, instead of each facility sending 1.4 million packets per day to the central server, they are sending only the 50 packets that are actually out of range.</p>
+<p>This temperature range filter is coded in a standard JSON format and looks like this:</p>
+<pre><div class="ace-chrome"><div class="ace_static_highlight ace_show_gutter" style="counter-reset:ace_line 0"><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>{
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>  "AND": {
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    "OR": {
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>  "UNDER": [ "$value", 32 ],
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>  "OVER": [ "$value", 105 ]
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    },
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    "EQUALS": [ "$device_info.manufacturer", "AcuRite" ]
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>  }
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>}
+</div></div></div></pre>
+<p>This filter checks two aspects of each packet of IoT data:</p>
+<ol>
+<li>That the value of the sensor is under 32 or over 105</li>
+<li>That the manufacturer of the sensor is AcuRite</li>
+</ol>
+<p>If these conditions are satisfied, the packet is passed on to the central server.</p>
+<p>Let's take this a step further by installing a backup server in each of the facilities. These backup servers are to retain all packets received by their Liot Routers regardless of the temperature they are reporting. To accomplish this, a second filter must be created:</p>
+<pre><div class="ace-chrome"><div class="ace_static_highlight ace_show_gutter" style="counter-reset:ace_line 0"><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>{
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>  EQUALS: [1, 1]
+</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>}
+</div></div></div></pre>
+<p>This filter is always satisfied and will pass any packets received on to the internal backup server. These packets, however, do not have to leave the internal network and therefore do not place a burden on the facility's egress bandwidth.</p>
+<p>Diving further down the rabbit hole, we create a Queued Distributor on each of the Liot Routers and connect them to their respective backup filters. These QDs will retain any packets sent to them for retrieval at a later date. Let's return to our central facility and install a large backup storage center that will retain all data ever reported by each facilities' internal sensors. However, instead of receiving the IoT data packets as they are generated, a <code>cron</code> task is set to automatically once per day retrieve the data stored in each facility's QD. This data can now be transferred all at once and in a highly compressed format in order to minimize bandwidth consumption.</p>
+<p>We now have a setup that:</p>
+<ol>
+<li>Reduces bandwidth usage by filtering out irrelevant data packets</li>
+<li>Backs up data locally in each facility</li>
+<li>Compresses and transfers large amounts of data to the central server for backup</li>
+</ol>
+<p>These filters and Queued Distributors can be created and modified via a JSON-based RESTful API, using the JavaScript library, or with the easy-to-use admin panel included with Liot R.</p>
+<h3>Use Case 2: Airgapped IoT Network</h3>
+<p>In this scenario, there is a single facility containing 5,000 panic buttons. If one of these buttons is pressed, a signal is to be sent to the alarm system and trigger a floor-wide lockdown. Such an alarm system requires maximum security and thus must be isolated from the Internet entirely in order to prevent external hackers from gaining control of alarm system and wreaking havoc. Thus, traditional 3rd-party centralized IoT systems are not possible to use as many require a constant or at least intermittent Internet connection to operate.</p>
+<p>Liot Router, however, can be run on an airgapped network without issue as no connection to an external server is required for operation or even initial setup. This network, pictured below, has a panic button in each room, a Liot Router on each floor, and a central router on the first floor.</p>
+<p><img src="/images/2019/01/iso.png" alt="Isolated network"></p>
+<p>Here's how the setup functions:</p>
+<ol>
+<li>When a panic button is pressed, it sends a signal to the floor's Liot Router.</li>
+<li>The Liot Router sends a signal to the security systems on that floor, triggering a lockdown.</li>
+<li>The Liot Router also sends a signal to the central Liot Router, which logs the event but does not disseminate the lockdown notification to the other floors as only a floor-wide lockdown is necessary.</li>
+<li>If the central router is deactivated or destroyed, the floor routers continue to function with only the facility-wide backup functionality disabled.</li>
+<li>If a floor router is deactivated or destroyed, the remaining floor routers continue to function with no issue.</li>
+</ol>
+<p>This decentralized setup allows not only for an entirely airgapped network, but for segments of the network to continue functioning even if other segments are disabled.</p>
+</div>
+<div id="arch" class="page">
+<h3>The Liot Architecture</h3>
+<p>Liot operates on four types of virtual devices: Collectors, Filters, Collators, and Distributors.</p>
+<h4>Collectors</h4>
+<p>Collectors are input devices that can receive data from any type of IoT sensor as long as it's in the JSON format. Each collector has an Accessor ID that must be included in the packet as a form of identification and authentication. If the collector represents another Liot Router, an Aggregate ID can be used to grant the router permission to forward data on behalf of other devices.</p>
+<h4>Filters</h4>
+<p>When a collector receives data from its associated device, it is checked against any active filters. Filters can process packets based on any number of attributes present in the packet's JSON data, including device manufacturer, values reported, and many other properties; boolean logic can be used to filter based on multiple attributes simultaneously. If a filtered packet does not meet the criteria specified, it is discarded. If the packet meets the filter's requirements, it is passed on to any Collators attached to the filter.</p>
+<h4>Collators</h4>
+<p>Collators combine data from multiple filters for easy aggregation of data. Need temperature data from these sensors, barometric data from some other sensors, and color data from yet more sensors? Instead of creating a new filter combining three distinct existing filters, Collators can be used to aggregate data from these filters without requiring complicated boolean logic.</p>
+<h4>Distributors</h4>
+<p>Once data has been collected, filtered, and collated, it is ready for distribution. Each device that is to receive packets from a Liot Router must have its own distributor and Accessor ID to ensure proper dissemination of data.</p>
+<p>Distributors come in two variants:</p>
+<ol>
+<li>Asynchronous distributors temporarily store data for retrieval via request from an external device</li>
+<li>If there is a pending async request to a distributor, new packets will automatically be sent to it</li>
+<li>Queued distributors can be used to store large amounts of data for retrieval at a later date</li>
+<li>Synchronous distributors send new packets to a specified callback URL.</li>
+<li>If the destination is another Liot Router, an Accessor ID can be included in the data forwarded.</li>
+<li>Callback URLs can be used to send data to other software on the same machine Liot R is running on by setting the URL to <code>http://localhost:xxxxx</code></li>
+</ol>
+</div></div></div>
+      <script></script>
+    </body>
+    </html>
