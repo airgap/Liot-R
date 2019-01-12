@@ -1,8 +1,16 @@
+# README #
+
+A brief overview of the advantages Linky's Intranets of Things provides over traditional Internet of Things approaches.
+
+**Please note that Liot R is still heavily in development and as such not all features are available or stable.** Documentation is far from complete as well.
+
+# Table of Contents
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [README](#readme)
+- [Internet of Things vs Intranets of Things](#internet-of-things-vs-intranets-of-things)
   - [The Problems with IoT](#the-problems-with-iot)
     - [Mass Outage](#mass-outage)
     - [Mass Breach](#mass-breach)
@@ -14,22 +22,19 @@
     - [Maximum Security](#maximum-security)
     - [Reduced Bandwidth Usage](#reduced-bandwidth-usage)
   - [Introducing the Intranets of Things](#introducing-the-intranets-of-things)
-  - [Liot R: The IoT Router](#liot-r-the-iot-router)
-    - [Use Case 1: Temperature Monitoring](#use-case-1-temperature-monitoring)
-    - [Use Case 2: Airgapped IoT Network](#use-case-2-airgapped-iot-network)
-    - [The Liot Architecture](#the-liot-architecture)
-      - [Collectors](#collectors)
-      - [Filters](#filters)
-      - [Collators](#collators)
-      - [Distributors](#distributors)
+- [Liot R: The IoT Router](#liot-r-the-iot-router)
+  - [The Liot Architecture](#the-liot-architecture)
+    - [Collectors](#collectors)
+    - [Filters](#filters)
+    - [Collators](#collators)
+    - [Distributors](#distributors)
+  - [Use Case 1: Temperature Monitoring](#use-case-1-temperature-monitoring)
+  - [Use Case 2: Airgapped IoT Network](#use-case-2-airgapped-iot-network)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# README #
 
-A brief overview of the advantages Linky's Intranets of Things provides over traditional Internet of Things approaches.
-
-**Please note that Liot R is still heavily in development and as such not all features are available or stable.** Documentation is far from complete as well.
+# Internet of Things vs Intranets of Things
 
 ## The Problems with IoT ##
 
@@ -88,11 +93,42 @@ Only data that needed at another facility needs to leave its facility of origin,
 Linky IoT stands not for Internet of Things, but _Intranets_ of Things. Many of the problems IoT faces are simply inherent to its nature and cannot be solved without changing the paradigm entirely. Your data is safest in your own hands, under your control, not that of some big corporation.
 **Keep your data yours. Create an Intranet of Things.**
 
-## Liot R: The IoT Router
+# Liot R: The IoT Router
 
 The strength behind a successful Intranet of Things network is the ability to filter out unneeded data packets. By only egressing the packets that matter, the useless barrage of unnecessary packets can be entirely avoided. Liot R is a piece of software that functions as a logical router between IoT devices and their servers. Multiple Liot Routers can be chained together in hierarchies, meshes, circles, and any other topology. Although currently in development, Liot R is capable of running on Windows, Mac, and Linux, provided you don't mind a bit of manual configuration.
 
-### Use Case 1: Temperature Monitoring
+## The Liot Architecture
+
+Liot operates on four types of virtual devices: Collectors, Filters, Collators, and Distributors.
+
+### Collectors
+
+Collectors are input devices that can receive data from any type of IoT sensor as long as it's in the JSON format. Each collector has an Accessor ID that must be included in the packet as a form of identification and authentication. If the collector represents another Liot Router, an Aggregate ID can be used to grant the router permission to forward data on behalf of other devices.
+
+### Filters
+
+When a collector receives data from its associated device, it is checked against any active filters. Filters can process packets based on any number of attributes present in the packet's JSON data, including device manufacturer, values reported, and many other properties; boolean logic can be used to filter based on multiple attributes simultaneously. If a filtered packet does not meet the criteria specified, it is discarded. If the packet meets the filter's requirements, it is passed on to any Collators attached to the filter.
+
+### Collators
+
+Collators combine data from multiple filters for easy aggregation of data. Need temperature data from these sensors, barometric data from some other sensors, and color data from yet more sensors? Instead of creating a new filter combining three distinct existing filters, Collators can be used to aggregate data from these filters without requiring complicated boolean logic.
+
+### Distributors
+
+Once data has been collected, filtered, and collated, it is ready for distribution. Each device that is to receive packets from a Liot Router must have its own distributor and Accessor ID to ensure proper dissemination of data.
+
+Distributors come in two variants:
+
+1. Asynchronous distributors temporarily store data for retrieval via request from an external device
+  1. If there is a pending async request to a distributor, new packets will automatically be sent to it
+  2. Queued distributors can be used to store large amounts of data for retrieval at a later date
+1. Synchronous distributors send new packets to a specified callback URL.
+  1. If the destination is another Liot Router, an Accessor ID can be included in the data forwarded.
+  2. Callback URLs can be used to send data to other software on the same machine Liot R is running on by setting the URL to `http://localhost:xxxxx`
+
+#Use Cases
+
+## Use Case 1: Temperature Monitoring
 
 In this scenario, there are ten facilities all connected to a central IoT server. Each of these ten facilities contains 1,000 thermometers, each of which reports the current temperature once per minute. The central server then determines if any temperatures are out of range (less than 32F or more than 105F); if one is, it reports the data to whichever facility contains the sensor.
 
@@ -135,7 +171,7 @@ We now have a setup that:
 
 These filters and Queued Distributors can be created and modified via a JSON-based RESTful API, using the JavaScript library, or with the easy-to-use admin panel included with Liot R.
 
-### Use Case 2: Airgapped IoT Network
+## Use Case 2: Airgapped IoT Network
 
 In this scenario, there is a single facility containing 5,000 panic buttons. If one of these buttons is pressed, a signal is to be sent to the alarm system and trigger a floor-wide lockdown. Such an alarm system requires maximum security and thus must be isolated from the Internet entirely in order to prevent external hackers from gaining control of alarm system and wreaking havoc. Thus, traditional 3rd-party centralized IoT systems are not possible to use as many require a constant or at least intermittent Internet connection to operate.
 
@@ -152,32 +188,3 @@ Here's how the setup functions:
 5. If a floor router is deactivated or destroyed, the remaining floor routers continue to function with no issue.
 
 This decentralized setup allows not only for an entirely airgapped network, but for segments of the network to continue functioning even if other segments are disabled.
-
-### The Liot Architecture
-
-Liot operates on four types of virtual devices: Collectors, Filters, Collators, and Distributors.
-
-#### Collectors
-
-Collectors are input devices that can receive data from any type of IoT sensor as long as it's in the JSON format. Each collector has an Accessor ID that must be included in the packet as a form of identification and authentication. If the collector represents another Liot Router, an Aggregate ID can be used to grant the router permission to forward data on behalf of other devices.
-
-#### Filters
-
-When a collector receives data from its associated device, it is checked against any active filters. Filters can process packets based on any number of attributes present in the packet's JSON data, including device manufacturer, values reported, and many other properties; boolean logic can be used to filter based on multiple attributes simultaneously. If a filtered packet does not meet the criteria specified, it is discarded. If the packet meets the filter's requirements, it is passed on to any Collators attached to the filter.
-
-#### Collators
-
-Collators combine data from multiple filters for easy aggregation of data. Need temperature data from these sensors, barometric data from some other sensors, and color data from yet more sensors? Instead of creating a new filter combining three distinct existing filters, Collators can be used to aggregate data from these filters without requiring complicated boolean logic.
-
-#### Distributors
-
-Once data has been collected, filtered, and collated, it is ready for distribution. Each device that is to receive packets from a Liot Router must have its own distributor and Accessor ID to ensure proper dissemination of data.
-
-Distributors come in two variants:
-
-1. Asynchronous distributors temporarily store data for retrieval via request from an external device
-  1. If there is a pending async request to a distributor, new packets will automatically be sent to it
-  2. Queued distributors can be used to store large amounts of data for retrieval at a later date
-1. Synchronous distributors send new packets to a specified callback URL.
-  1. If the destination is another Liot Router, an Accessor ID can be included in the data forwarded.
-  2. Callback URLs can be used to send data to other software on the same machine Liot R is running on by setting the URL to `http://localhost:xxxxx`
