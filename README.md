@@ -2,7 +2,7 @@
 
 A brief overview of the advantages Linky's Intranets of Things provides over traditional Internet of Things approaches.
 
-**Please note that Liot R is still heavily in development and as such not all features are available or stable.** Documentation is far from complete as well.
+**Please note that Liot R is still heavily in development and as such not all features are available or stable. Application and prerequisite installation must be performed manually.** Documentation is far from complete as well.
 
 # Table of Contents
 
@@ -188,3 +188,57 @@ Here's how the setup functions:
 5. If a floor router is deactivated or destroyed, the remaining floor routers continue to function with no issue.
 
 This decentralized setup allows not only for an entirely airgapped network, but for segments of the network to continue functioning even if other segments are disabled.
+
+# Project Development and Status
+
+Liot R is currently in development and is not yet fully functional. Installation and setup of certain prerequisites must be performed manually.
+
+* Collectors
+  * Features
+    * [ ] Web UI
+    * [x] Simple collectors
+    * [x] Aggregate collectors
+  * Functions
+    * [x] addCollectors
+    - [x] deleteCollectors
+    - [x] listCollectors
+    - [x] getCollectors
+* Filters
+  * Features
+    * [x] Web UI
+  * Functions
+    * [x] addFilters
+    - [x] deleteFilters
+    - [x] listFilters
+    - [x] getFilters
+    - [x] countReferences
+    - [x] listReferrers
+* Collators
+  * Features
+    * [x] Web UI
+  * Functions
+    * [x] addCollectors
+    - [x] deleteCollectors
+    - [x] listCollectors
+    - [x] getCollectors
+    - [x] countReferences
+    - [ ] listReferrers
+* Distributors
+  * Features
+    - [x] Web UI
+    - [ ] Push updates
+      - [ ] Queued updates
+    - [x] Callback updates
+      - [ ] Accessor overriding
+  * Functions
+    * [x] addCollectors
+    - [x] deleteCollectors
+    - [x] listCollectors
+    - [x] getCollectors
+- Updates
+  - Features
+    - [x] Simple update
+    - [x] Aggregate update
+  - Functions
+    - [x] pushUpdate
+    - [ ] pushUpdates
