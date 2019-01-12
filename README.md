@@ -8,7 +8,7 @@ A brief overview of the advantages Linky's Intranets of Things provides over tra
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
 
 - [Internet of Things vs Intranets of Things](#internet-of-things-vs-intranets-of-things)
   - [The Problems with IoT](#the-problems-with-iot)
