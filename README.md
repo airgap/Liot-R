@@ -30,6 +30,7 @@ A brief overview of the advantages Linky's Intranets of Things provides over tra
     - [Distributors](#distributors)
   - [Use Case 1: Temperature Monitoring](#use-case-1-temperature-monitoring)
   - [Use Case 2: Airgapped IoT Network](#use-case-2-airgapped-iot-network)
+- [Project Development and Status](#project-development-and-status)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
