@@ -1,3 +1,30 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [README](#readme)
+  - [The Problems with IoT](#the-problems-with-iot)
+    - [Mass Outage](#mass-outage)
+    - [Mass Breach](#mass-breach)
+    - [Reduced Security](#reduced-security)
+    - [Increased Bandwidth Usage](#increased-bandwidth-usage)
+  - [The Solution](#the-solution)
+    - [Outage Insulation](#outage-insulation)
+    - [Hacking Insulation](#hacking-insulation)
+    - [Maximum Security](#maximum-security)
+    - [Reduced Bandwidth Usage](#reduced-bandwidth-usage)
+  - [Introducing the Intranets of Things](#introducing-the-intranets-of-things)
+  - [Liot R: The IoT Router](#liot-r-the-iot-router)
+    - [Use Case 1: Temperature Monitoring](#use-case-1-temperature-monitoring)
+    - [Use Case 2: Airgapped IoT Network](#use-case-2-airgapped-iot-network)
+    - [The Liot Architecture](#the-liot-architecture)
+      - [Collectors](#collectors)
+      - [Filters](#filters)
+      - [Collators](#collators)
+      - [Distributors](#distributors)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # README #
 
 A brief overview of the advantages Linky's Intranets of Things provides over traditional Internet of Things approaches.
