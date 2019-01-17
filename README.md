@@ -138,7 +138,7 @@ This setup is problematic as each facility must send 1.4 million requests daily 
 Now let's install a Liot Router inside each of these facilities. These routers are programmed to collect data from the thermometers, determine which sensors are reporting data that is outside of the acceptable range, and only send these packets on to the central server. Now, instead of each facility sending 1.4 million packets per day to the central server, they are sending only the 50 packets that are actually out of range.
 
 This temperature range filter is coded in a standard JSON format and looks like this:
-```
+```json
 {
   "AND": {
     "OR": {
@@ -156,9 +156,9 @@ This filter checks two aspects of each packet of IoT data:
 If these conditions are satisfied, the packet is passed on to the central server.
 
 Let's take this a step further by installing a backup server in each of the facilities. These backup servers are to retain all packets received by their Liot Routers regardless of the temperature they are reporting. To accomplish this, a second filter must be created:
-```
+```json
 {
-  EQUALS: [1, 1]
+  "EQUALS": [1, 1]
 }
 ```
 This filter is always satisfied and will pass any packets received on to the internal backup server. These packets, however, do not have to leave the internal network and therefore do not place a burden on the facility's egress bandwidth.
