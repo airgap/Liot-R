@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: list-filters.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: list-filters.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var r = require('rethinkdb')
+/**
+ * List nonspecific packet filters.
+ * @name Database: List Collators
+ * @function
+ * @param {object} CONNECTION - Connection to the RethinkDB database
+ * @param {number} after - skip this many filters in query
+ * @param {number} count - number of filters to return
+ * @param {string|object} order - key or method for sorting
+ * @param {function} callback - Function(error, result) to execute upon success or error
+ */
+function listFilters(CONNECTION, after, count, order, callback) {
+  r.table('Filters').count().run(CONNECTION, (err, total) => {
+    if(err) {
+
+    } else {
+      if(after&lt;0)after += total;
+      after = Math.max(0,after);
+      var query = r.table('Filters')
+        .orderBy(order)
+          .slice(after, after + count)
+            .coerceTo('array')
+              .run(CONNECTION, callback)
+    }
+
+  })
+}
+module.exports = listFilters
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Action:AddCollators">Action: Add Collators</a></li><li><a href="global.html#Action:AddCollectors">Action: Add Collectors</a></li><li><a href="global.html#Action:AddDistributors">Action: Add Distributors</a></li><li><a href="global.html#Action:AddFilters">Action: Add Filters</a></li><li><a href="global.html#Action:CountCollatorReferences">Action: Count Collator References</a></li><li><a href="global.html#Action:CountFilterReferences">Action: Count Filter References</a></li><li><a href="global.html#Action:DeleteCollators">Action: Delete Collators</a></li><li><a href="global.html#Action:DeleteCollectors">Action: Delete Collectors</a></li><li><a href="global.html#Action:DeleteDistributors">Action: Delete Distributors</a></li><li><a href="global.html#Action:DeleteFilters">Action: Delete Filters</a></li><li><a href="global.html#Action:GetCollators">Action: Get Collators</a></li><li><a href="global.html#Action:GetDistributors">Action: Get Distributors</a></li><li><a href="global.html#Action:GetFilters">Action: Get Filters</a></li><li><a href="global.html#Action:ListCollators">Action: List Collators</a></li><li><a href="global.html#Action:ListCollectors">Action: List Collectors</a></li><li><a href="global.html#Action:ListDistributors">Action: List Distributors</a></li><li><a href="global.html#Action:ListFilterDistributors">Action: List Filter Distributors</a></li><li><a href="global.html#Action:ListFilters">Action: List Filters</a></li><li><a href="global.html#Action:PushUpdate">Action: Push Update</a></li><li><a href="global.html#Action:PushUpdates">Action: Push Updates</a></li><li><a href="global.html#Database:DeleteCollators">Database: Delete Collators</a></li><li><a href="global.html#Database:DeleteCollectors">Database: Delete Collectors</a></li><li><a href="global.html#Database:DeleteDistributors">Database: Delete Distributors</a></li><li><a href="global.html#Database:DeleteFilters">Database: Delete Filters</a></li><li><a href="global.html#Database:GetCollators">Database: Get Collators</a></li><li><a href="global.html#Database:GetCollectors">Database: Get Collectors</a></li><li><a href="global.html#Database:GetDistributors">Database: Get Distributors</a></li><li><a href="global.html#Database:GetFilters">Database: Get Filters</a></li><li><a href="global.html#Database:InsertCollators">Database: Insert Collators</a></li><li><a href="global.html#Database:InsertCollectors">Database: Insert Collectors</a></li><li><a href="global.html#Database:InsertDistributors">Database: Insert Distributors</a></li><li><a href="global.html#Database:InsertFilters">Database: Insert Filters</a></li><li><a href="global.html#Database:ListCollators">Database: List Collators</a></li><li><a href="global.html#Database:ListCollectors">Database: List Collectors</a></li><li><a href="global.html#Helper:BuildCollatorReferenceCounterQuery">Helper: Build Collator Reference Counter Query</a></li><li><a href="global.html#Helper:BuildFilterReferenceCounterQuery">Helper: Build Filter Reference Counter Query</a></li><li><a href="global.html#Helper:BuildFilterReferrerListerQuery">Helper: Build Filter Referrer Lister Query</a></li><li><a href="global.html#Helper:BuildFilterReferrerReferrerListerQuery">Helper: Build Filter Referrer Referrer Lister Query</a></li><li><a href="global.html#Helper:Sortify">Helper: Sortify</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Sun May 26 2019 10:06:18 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
