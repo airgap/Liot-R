@@ -3,7 +3,7 @@
     <title>Liot R: Edit Collector</title>
     <?php include 'head.php'?>
     <script>
-    var ID = '<?=$_GET['id']?>';
+    var ID = '<?=isset($_GET['id'])?$_GET['id']:0?>';
       load(()=>{
         LiotR.getCollectors({ids:[ID]}, res => {
           if(res.err)err('Error retreiving collector.')

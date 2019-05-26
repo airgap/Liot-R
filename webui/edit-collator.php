@@ -3,7 +3,7 @@
     <title>Liot R: Edit Collator</title>
     <?php include 'head.php'?>
     <script>
-    var ID = '<?=$_GET['id']?>';
+    var ID = '<?=isset($_GET['id'])?$_GET['id']:0?>';
     var COMPARATORS = [
       "EQUALS",
       "NEQUALS",
