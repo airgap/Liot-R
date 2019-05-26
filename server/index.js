@@ -1,4 +1,6 @@
 var DEBUG = 1||false;
+var TABLES = ['Filters', 'Collectors', 'Collators', 'Distributors', 'DistributedData']
+var ENSURED_TABLES = [];
 
 var COMPARATORS = [
   "EQUALS",
@@ -157,12 +159,27 @@ function startRethinkServer() {/* 1.db.yup.place => localhost */
             else
               if(DEBUG)console.log("Found database for Liot R.")
       			if(DEBUG)console.log('Connected to database for Liot R.');
+            for(var t of TABLES)
+              ensureTable(t)
       			return true;
       		}
         })
     }
 	})
 	//r.db('Yup');
+}
+
+function ensureTable(t) {
+  r.tableList().contains(t).do(e=>{
+    return r.branch(e,
+      { dbs_created: 0},
+      r.tableCreate(t)
+    );
+  }).run(CONNECTION, (err, status) => {
+    if(status.dbs_created) console.log("Table " + t + " created.")
+    ENSURED_TABLES.push(t)
+    if(ENSURED_TABLES.length==TABLES.length) console.log('All tables ensured.');
+  })
 }
 
 function launchHttpServer() {
@@ -189,71 +206,3 @@ function rcvdPost(req, res) {
 
   }
 }
-
-//action list collators
-
-/*action list collectors*/
-
-//action list filters
-
-//action list distributors
-
-//action add collectors
-
-
-//sortify
-
-//action add collators
-
-//action add distributors
-
-//action add filters
-
-//action mod distributors
-
-/*
-//action push updates
-*/
-
-//action push update
-
-//send data to callback
-
-//recur
-//get property
-//evaluate property
-
-//action get filters
-
-//action delete filters
-
-//action get collators
-
-//action delete collators
-
-//action get distributors
-
-//action delete distributors
-
-//action get collectors
-
-//action delete collectors
-
-//action count filter references
-
-//build filter reference counter query
-
-//action count collator references
-
-
-//build collator reference counter query
-
-
-//action list filter referrers
-
-//build filter referrer lister query
-
-
-//action list filter distributors
-
-//build filter distributor lister query
