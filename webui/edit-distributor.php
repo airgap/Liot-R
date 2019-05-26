@@ -3,7 +3,7 @@
     <title>Liot R: Edit Distributor</title>
     <?php include 'head.php'?>
     <script>
-    var ID = '<?=$_GET['id']?>';
+    var ID = '<?=isset($_GET['id'])?$_GET['id']:0?>';
     var COMPARATORS = [
       "EQUALS",
       "NEQUALS",
@@ -127,13 +127,13 @@
           <label for="distributor-name">Name:</label>
           <input id="distributor-name" placeholder="Unnamed Distributor" type="text">
             <label>Updates:</label>
-            <input id="distributor-push" type="radio" checked name="distributor-type" value=true><label for="distributor-push">Push</label>
+            <input id="distributor-push" type="radio" disabled name="distributor-type" value=true><label for="distributor-push">Push</label>
             <br>
-            <input id="distributor-queue" type="checkbox" value=true class="l2-box"><label for="distributor-queue">Queue new updates</label>
+            <input id="distributor-queue" type="checkbox" disabled value=true class="l2-box"><label for="distributor-queue">Queue new updates</label>
             <br>
-            <input id="distributor-callback" type="radio" name="distributor-type" value=true><label for="distributor-callback">Callback</label>
+            <input id="distributor-callback" type="radio" checked name="distributor-type" value=true><label for="distributor-callback">Callback</label>
             <input id="distributor-url" type="text" value = "" placeholder="Callback URI" class="l2-box">
-            <input id="distributor-accessor" type="text" value = "" placeholder="Accessor ID" class="l2-box">
+            <input id="distributor-accessor" type="text" disabled value = "" placeholder="Accessor ID" class="l2-box">
           <label>Collators:</label>
           <div class="bubble max-bubble" id="filter-list">
             <a onclick="addCollator()" id="add-filter">+ Collator</a>
