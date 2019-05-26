@@ -24,7 +24,5 @@ function actionDeleteCollators(DEBUG, CONNECTION, req, res) {
       if(DEBUG)console.log(collators);
     }
   })
-
-
 }
 module.exports = actionDeleteCollators;

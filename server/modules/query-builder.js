@@ -80,7 +80,6 @@ function buildFilterReferrerListerQuery(ids) {
  * @param {array} ids - list of filter ids to run the query on
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
-
 function buildFilterDistributorListerQuery(ids) {
   var query = r.table('Filters');
   if(Array.isArray(ids))

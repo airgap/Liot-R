@@ -7,7 +7,6 @@ var r = require('rethinkdb')
  * @param {array} collators - List of collators to retrieve
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
-
 function getCollators(CONNECTION, collators, callback) {
   r.table('Collators')
    .filter(doc=>{return r.expr(collators).contains(doc('id'))})

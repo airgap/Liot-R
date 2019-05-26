@@ -7,7 +7,6 @@ var r = require('rethinkdb')
  * @param {array} filters - List of filters to insert
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
-
 function insertFilters(CONNECTION, filters, callback) {
   r.table('Filters').insert(filters, { conflict: 'replace' }).run(CONNECTION, callback)
 }

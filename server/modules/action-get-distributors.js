@@ -24,7 +24,5 @@ function actionGetDistributors(DEBUG, CONNECTION, req, res) {
       if(DEBUG)console.log(distros);
     }
   })
-
-
 }
 module.exports = actionGetDistributors;

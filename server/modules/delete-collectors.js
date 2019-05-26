@@ -7,7 +7,6 @@ var r = require('rethinkdb')
  * @param {array} collectors - List of collector IDs to delete
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
-
 function deleteCollectors(CONNECTION, collectors, callback) {
   r.table('Collectors')
     .filter(doc=>{return r.expr(collectors).contains(doc('id'))})

@@ -1,6 +1,6 @@
-var r = require('rethinkdb'),
-  sortify = require('./sortify'),
-  insertCollectors = require('./insert-collectors')
+var r                 = require('rethinkdb'),
+    sortify           = require('./sortify'),
+    insertCollectors  = require('./insert-collectors')
 /**
  * Creates one or more packet collectors.
  * @name Action: Add Collectors

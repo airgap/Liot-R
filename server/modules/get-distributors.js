@@ -7,7 +7,6 @@ var r = require('rethinkdb')
  * @param {array} distributors - List of distributors to retrieve
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
-
 function getDistributors(CONNECTION, distributors, callback) {
   r.table('Distributors')
     .filter(doc=>{return r.expr(distributors).contains(doc('id'))})

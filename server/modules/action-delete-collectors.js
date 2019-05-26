@@ -24,7 +24,5 @@ function actionDeleteCollectors(DEBUG, CONNECTION, req, res) {
       if(DEBUG)console.log(deleted);
     }
   })
-
-
 }
 module.exports = actionDeleteCollectors

@@ -9,7 +9,6 @@ var r = require('rethinkdb')
  * @param {string|object} order - key or method for sorting
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
-
 function listFilters(CONNECTION, after, count, order, callback) {
   r.table('Filters').count().run(CONNECTION, (err, total) => {
     if(err) {

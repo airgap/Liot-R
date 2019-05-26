@@ -1,5 +1,3 @@
-
-
 /**
  * Smart indexer that recognizes words like "abc12" to be less than "abc100"
  * @name Helper: Sortify
@@ -7,7 +5,6 @@
  * @param {text} ids - text to build an index value for
  * @returns {number} - index value of the provided text
  */
-
  function sortify(text) {
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
   var score = 0;

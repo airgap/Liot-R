@@ -1,5 +1,5 @@
-var insertDistributors = require('./insert-distributors'),
-    validUrl = require('valid-url')
+var insertDistributors  = require('./insert-distributors'),
+    validUrl            = require('valid-url')
 /**
  * Creates one or more packet distributors.
  * @name Action: Add Distributors
