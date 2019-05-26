@@ -23,7 +23,7 @@ function actionDeleteCollectors(DEBUG, CONNECTION, req, res, dat) {
             res.send({err: 'Unable to query.'});
             if(DEBUG)console.log(err);
           } else {
-            //res.send({filters:collators});
+            res.send({});
             if(DEBUG)console.log('Queried collectors.');
             if(DEBUG)console.log(collators);
           }

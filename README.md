@@ -196,7 +196,7 @@ Liot R is currently in development and is not yet fully functional. Installation
 
 * Collectors
   * Features
-    * [ ] Web UI
+    * [x] Web UI
     * [x] Simple collectors
     * [x] Aggregate collectors
   * Functions

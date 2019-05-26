@@ -89,8 +89,8 @@ var ADMINACTIONS = {
   /*Collectors*/
   "list collectors": actions.collectors.list,
   "add collectors": actions.collectors.add,
-  "get collectors": actions.getCollectors,
-  "delete collectors": actions.deleteCollectors,
+  "get collectors": actions.collectors.get,
+  "delete collectors": actions.collectors.delete,
   //"get referenced collectors": actionGetReferencedCollectors,
   /*Filters*/
   "list filters": actions.filters.list,

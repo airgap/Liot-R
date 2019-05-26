@@ -1,24 +1,8 @@
 <html>
   <head>
-    <title>Liot R: Edit Collector</title>
+    <title>Liot R: New Collector</title>
     <?php include 'head.php'?>
     <script>
-    var ID = '<?=$_GET['id']?>';
-      load(()=>{
-        LiotR.getCollectors({ids:[ID]}, res => {
-          if(res.err)err('Error retreiving collector.')
-          else if(!res.collectors.length) err('Invalid collector selected.')
-          else {
-            var c = res.collectors[0]
-            if(typeof c.name === 'string')
-              grab('collector-name').value = c.name
-              if(typeof c.device_info == 'object')
-                for(var t of 'manufacturer model series'.split(' '))
-                  if(typeof c.device_info[t] === 'string')
-                    grab('collector-'+t).value = c.device_info[t];
-          }
-        })
-      })
       function save() {
         //addc('save-button', 'disabled');
         err('Creating collector...');
@@ -35,14 +19,6 @@
           location.href = "/collectors.php";
         })
       }
-      //Delete the filter
-      function deletec() {
-        if(confirm("Are you sure you wish to delete this collector? This action cannot be undone.")) {
-          LiotR.deleteCollectors({ids:[ID]},res=>{
-            location.href = 'collectors.php';
-          })
-        }
-      }
       function err(text) {
         grab('compile-errors').innerHTML = text||"Ready";
         setc('compile-errors', 'invalid-json', text)
@@ -55,7 +31,7 @@
   <body>
     <div id="content">
       <?php include 'nav.php'?>
-      <h1>Edit Collector</h1>
+      <h1>New Collector</h1>
       <div class="bubbles new-box" id="filter-box">
         <div class="bubble max-bubble">
           <label for="collector-name">Name:</label>
@@ -69,7 +45,6 @@
 
           <span id="compile-errors" class="valid-json">Ready</span>
           <a id="save-button" onclick="save()" class="a-button">Save</a>
-          <a id="delete-button" onclick="deletec()" class="a-button">Delete</a>
         </div>
       </div>
     </div>
