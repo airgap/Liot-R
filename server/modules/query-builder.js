@@ -8,14 +8,9 @@ var r = require('rethinkdb');
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
 function buildFilterReferenceCounterQuery(ids) {
-  //referenced = !!referenced;
   var query = r.table('Filters');
   if(Array.isArray(ids))
     query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
-  //var isReferencedFilter = //r.table("Collators").group('id')('filters')(0).contains(f('id')).ungroup().contains(true);
-  //For counting
-  //('reduction').filter(r=>{return r.eq(true)}).count()
-  //if(!referenced)isReferencedFilter = isReferencedFilter.not();
   query = query.map(filt=>{return {id:filt('id'),refcount:r.table("Collators").group('id')('filters')(0).contains(filt('id')).ungroup()('reduction').filter(r=>{return r.eq(true)}).count()}})
   //query = query.filter(isReferencedFilter);
   return query;

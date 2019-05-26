@@ -43,7 +43,6 @@ function actionAddFilters(DEBUG, CONNECTION, req, res) {
         var json;
         try {
           json = JSON.parse(code);
-          //err();
         } catch(error) {
           err('Invalid JSON.');
           return;

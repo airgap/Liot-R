@@ -30,7 +30,6 @@ var r = require('rethinkdb'),
         trec.smart = sortify(collector.name || "");
         trec.aggregate = !!collector.aggregate
         trec.accessor = r.uuid();//rename collators to funnels?
-        //trec.funnel = r.uuid();//rename collators to funnels?
         collectors.push(trec);
       }
     }

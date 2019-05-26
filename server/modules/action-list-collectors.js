@@ -29,7 +29,6 @@ function actionListCollectors(DEBUG, CONNECTION, req, res) {
     direction = dat.direction;
   }
   if(direction == 'descending') order = r.desc(order)
-  //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
   listCollectors(CONNECTION, after, count, order, (err, collectors) => {
     if(err) {

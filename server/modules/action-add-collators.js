@@ -25,11 +25,6 @@ function actionAddCollators(DEBUG, CONNECTION, req, res) {
             filters.push(filter);
           }
         }
-        /*r.table('Filters').filter(r.expr(filters).contains(r.row('id'))).count().run(CONNECTION, (err, count) => {
-          if(count == filters.length) {
-            r.table('Collectors').insert()
-          }
-        })*/
       }
       tcol.filters = filters;
       collators.push(tcol);
