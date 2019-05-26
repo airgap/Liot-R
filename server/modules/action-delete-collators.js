@@ -20,7 +20,7 @@ function actionDeleteCollators(DEBUG, CONNECTION, req, res, dat) {
       res.send({err: 'Unable to delete collators.'});
       if(DEBUG)console.log(err);
     } else {
-      //res.send({filters:collators});
+      res.send({collators:collators});
       if(DEBUG)console.log('Deleted collators.');
       if(DEBUG)console.log(collators);
     }

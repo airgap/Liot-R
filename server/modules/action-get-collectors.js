@@ -1,4 +1,4 @@
-var actionGetCollectors = require('./action-get-collectors')
+var getCollectors = require('./get-collectors')
 /**
  * Retreives one or more packet collectors.
  * @name Action: Get Collators

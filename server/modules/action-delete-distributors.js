@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var deleteDistributors = require('./delete-distributors');
 /**
  * Delete one or more packet distributors.
  * @name Action: Delete Distributors
@@ -22,7 +22,7 @@ function actionDeleteDistributors(DEBUG, CONNECTION, req, res, dat) {
     } else {
       res.send({});
       if(DEBUG)console.log('Deleted distributors.');
-      if(DEBUG)console.log(collators);
+      if(DEBUG)console.log(deleted);
     }
   })
 

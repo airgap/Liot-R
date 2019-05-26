@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var listCollectors = require('./list-collectors')
 /**
  * Lists packet collectors.
  * @name Action: List Collectors
@@ -31,7 +31,7 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listCollectors(after, count, order, direction, (err, collectors) => {
+  listCollectors(CONNECTION, after, count, order, direction, (err, collectors) => {
     if(err) {
       res.send({err: 'Unable to list collectors.'});
       if(DEBUG)console.log(err);
