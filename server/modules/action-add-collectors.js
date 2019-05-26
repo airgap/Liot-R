@@ -10,7 +10,7 @@ var r = require('rethinkdb'),
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-module.exports = (DEBUG, CONNECTION, req, res) => {
+ function actionAddCollectors(DEBUG, CONNECTION, req, res) {
   var collectors = [];
   var manufacturer_attributes = ['manufacture_req.bodye', 'manufacturer', 'model', 'series'];
   if(Array.isArray(req.body.collectors)) {
@@ -40,3 +40,4 @@ module.exports = (DEBUG, CONNECTION, req, res) => {
     })
   }
 }
+module.exports = actionAddCollectors

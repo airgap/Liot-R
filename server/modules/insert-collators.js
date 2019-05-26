@@ -1,4 +1,5 @@
 var r = require('rethinkdb')
-module.exports = (CONNECTION, collators, callback) => {
+function insertCollators(CONNECTION, collators, callback) {
   r.table('Collators').insert(collators, { conflict: 'replace' }).run(CONNECTION, callback)
 }
+module.exports = insertCollators

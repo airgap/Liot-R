@@ -8,7 +8,7 @@ var insertCollators = require('./insert-collators.js')
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-module.exports = (DEBUG, CONNECTION, req, res) => {
+function actionAddCollators(DEBUG, CONNECTION, req, res) {
   if(Array.isArray(req.body.collators)) {
     var collators = [];
     for(var collator of req.body.collators) {
@@ -45,3 +45,4 @@ module.exports = (DEBUG, CONNECTION, req, res) => {
     }
   })
 }
+module.exports = actionAddCollators

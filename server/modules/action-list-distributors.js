@@ -8,7 +8,7 @@ var listDistributors = require('./list-distributors');
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-module.exports = (DEBUG, CONNECTION, req, res) => {
+function actionListDistributors(DEBUG, CONNECTION, req, res) {
   var dat = req.body
   var after = 0,
   count = 100,
@@ -41,6 +41,5 @@ module.exports = (DEBUG, CONNECTION, req, res) => {
       if(DEBUG)console.log(distributors);
     }
   })
-
-
 }
+module.exports = actionListDistributors

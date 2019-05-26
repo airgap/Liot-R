@@ -8,7 +8,7 @@ var getFilters = require('./get-filters')
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-module.exports = (DEBUG, CONNECTION, req, res) => {
+function actionGetFilters (DEBUG, CONNECTION, req, res) {
   if(!Array.isArray(req.body.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
@@ -27,3 +27,4 @@ module.exports = (DEBUG, CONNECTION, req, res) => {
 
 
 }
+module.exports = actionGetFilters

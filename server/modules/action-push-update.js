@@ -9,7 +9,7 @@ var r = require('rethinkdb');
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-module.exports = (DEBUG, CONNECTION, req, res) => {
+function actionPushUpdate(DEBUG, CONNECTION, req, res) {
   var dat = req.body
   var newUpdate = {};
   if(typeof dat.accessor != 'string') {
@@ -223,3 +223,4 @@ function evaluateProperty(object, update, child) {
   }
   return side;
 }
+module.exports = actionPushUpdate

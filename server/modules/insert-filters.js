@@ -1,5 +1,6 @@
 var r = require('rethinkdb')
 
-module.exports = (CONNECTION, filters, callback) => {
+function insertFilters(CONNECTION, filters, callback) => {
   r.table('Filters').insert(filters, { conflict: 'replace' }).run(CONNECTION, callback)
 }
+module.exports = insertFilters
