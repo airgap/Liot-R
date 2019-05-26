@@ -102,7 +102,7 @@
       function deletef() {
         if(confirm("Are you sure you wish to delete this filter? This action cannot be undone.")) {
           LiotR.deleteCollators({ids:[ID]},res=>{
-            location.href = 'filters.php';
+            location.href = 'collators.php';
           })
         }
       }
