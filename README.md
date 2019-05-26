@@ -194,52 +194,52 @@ This decentralized setup allows not only for an entirely airgapped network, but 
 
 Liot R is currently in development and is not yet fully functional. Installation and setup of certain prerequisites must be performed manually.
 
-* Collectors
-  * Features
+* [x] Collectors
+  * [x] Features
     * [x] Web UI
     * [x] Simple collectors
     * [x] Aggregate collectors
-  * Functions
+  * [x] Functions
     * [x] addCollectors
     - [x] deleteCollectors
     - [x] listCollectors
     - [x] getCollectors
-* Filters
-  * Features
+* [x] Filters
+  * [x] Features
     * [x] Web UI
-  * Functions
+  * [x] Functions
     * [x] addFilters
     - [x] deleteFilters
     - [x] listFilters
     - [x] getFilters
     - [x] countReferences
     - [x] listReferrers
-* Collators
-  * Features
+* [ ] Collators
+  * [x] Features
     * [x] Web UI
-  * Functions
+  * [ ] Functions
     * [x] addCollectors
     - [x] deleteCollectors
     - [x] listCollectors
     - [x] getCollectors
     - [x] countReferences
     - [ ] listReferrers
-* Distributors
-  * Features
+* [ ] Distributors
+  * [ ] Features
     - [x] Web UI
     - [ ] Push updates
       - [ ] Queued updates
     - [x] Callback updates
       - [ ] Accessor overriding
-  * Functions
+  * [x] Functions
     * [x] addCollectors
     - [x] deleteCollectors
     - [x] listCollectors
     - [x] getCollectors
-- Updates
-  - Features
+- [ ] Updates
+  - [x] Features
     - [x] Simple update
     - [x] Aggregate update
-  - Functions
+  - [ ] Functions
     - [x] pushUpdate
     - [ ] pushUpdates
