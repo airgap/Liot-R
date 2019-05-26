@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Liot R: Filters</title>
+    <title>Liot R: New Filter</title>
     <?php include 'head.php'?>
     <script>
     var COMPARATORS = [

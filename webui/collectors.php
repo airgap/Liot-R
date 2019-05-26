@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Liot R: Admin</title>
+    <title>Liot R: Collectors</title>
     <?php include 'head.php'?>
     <script>
       var collectorList;

@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Liot R: Admin</title>
+    <title>Liot R: Collators</title>
     <?php include 'head.php'?>
     <script>
       var collatorList;

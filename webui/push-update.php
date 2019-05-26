@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Liot R: New Distributor</title>
+    <title>Liot R: Push Update</title>
     <?php include 'head.php'?>
     <script>
 
