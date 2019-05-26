@@ -112,4 +112,4 @@ function actionAddFilters(DEBUG, CONNECTION, req, res) {
   }
   function err(text) { res.send({err: text}); if(DEBUG)console.log(text) }
 }
-module.exports = actionAddFilters
+module.exports = actionAddFilters;
