@@ -2,7 +2,7 @@
  * Smart indexer that recognizes words like "abc12" to be less than "abc100"
  * @name Helper: Sortify
  * @function
- * @param {text} ids - text to build an index value for
+ * @param {string} ids - text to build an index value for
  * @returns {number} - index value of the provided text
  */
  function sortify(text) {
