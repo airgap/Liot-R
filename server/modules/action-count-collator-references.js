@@ -7,10 +7,9 @@ var queryBuilder = require('./query-builder.js');
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-function actionCountCollatorReferences(DEBUG, CONNECTION, req, res, dat) {
-  query = queryBuilder.buildCollatorReferenceCounterQuery(Array.isArray(dat.ids) ? dat.ids : null);
+function actionCountCollatorReferences(DEBUG, CONNECTION, req, res) {
+  var query = queryBuilder.buildCollatorReferenceCounterQuery(Array.isArray(req.body.ids) ? req.body.ids : null);
   query.coerceTo('array').run(CONNECTION, (err, collators) => {
     if(err) {
       res.send({err:'Error counting collator references.'});

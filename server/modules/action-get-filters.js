@@ -7,15 +7,14 @@ var getFilters = require('./get-filters')
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
-  if(!Array.isArray(dat.ids)) {
+module.exports = (DEBUG, CONNECTION, req, res) => {
+  if(!Array.isArray(req.body.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
   }
-  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  getFilters(CONNECTION, dat.ids, (err, collators) => {
+  for(var id of req.body.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  getFilters(CONNECTION, req.body.ids, (err, collators) => {
     if(err) {
       res.send({err: 'Unable to getfilters.'});
       if(DEBUG)console.log(err);

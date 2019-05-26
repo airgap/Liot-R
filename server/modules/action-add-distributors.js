@@ -8,12 +8,11 @@ var insertDistributors = require('./insert-distributors'),
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
-  if(Array.isArray(dat.distributors)) {
+module.exports = (DEBUG, CONNECTION, req, res) => {
+  if(Array.isArray(req.body.distributors)) {
     var distributors = [];
-    for(var distributor of dat.distributors) {
+    for(var distributor of req.body.distributors) {
       var trans = {collators:[]}
       if(typeof distributor.id === "string") {
         trans.id = distributor.id;

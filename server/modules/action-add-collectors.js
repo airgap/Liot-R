@@ -9,13 +9,12 @@ var r = require('rethinkdb'),
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
+module.exports = (DEBUG, CONNECTION, req, res) => {
   var collectors = [];
-  var manufacturer_attributes = ['manufacture_date', 'manufacturer', 'model', 'series'];
-  if(Array.isArray(dat.collectors)) {
-    for(var collector of dat.collectors) {
+  var manufacturer_attributes = ['manufacture_req.bodye', 'manufacturer', 'model', 'series'];
+  if(Array.isArray(req.body.collectors)) {
+    for(var collector of req.body.collectors) {
       if(typeof collector === 'object') {
         var trec = {};
         if(typeof collector.device_info === 'object') {

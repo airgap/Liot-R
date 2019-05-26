@@ -26,12 +26,11 @@ var OPERATORS = [
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
-  if(Array.isArray(dat.filters)) {
+module.exports = (DEBUG, CONNECTION, req, res, req.body) => {
+  if(Array.isArray(req.body.filters)) {
     var filters = [];
-    for(var filter of dat.filters) {
+    for(var filter of req.body.filters) {
       var trans = {};
       if(typeof filter.name === "string") {
         trans.name = filter.name;

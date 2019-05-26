@@ -7,15 +7,14 @@ var deleteCollectors = require('./delete-collectors')
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-function actionDeleteCollectors(DEBUG, CONNECTION, req, res, dat) {
-  if(!Array.isArray(dat.ids)) {
+function actionDeleteCollectors(DEBUG, CONNECTION, req, res) {
+  if(!Array.isArray(req.body.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
   }
-  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  deleteCollectors(CONNECTION, dat.ids,  (err, deleted) => {
+  for(var id of req.body.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  deleteCollectors(CONNECTION, req.body.ids,  (err, deleted) => {
     if(err) {
       res.send({err: 'Unable to delete collectors.'});
       if(DEBUG)console.log(err);

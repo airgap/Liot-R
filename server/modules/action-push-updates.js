@@ -7,9 +7,9 @@
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-function actionPushUpdates(DEBUG, CONNECTION, req, res, dat) {
+function actionPushUpdates(DEBUG, CONNECTION, req, res) {
+  var dat = req.body
   if(!Array.isArray(dat.updates)) {
     res.send({err: 'No updates specified.'});
     return;

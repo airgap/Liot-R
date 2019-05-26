@@ -7,10 +7,9 @@ var queryBuilder = require('./query-builder.js');
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-function actionListFilterDistributors(DEBUG, CONNECTION, req, res, dat) {
-  var query = queryBuilder.buildFilterReferrerListerQuery(Array.isArray(dat.ids) ? dat.ids : null);
+function actionListFilterDistributors(DEBUG, CONNECTION, req, res) {
+  var query = queryBuilder.buildFilterReferrerListerQuery(Array.isArray(req.body.ids) ? req.body.ids : null);
   query.coerceTo('array').run(CONNECTION, (err, filters) => {
     if(err) {
       res.send('Error listing filter referrers.');

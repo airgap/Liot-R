@@ -7,12 +7,11 @@ var insertCollators = require('./insert-collators.js')
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
-  if(Array.isArray(dat.collators)) {
+module.exports = (DEBUG, CONNECTION, req, res) => {
+  if(Array.isArray(req.body.collators)) {
     var collators = [];
-    for(var collator of dat.collators) {
+    for(var collator of req.body.collators) {
       var tcol = {};
       if(typeof collator.id === "string") {
         tcol.id = collator.id;

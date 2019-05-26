@@ -7,10 +7,9 @@ var queryBuilder = require('./query-builder.js');
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-function actionCountFilterReferences(DEBUG, CONNECTION, req, res, dat) {
-  query = queryBuilder.buildFilterReferenceCounterQuery(Array.isArray(dat.ids) ? dat.ids : null);
+function actionCountFilterReferences(DEBUG, CONNECTION, req, res) {
+  query = queryBuilder.buildFilterReferenceCounterQuery(Array.isArray(req.body.ids) ? req.body.ids : null);
   query.coerceTo('array').run(CONNECTION, (err, filters) => {
     if(err) {
       res.send('Error counting filter references.');

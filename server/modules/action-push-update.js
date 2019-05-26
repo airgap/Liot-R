@@ -8,9 +8,9 @@ var r = require('rethinkdb');
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
+module.exports = (DEBUG, CONNECTION, req, res) => {
+  var dat = req.body
   var newUpdate = {};
   if(typeof dat.accessor != 'string') {
     res.send({err: 'No accessor specified.'});

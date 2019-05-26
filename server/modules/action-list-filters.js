@@ -7,9 +7,9 @@ var listFilters = require('./list-filters')
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
- * @param {object} dat - JSON data of the request
  */
-module.exports = (DEBUG, CONNECTION, req, res, dat) => {
+module.exports = (DEBUG, CONNECTION, req, res) => {
+  var dat = req.body
   var after = 0,
   count = 100,
   orders = ['smart','name', 'id'],
