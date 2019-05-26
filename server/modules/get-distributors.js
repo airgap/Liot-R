@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Retreive one or more packet distributors.
  * @name Database: Get Distributors
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

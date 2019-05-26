@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Delete one or more packet collectors.
  * @name Database: Delete Collectors
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

@@ -1,6 +1,6 @@
 var r = require('rethinkdb');
 /**
- *
+ * Retreive the contents of one or more packet filters.
  * @name Database: Get Filters
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

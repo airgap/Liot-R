@@ -1,6 +1,6 @@
 var listFilters = require('./list-filters')
 /**
- * Lists packet filters.
+ * List packet filters.
  * @name Action: List Filters
  * @function
  * @param {boolean} DEBUG - enable verbose logging

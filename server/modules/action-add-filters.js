@@ -27,7 +27,7 @@ var OPERATORS = [
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-function actionAddFilters(DEBUG, CONNECTION, req, res, req.body) {
+function actionAddFilters(DEBUG, CONNECTION, req, res) {
   if(Array.isArray(req.body.filters)) {
     var filters = [];
     for(var filter of req.body.filters) {

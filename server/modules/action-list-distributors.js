@@ -1,6 +1,6 @@
 var listDistributors = require('./list-distributors');
 /**
- * Lists packet distributors.
+ * List nonspecific packet distributors.
  * @name Action: List Distributors
  * @function
  * @param {boolean} DEBUG - enable verbose logging

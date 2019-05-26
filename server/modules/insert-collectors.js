@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Inserts one or more packet collectors.
  * @name Database: Insert Collectors
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

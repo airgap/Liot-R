@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Delete one or more packet distributors.
  * @name Database: Delete Distributors
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

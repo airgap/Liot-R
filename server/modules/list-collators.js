@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Lists filter collators.
  * @name Database: List Collators
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

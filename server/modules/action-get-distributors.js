@@ -1,6 +1,6 @@
 var getDistributors = require('./get-distributors')
 /**
- * Retreives one or more packet distributors.
+ * Retreive one or more packet distributors.
  * @name Action: Get Distributors
  * @function
  * @param {boolean} DEBUG - enable verbose logging

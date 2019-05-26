@@ -1,6 +1,6 @@
 var getCollators = require('./get-collators')
 /**
- * Retreives one or more filter collators.
+ * Retreive one or more filter collators.
  * @name Action: Delete Collators
  * @function
  * @param {boolean} DEBUG - enable verbose logging

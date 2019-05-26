@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Delete one or more filter collators.
  * @name Database: Delete Collators
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

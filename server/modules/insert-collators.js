@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Inserts one or more filter collators.
  * @name Database: Insert Collators
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

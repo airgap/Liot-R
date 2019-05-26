@@ -1,6 +1,6 @@
 var listCollators = require('./list-collators')
 /**
- * Lists filter collators.
+ * List nonspecific filter collators.
  * @name Action: List Collators
  * @function
  * @param {boolean} DEBUG - enable verbose logging

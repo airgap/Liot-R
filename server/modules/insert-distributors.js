@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Inserts one or more packet distributors.
  * @name Database: Insert Distributors
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

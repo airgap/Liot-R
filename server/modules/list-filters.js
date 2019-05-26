@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * List nonspecific packet filters.
  * @name Database: List Collators
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

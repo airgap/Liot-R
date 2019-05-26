@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Retreive one or more packet collectors.
  * @name Database: Get Collectors
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database

@@ -1,6 +1,6 @@
 var getFilters = require('./get-filters')
 /**
- * Retreived the contents of one or more packet filters.
+ * Retreive the contents of one or more packet filters.
  * @name Action: Get Filters
  * @function
  * @param {boolean} DEBUG - enable verbose logging

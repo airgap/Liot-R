@@ -1,6 +1,6 @@
 var getCollectors = require('./get-collectors')
 /**
- * Retreives one or more packet collectors.
+ * Retreive one or more packet collectors
  * @name Action: Get Collators
  * @function
  * @param {boolean} DEBUG - enable verbose logging

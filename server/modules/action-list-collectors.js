@@ -1,6 +1,6 @@
 var listCollectors = require('./list-collectors')
 /**
- * Lists packet collectors.
+ * List nonspecific packet collectors.
  * @name Action: List Collectors
  * @function
  * @param {boolean} DEBUG - enable verbose logging

@@ -1,6 +1,6 @@
 var r = require('rethinkdb')
 /**
- *
+ * Delete one or more packet filters.
  * @name Database: Delete Filters
  * @function
  * @param {object} CONNECTION - Connection to the RethinkDB database
