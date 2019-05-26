@@ -31,7 +31,7 @@ function actionListCollators(DEBUG, CONNECTION, req, res) {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listCollators(CONNECTION, after, count, order, direction, (err, collators) => {
+  listCollators(CONNECTION, after, count, order, (err, collators) => {
     if(err) {
       res.send({err: 'Unable to list collators.'});
       if(DEBUG)console.log(err);

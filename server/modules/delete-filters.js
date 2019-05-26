@@ -1,4 +1,12 @@
 var r = require('rethinkdb')
+/**
+ *
+ * @name Database: Delete Filters
+ * @function
+ * @param {object} CONNECTION - Connection to the RethinkDB database
+ * @param {array} filters - List of filter IDs to delete
+ * @param {function} callback - Function(error, result) to execute upon success or error
+ */
 
 function deleteFilters(CONNECTION, filters, callback) {
   r.table('Filters')

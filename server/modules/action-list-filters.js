@@ -31,7 +31,7 @@ function actionListFilters(DEBUG, CONNECTION, req, res) {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listFilters(CONNECTION, after, count, order, direction, (err, filters) => {
+  listFilters(CONNECTION, after, count, order, (err, filters) => {
     if(err) {
       res.send({err: 'Unable to query.'});
       if(DEBUG)console.log(err);

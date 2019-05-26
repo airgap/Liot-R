@@ -1,4 +1,12 @@
 var r = require('rethinkdb');
+/**
+ *
+ * @name Database: Get Filters
+ * @function
+ * @param {object} CONNECTION - Connection to the RethinkDB database
+ * @param {array} - list of filters to retrieve
+ * @param {function} callback - Function(error, result) to execute upon success or error
+ */
 
 
 

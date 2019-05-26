@@ -31,7 +31,7 @@ function actionListDistributors(DEBUG, CONNECTION, req, res) {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listDistributors(CONNECTION, after, count, order, direction, (err, distributors) => {
+  listDistributors(CONNECTION, after, count, order, (err, distributors) => {
     if(err) {
       res.send({err: 'Unable to list distributors.'});
       if(DEBUG)console.log(err);
