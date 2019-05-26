@@ -41,54 +41,54 @@ A brief overview of the advantages Linky's Intranets of Things provides over tra
 
 Traditional IoT configurations rely third-party servers to transfer data between devices. However, this introduces numerous weaknesses.
 
-<img src="images/2019/01/traditional-iot.png" alt="Traditional IoT" width="500">
+<img src="docs/images/2019/01/traditional-iot.png" alt="Traditional IoT" width="500">
 
 ### Mass Outage
 If the server goes down, all connected devices from all customer companies are disconnected and sent offline.
 
-<img src="images/2019/01/mass-outage.png" alt="Mass Outage" width="500">
+<img src="docs/images/2019/01/mass-outage.png" alt="Mass Outage" width="500">
 
 
 ### Mass Breach
 If the server is hacked, data from all parties is vulnerable to leaks and theft.
 
-<img src="images/2019/01/mass-breach.png" alt="Mass Breach" width="500">
+<img src="docs/images/2019/01/mass-breach.png" alt="Mass Breach" width="500">
 
 ### Reduced Security
 
 IoT devices existing on each company's internal network must maintain a connection to the Internet.
 
-<img src="images/2019/01/reduced-security.png" alt="Reduced Security" width="500">
+<img src="docs/images/2019/01/reduced-security.png" alt="Reduced Security" width="500">
 
 ### Increased Bandwidth Usage
 All data must pass through the central server, even if it is only going to be accessed by servers internal to your network. On a large scale, such as an IoT network spanning an entire city, this can prove prohibitively expensive.
 
-<img src="images/2019/01/increased-bandwidth.png" alt="Increased Bandwidth" width="500">
+<img src="docs/images/2019/01/increased-bandwidth.png" alt="Increased Bandwidth" width="500">
 
 ## The Solution
 One possible solution to these problems is to internalize IoT servers into each company's network. Normally, this would require complex combinations of hardware and software, with each company creating their own standards. Linky IoT is a client/server software package that not only ships with an easy-to-use, drag-and-drop network designer, but is compatible with every device capable of connecting to your company's intranet.
 
-<img src="images/2019/01/local-intranets-of-things.png" alt="Local Intranets of Things" width="500">
+<img src="docs/images/2019/01/local-intranets-of-things.png" alt="Local Intranets of Things" width="500">
 
 ### Outage Insulation
 If one or more IoT servers are downed, none of the other companies are affected. Even if one facility of one company goes down, its other facility can remain online.
 
-<img src="images/2019/01/outage-insulation.png" alt="Outage Insulation" width="500">
+<img src="docs/images/2019/01/outage-insulation.png" alt="Outage Insulation" width="500">
 
 ### Hacking Insulation
 If one server is hacked, no other servers are affected.
 
-<img src="images/2019/01/hacking-insulation.png" alt="Hacking Insulation" width="500">
+<img src="docs/images/2019/01/hacking-insulation.png" alt="Hacking Insulation" width="500">
 
 ### Maximum Security
 Linky IoT devices require no Internet connection, allowing your network to be fully air-gapped.
 
-<img src="images/2019/01/airgapped.png" alt="Airgapped" width="500">
+<img src="docs/images/2019/01/airgapped.png" alt="Airgapped" width="500">
 
 ### Reduced Bandwidth Usage
 Only data that needed at another facility needs to leave its facility of origin, reducing bandwidth requirements, latency, and risk of data leak.
 
-<img src="images/2019/01/reduced-bandwidth.png" alt="Reduced Bandwidth" width="500">
+<img src="docs/images/2019/01/reduced-bandwidth.png" alt="Reduced Bandwidth" width="500">
 
 ## Introducing the Intranets of Things
 Linky IoT stands not for Internet of Things, but _Intranets_ of Things. Many of the problems IoT faces are simply inherent to its nature and cannot be solved without changing the paradigm entirely. Your data is safest in your own hands, under your control, not that of some big corporation.
@@ -178,7 +178,7 @@ In this scenario, there is a single facility containing 5,000 panic buttons. If 
 
 Liot Router, however, can be run on an airgapped network without issue as no connection to an external server is required for operation or even initial setup. This network, pictured below, has a panic button in each room, a Liot Router on each floor, and a central router on the first floor.
 
-![Isolated network](/images/2019/01/iso.png)
+![Isolated network](/docs/images/2019/01/iso.png)
 
 
 Here's how the setup functions:
