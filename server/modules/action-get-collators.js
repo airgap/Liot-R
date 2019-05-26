@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var getCollators = require('./get-collators')
 /**
  * Retreives one or more filter collators.
  * @name Action: Delete Collators
@@ -15,20 +15,16 @@ function actionGetCollators(DEBUG, CONNECTION, req, res, dat) {
     return;
   }
   for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  var query = r.table('Collators')
-    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
-      .merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
-        .coerceTo('array')
-          .run(CONNECTION, (err, collators) => {
-            if(err) {
-              res.send({err: 'Unable to query.'});
-              if(DEBUG)console.log(err);
-            } else {
-              res.send({collators:collators});
-              if(DEBUG)console.log('Queried collators.');
-              if(DEBUG)console.log(collators);
-            }
-          })
+  getCollators(CONNECTION, dat.ids, (err, collators) => {
+    if(err) {
+      res.send({err: 'Unable to get collators.'});
+      if(DEBUG)console.log(err);
+    } else {
+      res.send({collators:collators});
+      if(DEBUG)console.log('Got collators.');
+      if(DEBUG)console.log(collators);
+    }
+  })
 
 
 }

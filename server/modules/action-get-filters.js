@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var getFilters = require('./get-filters')
 /**
  * Retreived the contents of one or more packet filters.
  * @name Action: Get Filters
@@ -15,19 +15,16 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
     return;
   }
   for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  var query = r.table('Filters')
-    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
-        .coerceTo('array')
-          .run(CONNECTION, (err, collators) => {
-            if(err) {
-              res.send({err: 'Unable to query.'});
-              if(DEBUG)console.log(err);
-            } else {
-              res.send({filters:collators});
-              if(DEBUG)console.log('Queried filters.');
-              if(DEBUG)console.log(collators);
-            }
-          })
+  getFilters(CONNECTION, dat.ids, (err, collators) => {
+    if(err) {
+      res.send({err: 'Unable to getfilters.'});
+      if(DEBUG)console.log(err);
+    } else {
+      res.send({filters:collators});
+      if(DEBUG)console.log('Got filters.');
+      if(DEBUG)console.log(collators);
+    }
+  })
 
 
 }

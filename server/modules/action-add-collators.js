@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var insertCollators = require('./insert-collators.js')
 /**
  * Creates one or more filter collators.
  * @name Action: Add Collators
@@ -36,10 +36,10 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
       collators.push(tcol);
     }
   }
-  r.table('Collators').insert(collators, { conflict: 'replace' }).run(CONNECTION, (err, inserted) => {
+  insertCollators(CONNECTION, collators, (err, inserted) => {
     if(err) {
       res.send({err:"Unable to create collators."});
-        if(DEBUG)console.log(err);
+      if(DEBUG)console.log(err);
     } else {
       res.send({});
       if(DEBUG)console.log("Created collators.");

@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var insertDistributors = require('./insert-distributors');
 /**
  * Creates one or more packet distributors.
  * @name Action: Add Distributors
@@ -33,7 +33,7 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
       trans.callback = !!distributor.callback;
       distributors.push(trans);
     }
-    r.table('Distributors').insert(distributors, { conflict: 'replace' }).run(CONNECTION, (err, created) => {
+    insertDistributors(CONNECTION, distributors, (err, created) => {
       if(err) {
         res.send({err:'Error creating distributors.'});
         if(DEBUG)console.log(err);

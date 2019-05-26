@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var deleteFilters = require('./delete-filters')
 /**
  * Delete one or more packet filters.
  * @name Action: Delete Filters
@@ -14,20 +14,17 @@ function actionDeleteFilters(DEBUG, CONNECTION, req, res, dat) {
     res.send({err: "No list of IDs provided."});
     return;
   }
-  for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  var query = r.table('Filters')
-    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
-      .delete()
-        .run(CONNECTION, (err, collators) => {
-          if(err) {
-            res.send({err: 'Unable to query.'});
-            if(DEBUG)console.log(err);
-          } else {
-            res.send({filters:collators});
-            if(DEBUG)console.log('Queried filters.');
-            if(DEBUG)console.log(collators);
-          }
-        })
+  for(var id of dat.ids)if(typeof id !== 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
+  deleteFilters(CONNECTION, dat.ids, (err, collators) => {
+    if(err) {
+      res.send({err: 'Unable to delete filters.'});
+      if(DEBUG)console.log(err);
+    } else {
+      res.send({filters:collators});
+      if(DEBUG)console.log('Deleted filters.');
+      if(DEBUG)console.log(collators);
+    }
+  })
 
 
 }

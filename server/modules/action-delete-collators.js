@@ -1,6 +1,6 @@
-var r = require('rethinkdb');
+var deleteCollators = require('./delete-collators');
 /**
- * Delete one or more filter collators.
+ * Delete one or more filter collators. Exposed to API.
  * @name Action: Delete Collators
  * @function
  * @param {boolean} DEBUG - enable verbose logging
@@ -15,19 +15,16 @@ function actionDeleteCollators(DEBUG, CONNECTION, req, res, dat) {
     return;
   }
   for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  var query = r.table('Collators')
-    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
-      .delete()
-        .run(CONNECTION, (err, collators) => {
-          if(err) {
-            res.send({err: 'Unable to query.'});
-            if(DEBUG)console.log(err);
-          } else {
-            //res.send({filters:collators});
-            if(DEBUG)console.log('Queried collators.');
-            if(DEBUG)console.log(collators);
-          }
-        })
+  deleteCollators(CONNECTION, dat.ids, (err, collators) => {
+    if(err) {
+      res.send({err: 'Unable to delete collators.'});
+      if(DEBUG)console.log(err);
+    } else {
+      //res.send({filters:collators});
+      if(DEBUG)console.log('Deleted collators.');
+      if(DEBUG)console.log(collators);
+    }
+  })
 
 
 }

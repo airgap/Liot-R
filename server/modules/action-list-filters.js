@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var listFilters = require('./list-filters')
 /**
  * Lists packet filters.
  * @name Action: List Filters
@@ -31,27 +31,14 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  r.table('Filters').count().run(CONNECTION, (err, total) => {
+  listFilters(CONNECTION, after, count, order, direction, (err, filters) => {
     if(err) {
-
+      res.send({err: 'Unable to query.'});
+      if(DEBUG)console.log(err);
     } else {
-      if(after<0)after += total;
-      after = Math.max(0,after);
-      var query = r.table('Filters')
-        .orderBy(order)
-          .slice(after, after + count)
-            .coerceTo('array')
-              .run(CONNECTION, (err, collators) => {
-                if(err) {
-                  res.send({err: 'Unable to query.'});
-                  console.log(err);
-                } else {
-                  res.send({filters:collators});
-                  console.log('Queried filters.');
-                }
-              })
+      res.send({filters:filters});
+      if(DEBUG)console.log('Queried filters.');
     }
-
   })
 
 

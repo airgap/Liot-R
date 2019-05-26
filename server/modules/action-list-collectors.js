@@ -31,28 +31,15 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  r.table('Collectors').count().run(CONNECTION, (err, total) => {
+  listCollectors(after, count, order, direction, (err, collectors) => {
     if(err) {
-
+      res.send({err: 'Unable to list collectors.'});
+      if(DEBUG)console.log(err);
     } else {
-      if(after<0)after += total;
-      after = Math.max(0,after);
-      var query = r.table('Collectors')
-        .orderBy(order)
-          .slice(after, after + count)
-            .coerceTo('array')
-              .run(CONNECTION, (err, collectors) => {
-                if(err) {
-                  res.send({err: 'Unable to query.'});
-                  if(DEBUG)console.log(err);
-                } else {
-                  res.send({collectors:collectors});
-                  if(DEBUG)console.log('Queried collectors.');
-                  if(DEBUG)console.log(collectors);
-                }
-              })
+      res.send({collectors:collectors});
+      if(DEBUG)console.log('Listed collectors.');
+      if(DEBUG)console.log(collectors);
     }
-
   })
 
 

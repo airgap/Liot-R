@@ -15,19 +15,16 @@ function actionDeleteDistributors(DEBUG, CONNECTION, req, res, dat) {
     return;
   }
   for(var id of dat.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  var query = r.table('Distributors')
-    .filter(doc=>{return r.expr(dat.ids).contains(doc('id'))})
-      .delete()
-        .run(CONNECTION, (err, collators) => {
-          if(err) {
-            res.send({err: 'Unable to query.'});
-            if(DEBUG)console.log(err);
-          } else {
-            //res.send({filters:collators});
-            if(DEBUG)console.log('Queried distributors.');
-            if(DEBUG)console.log(collators);
-          }
-        })
+  deleteDistributors(CONNECTION, dat.ids, (err, deleted) => {
+    if(err) {
+      res.send({err: 'Unable to delete distributors.'});
+      if(DEBUG)console.log(err);
+    } else {
+      res.send({});
+      if(DEBUG)console.log('Deleted distributors.');
+      if(DEBUG)console.log(collators);
+    }
+  })
 
 
 }

@@ -1,5 +1,5 @@
-var r = require('rethinkdb');
-var sortify = require('./sortify');
+var sortify = require('./sortify')
+    insertCollectors = require('./insert-collectors')
 /**
  * Creates one or more packet collectors.
  * @name Action: Add Collectors
@@ -34,9 +34,9 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
         collectors.push(trec);
       }
     }
-    r.table('Collectors').insert(collectors, { conflict: 'replace' }).run(CONNECTION, (err, inserted) => {
+    insertCollectors(CONNECTION, collectors, (err, inserted) => {
       var obj = err ? {err: 'Could not create collectors.'} : {}
       res.send(obj)
-    });
+    })
   }
 }

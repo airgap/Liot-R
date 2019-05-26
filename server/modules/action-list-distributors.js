@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var listDistributors = require('./list-distributors');
 /**
  * Lists packet distributors.
  * @name Action: List Distributors
@@ -31,30 +31,15 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
   if(direction == 'descending') order = r.desc(order)
   //var col = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  r.table('Distributors').count().run(CONNECTION, (err, total) => {
+  listDistributors(CONNECTION, after, count, order, direction, (err, distributors) => {
     if(err) {
-
+      res.send({err: 'Unable to list distributors.'});
+      if(DEBUG)console.log(err);
     } else {
-      if(after<0)after += total;
-      after = Math.max(0,after);
-      var query = r.table('Distributors')
-        .orderBy(order)
-          .slice(after, after + count).merge(doc=>{return {collets:r.table('Collators').getAll(r.args(doc('collators')))
-.merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
-          .coerceTo('array')}})
-            .coerceTo('array')
-              .run(CONNECTION, (err, distributors) => {
-                if(err) {
-                  res.send({err: 'Unable to query.'});
-                  if(DEBUG)console.log(err);
-                } else {
-                  res.send({distributors:distributors});
-                  if(DEBUG)console.log('Queried distributors.');
-                  if(DEBUG)console.log(distributors);
-                }
-              })
+      res.send({distributors:distributors});
+      if(DEBUG)console.log('Listed distributors.');
+      if(DEBUG)console.log(distributors);
     }
-
   })
 
 

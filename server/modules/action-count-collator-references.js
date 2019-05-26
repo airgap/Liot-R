@@ -13,9 +13,10 @@ function actionCountCollatorReferences(DEBUG, CONNECTION, req, res, dat) {
   query = queryBuilder.buildCollatorReferenceCounterQuery(Array.isArray(dat.ids) ? dat.ids : null);
   query.coerceTo('array').run(CONNECTION, (err, collators) => {
     if(err) {
-      res.send('Error counting collator references.');
+      res.send({err:'Error counting collator references.'});
       return;
     }
+    console.log('Collators', collators)
     res.send({collators:collators});
   })
 }

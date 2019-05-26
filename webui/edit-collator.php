@@ -49,7 +49,7 @@
                 return;
               }
               var cool = res.collators[0];
-                grab('reference-count').innerHTML = "Used by " + cool.referrers.length + " distributors."
+                grab('reference-count').innerHTML = "Used by " + (cool.refcount||"no") + " distributors."
               console.log(cool.refcount);
               if(cool.refcount)addc('delete-button', 'disabled')
               if(cool.refcount)grab('delete-button').innerHTML = "Undeletable";
@@ -128,6 +128,7 @@
           <div class="bubble max-bubble" id="filter-list">
             <a onclick="addFilter()" id="add-filter">+ Filter</a>
           </div>
+          <span id="compile-errors" class="valid-json">Ready</span>
           <a id="save-button" onclick="save()" class="a-button">Save</a>
           <a id="delete-button" onclick="deletef()" class="a-button">Delete</a>
           <span id="reference-count">Ready</span>

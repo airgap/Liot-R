@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var insertFilters = require('./insert-filters');
 var COMPARATORS = [
   "EQUALS",
   "NEQUALS",
@@ -102,7 +102,7 @@ module.exports = (DEBUG, CONNECTION, req, res, dat) => {
       }
       filters.push(trans);
     }
-    r.table('Filters').insert(filters, { conflict: 'replace' }).run(CONNECTION, (err, created) => {
+    insertFilters(CONNECTION, filters, (err, created) => {
       if(err) {
         res.send({err:'Error creating filters.'});
         if(DEBUG)console.log(err);
