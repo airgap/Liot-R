@@ -29,6 +29,7 @@ var bodyParser = require('body-parser');
 var validUrl = require('valid-url')
 var request = require('request');
 const app = express();
+const adminPanel = express();
 var fs = require('fs');
 var CONFIG = {};
 CONFIG.port = 7474;
@@ -186,6 +187,8 @@ function launchHttpServer() {
   app.post('/', rcvdPost)
 
   app.listen(CONFIG.port)
+  adminPanel.listen(80)
+  adminPanel.use(express.static('./webui'))
 }
 
 function rcvdPost(req, res) {
