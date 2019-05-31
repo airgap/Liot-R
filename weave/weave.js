@@ -10,6 +10,10 @@ var UNMET_DEPENDENCIES = {};
 var WRITTEN_FILES = {};
 var ACTIVE_READS = 0;
 
+var DEPENDENCY_COUNT = 0;
+var INTERPOLATED_COUNT = 0;
+var WRITTEN_FILE_COUNT = 0;
+
 var ARGREG = /^[\-\/](.+)$/;
 var ATREG = /(?:^|[^\\])(?:\\\\)*@@(.+?)(?:(?:\\\\)*@@|$)/gm;
 var CONF = {
@@ -82,7 +86,8 @@ function listTree(directory) {
           //console.log("MATCH",ext)
           while(m = e.exec(body)) {
             var p = pathify(directory, m[1]);
-            var op = pathify(outify(directory), m[1]);
+            //var op = pathify(outify(directory), m[1]);
+            var op = pather.join(CONF.t,p.substring(CONF.i.length))
             var pathObj = {
               name: m[1],
               inputPath: p,
@@ -90,6 +95,7 @@ function listTree(directory) {
               inputDir: directory,
               outputDir: outify(directory)
             }
+            DEPENDENCY_COUNT++;
             if(!dependencies.includes(pathObj))
               dependencies.push(pathObj)
           }
@@ -110,7 +116,7 @@ function unqueueRead() {
     /*for(k of Object.keys(UNMET_DEPENDENCIES))
       for(d in UNMET_DEPENDENCIES[k])
         UNMET_DEPENDENCIES[k][d].outed = outify(UNMET_DEPENDENCIES[k][d].path)*/
-    console.log("CONT", CONF, "DIRECTORIES", DIRECTORIES, "FILES", FILES,"DEPENDENCIES", DEPENDENCIES, "UNMET", UNMET_DEPENDENCIES);
+    //console.log("CONT", CONF, "DIRECTORIES", DIRECTORIES, "FILES", FILES,"DEPENDENCIES", DEPENDENCIES, "UNMET", UNMET_DEPENDENCIES);
     passDependencies();
   }
 }
@@ -163,16 +169,11 @@ function passDependencies() {
           interpolateDependency(d);
         }
         if(!reqs){
-          //console.log(f, "NO REQS", DEPENDENCIES[f]);
           writeReplaced();
-        } else {
-          //console.log(f, "REQS", DEPENDENCIES[f])
         }
         function interpolateDependency(d) {
-          //d = outify(d);
-          //console.log(d)
           var fmatch=d.name;//d.substring(CONF.o.length).replace(/[\\\/]/g,'[\\\\\\\/]').replace('.','\\.')
-          console.log("INTERPOLATING", d);
+          //console.log("INTERPOLATING", f, d);
           fs.readFile(d.outputPath,'utf-8',(err,bod) => {
             var reg = new RegExp('(^|[^\\\\])(\\\\\\\\)*@@'+fmatch+'((?:\\\\\\\\)*@@|$)','gm');
             //console.log(reg);
@@ -195,16 +196,19 @@ function passDependencies() {
               if(err)throw err
               for(var k of Object.keys(UNMET_DEPENDENCIES)) {
                 for(d in UNMET_DEPENDENCIES[k]) {
-                  if(f=="C:\\Users\\nikki\\documents\\github\\liot-r\\weave\\unwoven-site\\head.html")//&&UNMET_DEPENDENCIES[k][d].name=="/nav.html")
-                    console.log(f,UNMET_DEPENDENCIES[k][d].inputPath)
+                  /*if(f=="C:\\Users\\nikki\\documents\\github\\liot-r\\weave\\unwoven-site\\head.html")//&&UNMET_DEPENDENCIES[k][d].name=="/nav.html")
+                    console.log(f,UNMET_DEPENDENCIES[k][d].inputPath)*/
                   //console.log("UNMET K", UNMET_DEPENDENCIES[k], "UNMET D", UNMET_DEPENDENCIES[k][d], "f", f, "OUTD", outify(f))
                   if(UNMET_DEPENDENCIES[k][d].inputPath==f) {
+                    //console.log("MATCHES")
                     UNMET_DEPENDENCIES[k].splice(d,1);
+                    INTERPOLATED_COUNT++;
                     break;
                   }
                 }
               }
               WRITTEN_FILES[f] = true;
+              WRITTEN_FILE_COUNT++;
               filesWrittenInPass++;
               tryAnotherPass();
             })
@@ -217,12 +221,12 @@ function passDependencies() {
   }
 }
 function outify(d) {
-  //console.log("OUTIFY", d, CONF.i)
   //var out = CONF.t+(d.match(/([\/\\].+)/)||[0,"/"+d])[1]
   //out = pather.resolve(out)
   var out = d;
   if(CONF.i==d.substring(0,CONF.i.length)) out = pather.join(CONF.o,d.substring(CONF.i.length+1))
   //console.log("OUTEDY", out)
+    //console.log("OUTIFY", d, CONF.i, out)
   return out
 }
 function pathify(directory, m) {
@@ -243,6 +247,7 @@ function tryAnotherPass() {
   filesLeftInPass--;
   if(filesLeftInPass==0) {
     if(filesWrittenInPass) {
+      //setTimeout(passDependencies,1000)
       passDependencies();
     } else {
       var t = '';
@@ -257,9 +262,28 @@ function tryAnotherPass() {
         }
       }
       if(failed) {
-        console.log('Nonexistent dependencies or loop discovered.')
+        clearTimeout(updateInterval)
+        updateProgress();
+        console.log('\nNonexistent dependencies or loop discovered.')
         console.log(t)
+      } else {
+        updateProgress()
+        console.log("\nSuccess!")
+        clearTimeout(updateInterval)
       }
     }
   }
 }
+var LAST_STATUS = null
+function updateProgress(){
+  var status = `\rWeaves: ${INTERPOLATED_COUNT} of ${DEPENDENCY_COUNT} | Written: ${WRITTEN_FILE_COUNT} of ${FILES.length}              `;
+  if(status !=LAST_STATUS) {
+    LAST_STATUS = status;
+    process.stdout.write(status)
+  }
+  //console.log(`Weaves: ${INTERPOLATED_COUNT} of ${DEPENDENCY_COUNT}`)
+  if(WRITTEN_FILE_COUNT==FILES.length) {
+    //clearTimeout(updateInterval)
+  }
+}
+var updateInterval = setInterval(updateProgress, 1)

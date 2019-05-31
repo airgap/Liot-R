@@ -1,6 +1,7 @@
 var DEBUG = 1||false;
 var TABLES = ['Filters', 'Collectors', 'Collators', 'Distributors', 'DistributedData']
 var ENSURED_TABLES = [];
+var CHECKS = {};
 
 var COMPARATORS = [
   "EQUALS",
@@ -179,16 +180,37 @@ function ensureTable(t) {
   }).run(CONNECTION, (err, status) => {
     if(status.dbs_created) console.log("Table " + t + " created.")
     ENSURED_TABLES.push(t)
-    if(ENSURED_TABLES.length==TABLES.length) console.log('All tables ensured.');
+    if(ENSURED_TABLES.length==TABLES.length) {
+      console.log('All tables ensured.');
+      CHECKS.tablesPrepped = true;
+      confirmRunning();
+    }
   })
+}
+
+function confirmRunning() {
+  if(CHECKS.tablesPrepped && CHECKS.httpServerRunning) {
+    var out = "Liot R launched. Ready for queries" + (CHECKS.adminPanelRunning ? ' and GUI interaction.' : '.')
+    console.log(out)
+  }
 }
 
 function launchHttpServer() {
   app.post('/', rcvdPost)
-
+  CHECKS.httpServerRunning = true;
+  console.log(`HTTP server launched on port ${CONFIG.port}.`)
   app.listen(CONFIG.port)
-  adminPanel.listen(80)
-  adminPanel.use(express.static('./webui'))
+  fs.exists('./webui', exists => {
+    if(exists) {
+      adminPanel.listen(80)
+      adminPanel.use(express.static('./webui'))
+      console.log(`Admin panel launched on port ${80}.`)
+      CHECKS.adminPanelRunning = true;
+    } else {
+      console.log("No admin panel detected. Running in headless mode.")
+    }
+    confirmRunning();
+  })
 }
 
 function rcvdPost(req, res) {

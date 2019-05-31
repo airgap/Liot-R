@@ -5,7 +5,7 @@
     <script>
 
     //The filter ID from the URL
-    var ID = '<?=isset($_GET['id'])?$_GET['id']:0?>';
+    var ID = getPageId();
 
     //Comparators for the Liot filter code JSON parser
     var COMPARATORS = [

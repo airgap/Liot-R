@@ -9,7 +9,7 @@ function load(func) {
 }
 function namify(rec, type, editing) {
   var name = xss(rec.name||''), id = xss(rec.id);
-  var edit = `<a class='title-edit${editing?' disabled':''}' href="edit-${type}.php?id=${rec.id}">edit${editing?'ing':''}</a>`;
+  var edit = `<a class='title-edit${editing?' disabled':''}' href="/${type}s/edit?id=${rec.id}">edit${editing?'ing':''}</a>`;
   return ( name.length ? name : '<i>Unnamed ' + type[0].toUpperCase() + type.substr(1) + "</i>" ) + edit + " <span class='name-id'>["+id+"]</span>";
   /*return rec.name && rec.name.length ?
     name + edit + " <span class='name-id'>["+id+"]</span>" :
@@ -192,6 +192,11 @@ function appendDropper(bubble) {
 }
 function bindBubble(bubble, rec) {
   bind(bubble, 'click', ()=>{
-    location.href = 'edit-filter.php?id='+rec.id;
+    location.href = '/filters/edit?id='+rec.id;
   })
+}
+
+function getPageId() {
+  var id = location.href.match(/\?id=(.+)$/)
+  return id ? id[1] : 0;
 }

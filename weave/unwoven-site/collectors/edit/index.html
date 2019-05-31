@@ -3,7 +3,7 @@
     <title>Liot R: Edit Collector</title>
     @@/head.html
     <script>
-    var ID = '<?=isset($_GET['id'])?$_GET['id']:0?>';
+    var ID = getPageId();
       load(()=>{
         LiotR.getCollectors({ids:[ID]}, res => {
           if(res.err)err('Error retreiving collector.')
