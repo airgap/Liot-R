@@ -1,4 +1,4 @@
-var r = require('rethinkdb')
+
 /**
  * Inserts one or more packet distributors.
  * @name Database: Insert Distributors
@@ -7,7 +7,5 @@ var r = require('rethinkdb')
  * @param {array} distributors - List of distributors to insert
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
-function insertDistributors(CONNECTION, distributors, callback) {
-  r.table('Distributors').insert(distributors, { conflict: 'replace' }).run(CONNECTION, callback)
-}
-module.exports = insertDistributors
+export const insertDistributors = (r, distributors) =>
+  r.table('Distributors').insert(distributors, { conflict: 'replace' });

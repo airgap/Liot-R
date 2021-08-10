@@ -1,4 +1,4 @@
-var deleteFilters = require('./delete-filters')
+var deleteFilters = require('../delete-filters')
 /**
  * Delete one or more packet filters.
  * @name Action: Delete Filters

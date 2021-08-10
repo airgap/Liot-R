@@ -1,14 +1,14 @@
-var listCollectors = require('./list-collectors')
+var listFilters = require('../list-filters')
 /**
- * List nonspecific packet collectors.
- * @name Action: List Collectors
+ * List packet filters.
+ * @name Action: List Filters
  * @function
  * @param {boolean} DEBUG - enable verbose logging
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-function actionListCollectors(DEBUG, CONNECTION, req, res) {
+function actionListFilters(DEBUG, CONNECTION, req, res) {
   var dat = req.body
   var after = 0,
   count = 100,
@@ -30,15 +30,14 @@ function actionListCollectors(DEBUG, CONNECTION, req, res) {
   }
   if(direction == 'descending') order = r.desc(order)
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listCollectors(CONNECTION, after, count, order, (err, collectors) => {
+  listFilters(CONNECTION, after, count, order, (err, filters) => {
     if(err) {
-      res.send({err: 'Unable to list collectors.'});
+      res.send({err: 'Unable to query.'});
       if(DEBUG)console.log(err);
     } else {
-      res.send({collectors:collectors});
-      if(DEBUG)console.log('Listed collectors.');
-      if(DEBUG)console.log(collectors);
+      res.send({filters:filters});
+      if(DEBUG)console.log('Queried filters.');
     }
   })
 }
-module.exports = actionListCollectors
+module.exports = actionListFilters

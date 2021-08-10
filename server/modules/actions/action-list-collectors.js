@@ -1,14 +1,14 @@
-var listCollators = require('./list-collators')
+var listCollectors = require('../list-collectors')
 /**
- * List nonspecific filter collators.
- * @name Action: List Collators
+ * List nonspecific packet collectors.
+ * @name Action: List Collectors
  * @function
  * @param {boolean} DEBUG - enable verbose logging
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-function actionListCollators(DEBUG, CONNECTION, req, res) {
+function actionListCollectors(DEBUG, CONNECTION, req, res) {
   var dat = req.body
   var after = 0,
   count = 100,
@@ -30,15 +30,15 @@ function actionListCollators(DEBUG, CONNECTION, req, res) {
   }
   if(direction == 'descending') order = r.desc(order)
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listCollators(CONNECTION, after, count, order, (err, collators) => {
+  listCollectors(CONNECTION, after, count, order, (err, collectors) => {
     if(err) {
-      res.send({err: 'Unable to list collators.'});
+      res.send({err: 'Unable to list collectors.'});
       if(DEBUG)console.log(err);
     } else {
-      res.send({collators:collators});
-      if(DEBUG)console.log('Listed collators.');
-      if(DEBUG)console.log(collators);
+      res.send({collectors:collectors});
+      if(DEBUG)console.log('Listed collectors.');
+      if(DEBUG)console.log(collectors);
     }
   })
 }
-module.exports = actionListCollators
+module.exports = actionListCollectors

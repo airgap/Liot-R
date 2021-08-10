@@ -1,4 +1,4 @@
-var queryBuilder = require('./query-builder.js');
+var queryBuilder = require('../query-builder.ts');
 /**
  * Count the number of collators referencing one or more packet filters.
  * @name Action: Count Filter References

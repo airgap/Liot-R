@@ -1,4 +1,4 @@
-var queryBuilder = require('./query-builder.js');
+var queryBuilder = require('../query-builder.ts');
 /**
  * Lists the distributors referencing one or more filters, recursively building the reference tree.
  * @name Action: List Filter Distributors

@@ -1,14 +1,14 @@
-var listFilters = require('./list-filters')
+var listCollators = require('../list-collators')
 /**
- * List packet filters.
- * @name Action: List Filters
+ * List nonspecific filter collators.
+ * @name Action: List Collators
  * @function
  * @param {boolean} DEBUG - enable verbose logging
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-function actionListFilters(DEBUG, CONNECTION, req, res) {
+function actionListCollators(DEBUG, CONNECTION, req, res) {
   var dat = req.body
   var after = 0,
   count = 100,
@@ -30,14 +30,15 @@ function actionListFilters(DEBUG, CONNECTION, req, res) {
   }
   if(direction == 'descending') order = r.desc(order)
   var reg = /([A-Za-z]+|[0-9]+|.+?)/g;
-  listFilters(CONNECTION, after, count, order, (err, filters) => {
+  listCollators(CONNECTION, after, count, order, (err, collators) => {
     if(err) {
-      res.send({err: 'Unable to query.'});
+      res.send({err: 'Unable to list collators.'});
       if(DEBUG)console.log(err);
     } else {
-      res.send({filters:filters});
-      if(DEBUG)console.log('Queried filters.');
+      res.send({collators:collators});
+      if(DEBUG)console.log('Listed collators.');
+      if(DEBUG)console.log(collators);
     }
   })
 }
-module.exports = actionListFilters
+module.exports = actionListCollators

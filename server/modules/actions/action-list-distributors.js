@@ -1,4 +1,4 @@
-var listDistributors = require('./list-distributors');
+var listDistributors = require('../list-distributors');
 /**
  * List nonspecific packet distributors.
  * @name Action: List Distributors

@@ -1,28 +1,28 @@
-var getFilters = require('./get-filters')
+var getDistributors = require('../get-distributors')
 /**
- * Retreive the contents of one or more packet filters.
- * @name Action: Get Filters
+ * Retreive one or more packet distributors.
+ * @name Action: Get Distributors
  * @function
  * @param {boolean} DEBUG - enable verbose logging
  * @param {object} CONNECTION - connection to the RethinkDB database
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-function actionGetFilters (DEBUG, CONNECTION, req, res) {
+function actionGetDistributors(DEBUG, CONNECTION, req, res) {
   if(!Array.isArray(req.body.ids)) {
     res.send({err: "No list of IDs provided."});
     return;
   }
   for(var id of req.body.ids)if(typeof id != 'string' || id.length > 55) { res.send({err: 'Invalid (non-string) ID provided.'}); return }
-  getFilters(CONNECTION, req.body.ids, (err, collators) => {
+  var query = getDistributors(CONNECTION, req.body.ids, (err, distros) => {
     if(err) {
-      res.send({err: 'Unable to getfilters.'});
+      res.send({err: 'Unable to get distributors.'});
       if(DEBUG)console.log(err);
     } else {
-      res.send({filters:collators});
-      if(DEBUG)console.log('Got filters.');
-      if(DEBUG)console.log(collators);
+      res.send({distributors:distros});
+      if(DEBUG)console.log('Got distributors.');
+      if(DEBUG)console.log(distros);
     }
   })
 }
-module.exports = actionGetFilters
+module.exports = actionGetDistributors;
