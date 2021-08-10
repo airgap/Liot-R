@@ -1,16 +1,14 @@
-var queryBuilder = require('../query-builder.ts');
+import {buildCollatorReferenceCounterQuery} from '../query-builder';
 
 /**
  * Count the number of distributors referencing one or more filter collators.
  * @name Action: Count Collator References
  * @function
- * @param {boolean} DEBUG - enable verbose logging
- * @param {object} CONNECTION - connection to the RethinkDB database
- * @param {object} req - Express request
- * @param {object} res - Express response
+ * @param {array} ids - I don't remember
+ * @param {object} r - connection to the RethinkDB database
  */
 async function actionCountCollatorReferences({ids}, r) {
-    const query = queryBuilder.buildCollatorReferenceCounterQuery(
+    const query = buildCollatorReferenceCounterQuery(
         Array.isArray(ids)
             ? ids
             : null,

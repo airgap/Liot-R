@@ -6,7 +6,7 @@
  * @param {array} ids - list of filter ids to run the query on
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
-function buildFilterReferenceCounterQuery(ids, r) {
+export function buildFilterReferenceCounterQuery(ids, r) {
     var query = r.table('Filters');
     if (Array.isArray(ids))
         query = query.filter(d => {
@@ -32,7 +32,7 @@ function buildFilterReferenceCounterQuery(ids, r) {
  * @param {array} ids - list of collator ids to run the query on
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
-function buildCollatorReferenceCounterQuery(ids, r) {
+export function buildCollatorReferenceCounterQuery(ids, r) {
     let query = r.table('Collators');
     if (Array.isArray(ids))
         query = query.filter(d => r.expr(ids).contains(d('id')));
@@ -57,7 +57,7 @@ function buildCollatorReferenceCounterQuery(ids, r) {
  * @param {array} ids - list of filter ids to run the query on
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
-function buildFilterReferrerListerQuery(ids, r) {
+export function buildFilterReferrerListerQuery(ids, r) {
     var query = r.table('Filters');
     if (Array.isArray(ids))
         query = query.filter(d => {
@@ -88,7 +88,7 @@ function buildFilterReferrerListerQuery(ids, r) {
  * @param {array} ids - list of filter ids to run the query on
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
-function buildFilterDistributorListerQuery(ids, r) {
+export function buildFilterDistributorListerQuery(ids, r) {
     var query = r.table('Filters');
     if (Array.isArray(ids))
         query = query.filter(d => {
@@ -109,11 +109,4 @@ function buildFilterDistributorListerQuery(ids, r) {
         }
     })
     return query;
-}
-
-module.exports = {
-    buildFilterReferrerListerQuery: buildFilterReferrerListerQuery,
-    buildFilterReferenceCounterQuery: buildFilterReferenceCounterQuery,
-    buildFilterDistributorListerQuery: buildFilterDistributorListerQuery,
-    buildCollatorReferenceCounterQuery: buildCollatorReferenceCounterQuery
 }
