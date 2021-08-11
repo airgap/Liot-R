@@ -1,5 +1,5 @@
-import {listCollectors} from "../list-collectors";
-import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
+import { listCollectors } from '../list-collectors';
+import { getAfterCountOrderDirection } from '../getAfterCountOrderDirection';
 
 /**
  * List nonspecific packet collectors.
@@ -10,10 +10,12 @@ import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
  */
 
 export async function actionListCollectors(params, r) {
-    try {
-        const collectors = await listCollectors(...getAfterCountOrderDirection(r, params));
-        return {collectors};
-    } catch (err) {
-        return {err: 'Unable to list collectors.'};
-    }
+	try {
+		const collectors = await listCollectors(
+			...getAfterCountOrderDirection(r, params)
+		);
+		return { collectors };
+	} catch (err) {
+		return { err: 'Unable to list collectors.' };
+	}
 }

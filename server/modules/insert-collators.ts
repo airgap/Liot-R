@@ -6,6 +6,4 @@
  * @param {array} collators - List of collators to insert
  */
 export const insertCollators = (r, collators) =>
-	r
-		.table('Collators')
-		.insert(collators, { conflict: 'replace' });
+	r.table('Collators').insert(collators, { conflict: 'replace' });

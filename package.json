@@ -20,7 +20,7 @@
     "valid-url": "^1.0.9"
   },
   "prettier": {
-    "printWidth": 60,
+    "printWidth": 80,
     "tabWidth": 4,
     "useTabs": true,
     "semi": true,

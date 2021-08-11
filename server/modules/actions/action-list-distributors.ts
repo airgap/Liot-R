@@ -1,6 +1,6 @@
-import {listDistributors} from "../list-distributors";
+import { listDistributors } from '../list-distributors';
 
-import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
+import { getAfterCountOrderDirection } from '../getAfterCountOrderDirection';
 
 /**
  * List nonspecific packet distributors.
@@ -10,10 +10,12 @@ import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
  * @param {object} r - connection to the RethinkDB database
  */
 export async function actionListDistributors(params, r) {
-    try {
-        const distributors = await listDistributors(...getAfterCountOrderDirection(r, params));
-        return {distributors};
-    } catch (err) {
-        return {err: 'Unable to list distributors.'};
-    }
+	try {
+		const distributors = await listDistributors(
+			...getAfterCountOrderDirection(r, params)
+		);
+		return { distributors };
+	} catch (err) {
+		return { err: 'Unable to list distributors.' };
+	}
 }

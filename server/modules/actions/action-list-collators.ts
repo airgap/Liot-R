@@ -1,5 +1,5 @@
-import {listCollators} from "../list-collators";
-import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
+import { listCollators } from '../list-collators';
+import { getAfterCountOrderDirection } from '../getAfterCountOrderDirection';
 
 /**
  * List nonspecific filter collators.
@@ -9,10 +9,12 @@ import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
  * @param {object} r - connection to the RethinkDB database
  */
 export async function actionListCollators(params, r) {
-    try {
-        const collators = await listCollators(...getAfterCountOrderDirection(r, params));
-        return {collators};
-    } catch (err) {
-        return {err: 'Unable to list collators.'};
-    }
+	try {
+		const collators = await listCollators(
+			...getAfterCountOrderDirection(r, params)
+		);
+		return { collators };
+	} catch (err) {
+		return { err: 'Unable to list collators.' };
+	}
 }

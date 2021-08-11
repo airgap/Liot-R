@@ -1,4 +1,3 @@
-
 /**
  * Inserts one or more packet distributors.
  * @name Database: Insert Distributors
@@ -7,4 +6,4 @@
  * @param {array} distributors - List of distributors to insert
  */
 export const insertDistributors = (r, distributors) =>
-  r.table('Distributors').insert(distributors, { conflict: 'replace' });
+	r.table('Distributors').insert(distributors, { conflict: 'replace' });

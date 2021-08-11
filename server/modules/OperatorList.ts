@@ -1,8 +1,1 @@
-export const OPERATORS = [
-    "AND",
-    "OR",
-    "NAND",
-    "NOR",
-    "XOR",
-    "SAME",
-];
+export const OPERATORS = ['AND', 'OR', 'NAND', 'NOR', 'XOR', 'SAME'];

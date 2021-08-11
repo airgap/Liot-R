@@ -1,6 +1,6 @@
-import {getAfterCountOrderDirection} from "../getAfterCountOrderDirection";
+import { getAfterCountOrderDirection } from '../getAfterCountOrderDirection';
 
-import {listFilters} from "../list-filters";
+import { listFilters } from '../list-filters';
 
 /**
  * List packet filters.
@@ -10,10 +10,12 @@ import {listFilters} from "../list-filters";
  * @param {object} r - connection to the RethinkDB database
  */
 export async function actionListFilters(params, r) {
-    try {
-        const filters = await listFilters(...getAfterCountOrderDirection(params, r));
-        return {filters};
-    } catch {
-        return {err: 'Unable to query.'};
-    }
+	try {
+		const filters = await listFilters(
+			...getAfterCountOrderDirection(params, r)
+		);
+		return { filters };
+	} catch {
+		return { err: 'Unable to query.' };
+	}
 }

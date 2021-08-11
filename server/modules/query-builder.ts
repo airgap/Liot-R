@@ -8,19 +8,25 @@
  * @returns {object} - RethinkDB query for retrieving the reference count
  */
 export function buildFilterReferenceCounterQuery(ids, r) {
-    let query = r.table('Filters');
-    if (Array.isArray(ids))
-        query = query.filter(d => {
-            return r.expr(ids).contains(d('id'))
-        });
-    query = query.map(filt => ({
-        id: filt('id'),
-        refcount: r.table("Collators").group('id')('filters')(0).contains(filt('id')).ungroup()('reduction').filter(r => {
-            return r.eq(true)
-        }).count()
-    }))
-    //query = query.filter(isReferencedFilter);
-    return query;
+	let query = r.table('Filters');
+	if (Array.isArray(ids))
+		query = query.filter(d => {
+			return r.expr(ids).contains(d('id'));
+		});
+	query = query.map(filt => ({
+		id: filt('id'),
+		refcount: r
+			.table('Collators')
+			.group('id')('filters')(0)
+			.contains(filt('id'))
+			.ungroup()('reduction')
+			.filter(r => {
+				return r.eq(true);
+			})
+			.count()
+	}));
+	//query = query.filter(isReferencedFilter);
+	return query;
 }
 
 /**
@@ -32,20 +38,22 @@ export function buildFilterReferenceCounterQuery(ids, r) {
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
 export function buildCollatorReferenceCounterQuery(ids, r) {
-    let query = r.table('Collators');
-    if (Array.isArray(ids))
-        query = query.filter(d => r.expr(ids).contains(d('id')));
-    query = query.map(filt => ({
-        id: filt('id'),
-        refcount: r.table("Distributors")
-            .group('id')('collators')(0)
-            .contains(filt('id'))
-            .ungroup()('reduction')
-            .filter(r => {
-                return r.eq(true)
-            }).count()
-    }))
-    return query;
+	let query = r.table('Collators');
+	if (Array.isArray(ids))
+		query = query.filter(d => r.expr(ids).contains(d('id')));
+	query = query.map(filt => ({
+		id: filt('id'),
+		refcount: r
+			.table('Distributors')
+			.group('id')('collators')(0)
+			.contains(filt('id'))
+			.ungroup()('reduction')
+			.filter(r => {
+				return r.eq(true);
+			})
+			.count()
+	}));
+	return query;
 }
 
 /**
@@ -57,21 +65,27 @@ export function buildCollatorReferenceCounterQuery(ids, r) {
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
 export function buildFilterReferrerListerQuery(ids, r) {
-    let query = r.table('Filters');
-    if (Array.isArray(ids))
-        query = query.filter(d => r.expr(ids).contains(d('id')));
-    query = query.map(filt => ({
-        id: filt('id'),
-        referrers: r.db('LiotR')
-            .table("Collators")
-            .filter(col => {
-                return col('filters')
-                    .contains(filt('id'))
-            }).merge(doc => {
-                return {filtrets: r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}
-            })
-    }))
-    return query;
+	let query = r.table('Filters');
+	if (Array.isArray(ids))
+		query = query.filter(d => r.expr(ids).contains(d('id')));
+	query = query.map(filt => ({
+		id: filt('id'),
+		referrers: r
+			.db('LiotR')
+			.table('Collators')
+			.filter(col => {
+				return col('filters').contains(filt('id'));
+			})
+			.merge(doc => {
+				return {
+					filtrets: r
+						.table('Filters')
+						.getAll(r.args(doc('filters')))
+						.coerceTo('array')
+				};
+			})
+	}));
+	return query;
 }
 
 /**
@@ -83,19 +97,25 @@ export function buildFilterReferrerListerQuery(ids, r) {
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
 export function buildFilterDistributorListerQuery(ids, r) {
-    let query = r.table('Filters');
-    if (Array.isArray(ids))
-        query = query.filter(d => r.expr(ids).contains(d('id')));
-    query = query.map(filt => ({
-        id: filt('id'),
-        referrers: r.db('LiotR')
-            .table("Collators")
-            .filter(col => {
-                return col('filters')
-                    .contains(filt('id'))
-            }).merge(doc => {
-                return {filtrets: r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}
-            })
-    }))
-    return query;
+	let query = r.table('Filters');
+	if (Array.isArray(ids))
+		query = query.filter(d => r.expr(ids).contains(d('id')));
+	query = query.map(filt => ({
+		id: filt('id'),
+		referrers: r
+			.db('LiotR')
+			.table('Collators')
+			.filter(col => {
+				return col('filters').contains(filt('id'));
+			})
+			.merge(doc => {
+				return {
+					filtrets: r
+						.table('Filters')
+						.getAll(r.args(doc('filters')))
+						.coerceTo('array')
+				};
+			})
+	}));
+	return query;
 }

@@ -6,13 +6,10 @@ export const getAfterCountOrderDirection = (
 	// after
 	typeof after !== 'number' || after < 0 ? 0 : after,
 	// count
-	typeof count !== 'number' || count < 0 || count > 1000
-		? 100
-		: after,
+	typeof count !== 'number' || count < 0 || count > 1000 ? 100 : after,
 	// order & direction
 	r[direction === 'descending' ? 'desc' : 'asc'](
-		typeof order !== 'string' ||
-			!['smart', 'name', 'id'].includes(order)
+		typeof order !== 'string' || !['smart', 'name', 'id'].includes(order)
 			? 'smart'
 			: order
 	)
