@@ -10,9 +10,7 @@
 export function buildFilterReferenceCounterQuery(ids, r) {
 	let query = r.table('Filters');
 	if (Array.isArray(ids))
-		query = query.filter(d => {
-			return r.expr(ids).contains(d('id'));
-		});
+		query = query.filter(d => r.expr(ids).contains(d('id')));
 	query = query.map(filt => ({
 		id: filt('id'),
 		refcount: r
@@ -76,14 +74,12 @@ export function buildFilterReferrerListerQuery(ids, r) {
 			.filter(col => {
 				return col('filters').contains(filt('id'));
 			})
-			.merge(doc => {
-				return {
-					filtrets: r
-						.table('Filters')
-						.getAll(r.args(doc('filters')))
-						.coerceTo('array')
-				};
-			})
+			.merge(doc => ({
+				filtrets: r
+					.table('Filters')
+					.getAll(r.args(doc('filters')))
+					.coerceTo('array')
+			}))
 	}));
 	return query;
 }
@@ -108,14 +104,12 @@ export function buildFilterDistributorListerQuery(ids, r) {
 			.filter(col => {
 				return col('filters').contains(filt('id'));
 			})
-			.merge(doc => {
-				return {
-					filtrets: r
-						.table('Filters')
-						.getAll(r.args(doc('filters')))
-						.coerceTo('array')
-				};
-			})
+			.merge(doc => ({
+				filtrets: r
+					.table('Filters')
+					.getAll(r.args(doc('filters')))
+					.coerceTo('array')
+			}))
 	}));
 	return query;
 }
