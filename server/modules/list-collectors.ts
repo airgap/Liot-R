@@ -11,7 +11,7 @@ export const listCollectors = async (r, after, count, order) => {
     const total = await r.table('Collectors').count();
     if (after < 0) after += total;
     after = Math.max(0, after);
-    return r.table('Collectors')
+    return await r.table('Collectors')
         .orderBy(order)
         .slice(after, after + count);
 }
