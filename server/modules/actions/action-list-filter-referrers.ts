@@ -1,4 +1,5 @@
 var queryBuilder = require('../query-builder.ts');
+import {buildFilterReferrerListerQuery} from '../query-builder';
 /**
  * Lists the collators referencing one or more packet filters.
  * @name Action: List Filters
@@ -8,14 +9,12 @@ var queryBuilder = require('../query-builder.ts');
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-function actionListFilterReferrers(DEBUG, CONNECTION, req, res) {
-  var query = queryBuilder.buildFilterReferrerListerQuery(Array.isArray(req.body.ids) ? req.body.ids : null);
-  query.coerceTo('array').run(CONNECTION, (err, filters) => {
-    if(err) {
-      res.send('Error listing filter referrers.');
-      return;
-    }
-    res.send({filters:filters});
-  })
+export async function actionListFilterReferrers({ids}, r) {
+  try {
+    const filters = await buildFilterReferrerListerQuery(Array.isArray(ids) ? ids : null, r);
+    return {filters};
+  } catch (err) {
+    return {err: 'Error listing filter referrers.'};
+  }
 }
 module.exports = actionListFilterReferrers;
