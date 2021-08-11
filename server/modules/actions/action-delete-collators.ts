@@ -9,7 +9,7 @@ import {deleteCollators} from '../delete-collators';
  * @param {object} req - Express request
  * @param {object} res - Express response
  */
-async function actionDeleteCollators({ids}, r) {
+export async function actionDeleteCollators({ids}, r) {
     if (!Array.isArray(ids))
         return {err: "No list of IDs provided."};
     for (const id of ids) if (typeof id != 'string' || id.length > 55)
@@ -22,5 +22,3 @@ async function actionDeleteCollators({ids}, r) {
         return {err: 'Unable to delete collators.'};
     }
 }
-
-module.exports = actionDeleteCollators;

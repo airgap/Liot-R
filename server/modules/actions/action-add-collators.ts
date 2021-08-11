@@ -6,7 +6,6 @@ import {insertCollators} from '../insert-collators';
  * @function
  */
 export async function actionAddCollators(params, r) {
-    'use strict';
     const collators = [], tcol: any = {}, filters = [];
     if (Array.isArray(params.collators))
         for (const collator of params.collators) {

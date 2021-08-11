@@ -6,7 +6,7 @@ import * as validUrl from 'valid-url';
  * @name Action: Add Distributors
  * @function
  */
-async function actionAddDistributors(params, r) {
+export async function actionAddDistributors(params, r) {
     if (!Array.isArray(params.distributors))
         return {err: '`distributors` must be a valid array'};
     const distributors = [];
@@ -36,5 +36,3 @@ async function actionAddDistributors(params, r) {
     }
     return {};
 }
-
-module.exports = actionAddDistributors;

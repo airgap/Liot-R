@@ -7,7 +7,7 @@ import {deleteCollectors} from "../delete-collectors";
  * @param {boolean} {ids} - request supposedly containing collector ID list
  * @param {object} r - connection to the RethinkDB database
  */
-function actionDeleteCollectors({ids}, r) {
+export function actionDeleteCollectors({ids}, r) {
     if (!Array.isArray(ids))
         return {err: "No list of IDs provided."};
     for (const id of ids)
@@ -21,5 +21,3 @@ function actionDeleteCollectors({ids}, r) {
         return {err: 'Unable to delete collectors.'};
     }
 }
-
-module.exports = actionDeleteCollectors

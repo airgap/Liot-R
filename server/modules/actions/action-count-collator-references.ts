@@ -7,7 +7,7 @@ import {buildCollatorReferenceCounterQuery} from '../query-builder';
  * @param {array} ids - I don't remember
  * @param {object} r - connection to the RethinkDB database
  */
-async function actionCountCollatorReferences({ids}, r) {
+export async function actionCountCollatorReferences({ids}, r) {
     const query = buildCollatorReferenceCounterQuery(
         Array.isArray(ids)
             ? ids
@@ -22,5 +22,3 @@ async function actionCountCollatorReferences({ids}, r) {
         return {err: 'Error counting collator references.'};
     }
 }
-
-module.exports = actionCountCollatorReferences;

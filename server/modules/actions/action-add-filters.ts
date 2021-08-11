@@ -8,7 +8,7 @@ import {OPERATORS} from "../OperatorList";
  * @name Action: Add Filters
  * @function
  */
-async function actionAddFilters(params, r) {
+export async function actionAddFilters(params, r) {
     if (!Array.isArray(params.filters))
         return {err: '`filters` must be a valid array'};
     const filters = [];
@@ -68,5 +68,3 @@ async function actionAddFilters(params, r) {
         return {err: 'Error creating filters.'};
     }
 }
-
-module.exports = actionAddFilters;
