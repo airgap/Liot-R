@@ -6,6 +6,9 @@
  * @param {array} collectors - List of collector IDs to delete
  */
 export const deleteCollectors = (r, collectors) =>
-    r.table('Collectors')
-        .filter(doc => r.expr(collectors).contains(doc('id')))
-        .delete();
+	r
+		.table('Collectors')
+		.filter(doc =>
+			r.expr(collectors).contains(doc('id'))
+		)
+		.delete();

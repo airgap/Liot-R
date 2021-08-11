@@ -1,5 +1,5 @@
 /* THIS FUNCTION IS INCOMPLETE AND NOT READY FOR PRODUCTION */
-import {actionPushUpdate} from "./action-push-update";
+import { actionPushUpdate } from './action-push-update';
 
 /**
  * Push multiple update simultaneously for batch processing. Currently not fully implemented.
@@ -9,7 +9,11 @@ import {actionPushUpdate} from "./action-push-update";
  * @param {object} r - connection to the RethinkDB database
  */
 export function actionPushUpdates(params, r) {
-    if (!Array.isArray(params.updates))
-        return {err: 'No updates specified.'};
-    return Promise.allSettled(params.updates.map(update => actionPushUpdate(update, r)))
+	if (!Array.isArray(params.updates))
+		return { err: 'No updates specified.' };
+	return Promise.allSettled(
+		params.updates.map(update =>
+			actionPushUpdate(update, r)
+		)
+	);
 }

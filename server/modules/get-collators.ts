@@ -6,10 +6,15 @@
  * @param {array} collators - List of collators to retrieve
  */
 export const getCollators = (r, collators) =>
-    r.table('Collators')
-        .filter(doc => r.expr(collators).contains(doc('id')))
-        .merge(doc => ({
-            filtrets: r.table('Filters')
-                .getAll(r.args(doc('filters'))).coerceTo('array')
-        }))
-        .coerceTo('array');
+	r
+		.table('Collators')
+		.filter(doc =>
+			r.expr(collators).contains(doc('id'))
+		)
+		.merge(doc => ({
+			filtrets: r
+				.table('Filters')
+				.getAll(r.args(doc('filters')))
+				.coerceTo('array')
+		}))
+		.coerceTo('array');

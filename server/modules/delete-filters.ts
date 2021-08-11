@@ -6,8 +6,9 @@
  * @param {array} filters - List of filter IDs to delete
  */
 export const deleteFilters = (r, filters) =>
-    r.table('Filters')
-        .filter(doc => {
-            return r.expr(filters).contains(doc('id'))
-        })
-        .delete();
+	r
+		.table('Filters')
+		.filter(doc => {
+			return r.expr(filters).contains(doc('id'));
+		})
+		.delete();

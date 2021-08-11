@@ -7,8 +7,7 @@
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 
-
-
 export const getFilters = async (r, filters) =>
-    r.table('Filters')
-        .filter(doc => r.expr(filters).contains(doc('id')));
+	r
+		.table('Filters')
+		.filter(doc => r.expr(filters).contains(doc('id')));

@@ -7,11 +7,17 @@
  * @param {number} count - number of collectors to return
  * @param {string|object} order - key or method for sorting
  */
-export const listCollectors = async (r, after, count, order) => {
-    const total = await r.table('Collectors').count();
-    if (after < 0) after += total;
-    after = Math.max(0, after);
-    return await r.table('Collectors')
-        .orderBy(order)
-        .slice(after, after + count);
-}
+export const listCollectors = async (
+	r,
+	after,
+	count,
+	order
+) => {
+	const total = await r.table('Collectors').count();
+	if (after < 0) after += total;
+	after = Math.max(0, after);
+	return await r
+		.table('Collectors')
+		.orderBy(order)
+		.slice(after, after + count);
+};

@@ -6,5 +6,6 @@
  * @param {array} collectors - List of collectors to retrieve
  */
 export const getCollectors = async (r, collectors) =>
-  r.table('Collectors')
-    .filter(doc=>{return r.expr(collectors).contains(doc('id'))});
+	r.table('Collectors').filter(doc => {
+		return r.expr(collectors).contains(doc('id'));
+	});
