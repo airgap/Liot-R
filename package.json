@@ -8,6 +8,7 @@
   "devDependencies": {
     "@types/node": "^16.4.13",
     "mkdirp": "^0.5.5",
+    "prettier": "^2.3.2",
     "typescript": "^4.3.5"
   },
   "dependencies": {
@@ -17,5 +18,17 @@
     "rethinkdb": "^2.4.2",
     "rethinkdbdash": "^2.3.31",
     "valid-url": "^1.0.9"
+  },
+  "prettier": {
+    "printWidth": 60,
+    "tabWidth": 4,
+    "useTabs": true,
+    "semi": true,
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "trailingComma": "none",
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "parser": "babel-ts"
   }
 }
