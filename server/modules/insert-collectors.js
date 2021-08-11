@@ -1,4 +1,4 @@
-var r = require('rethinkdb')
+var r = require("rethinkdb");
 /**
  * Inserts one or more packet collectors.
  * @name Database: Insert Collectors
@@ -8,6 +8,8 @@ var r = require('rethinkdb')
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 function insertCollectors(CONNECTION, collectors, callback) {
-  r.table('Collectors').insert(collectors, { conflict: 'replace' }).run(CONNECTION, callback);
+  r.table("Collectors")
+    .insert(collectors, { conflict: "replace" })
+    .run(CONNECTION, callback);
 }
-module.exports = insertCollectors
+module.exports = insertCollectors;

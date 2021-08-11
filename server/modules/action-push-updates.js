@@ -9,33 +9,33 @@
  * @param {object} res - Express response
  */
 function actionPushUpdates(DEBUG, CONNECTION, req, res) {
-  var dat = req.body
-  if(!Array.isArray(dat.updates)) {
-    res.send({err: 'No updates specified.'});
+  var dat = req.body;
+  if (!Array.isArray(dat.updates)) {
+    res.send({ err: "No updates specified." });
     return;
   }
   var toPush = [];
   var idsAndAccessors = [];
   var ids = [];
 
-  for(var update of dat.updates) {
+  for (var update of dat.updates) {
     var newUpdate = {};
-    if(typeof dat.accessor != 'string') {
-      res.send({err: 'No accessor specified.'});
+    if (typeof dat.accessor != "string") {
+      res.send({ err: "No accessor specified." });
       return;
     }
     var tv = typeof dat.value;
-    if(tv == 'undefined' || tv == 'null') {
-      res.send({err: 'No value specified.'});
+    if (tv == "undefined" || tv == "null") {
+      res.send({ err: "No value specified." });
       return;
     }
     newUpdate.accessor = dat.accessor;
     newUpdate.value = dat.value;
-    idsAndAccessors.push({id:dat.id,accessor:dat.accessor});
+    idsAndAccessors.push({ id: dat.id, accessor: dat.accessor });
   }
   var idsExpr = r.expr(idsAndAccessors);
-  r.table('Collectors').filter(collector=>{
+  r.table("Collectors").filter((collector) => {
     //if(collector('accessor').eq())
-  })
+  });
 }
 module.exports = actionPushUpdates;

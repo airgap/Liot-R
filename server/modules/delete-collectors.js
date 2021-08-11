@@ -1,4 +1,4 @@
-var r = require('rethinkdb')
+var r = require("rethinkdb");
 /**
  * Delete one or more packet collectors.
  * @name Database: Delete Collectors
@@ -8,9 +8,11 @@ var r = require('rethinkdb')
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 function deleteCollectors(CONNECTION, collectors, callback) {
-  r.table('Collectors')
-    .filter(doc=>{return r.expr(collectors).contains(doc('id'))})
-      .delete()
-        .run(CONNECTION, callback)
+  r.table("Collectors")
+    .filter((doc) => {
+      return r.expr(collectors).contains(doc("id"));
+    })
+    .delete()
+    .run(CONNECTION, callback);
 }
-module.exports = deleteCollectors
+module.exports = deleteCollectors;

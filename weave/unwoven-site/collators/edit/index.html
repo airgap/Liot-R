@@ -3,116 +3,124 @@
     <title>Liot R: Edit Collator</title>
     @@/head.html
     <script>
-    var ID = getPageId();
-    var COMPARATORS = [
-      "EQUALS",
-      "NEQUALS",
-      "TFNEQUALS",
-      "OVER",
-      "OVEROR",
-      "UNDER",
-      "UNDEROR",
-    ]
+      var ID = getPageId();
+      var COMPARATORS = [
+        "EQUALS",
+        "NEQUALS",
+        "TFNEQUALS",
+        "OVER",
+        "OVEROR",
+        "UNDER",
+        "UNDEROR",
+      ];
 
-    var OPERATORS = [
-      "AND",
-      "OR",
-      "NAND",
-      "NOR",
-      "XOR",
-      "SAME",
-    ]
+      var OPERATORS = ["AND", "OR", "NAND", "NOR", "XOR", "SAME"];
 
       var filterList;
       var reg = location.href.match(/after=(-?[0-9]+)/);
-      var after = reg ? reg[1]*1 : 0;
+      var after = reg ? reg[1] * 1 : 0;
       var filters = [];
-      load(()=>{
-        LiotR.listFilters({}, res => {
-          if(res.err) {
-            console.log(res.err)
+      load(() => {
+        LiotR.listFilters({}, (res) => {
+          if (res.err) {
+            console.log(res.err);
             return;
           }
           filters = res.filters;
-          LiotR.getCollators({ids:[ID]}, res => {
-            if(res.err || !res.collators || !res.collators.length) {
+          LiotR.getCollators({ ids: [ID] }, (res) => {
+            if (res.err || !res.collators || !res.collators.length) {
               console.log(res.err);
               return;
             }
-            console.log(res.collators[0])
-            grab('item-id').innerHTML = '['+res.collators[0].id+']';
-              grab('collator-name').value = res.collators[0].name||'';
-            for(var filter of res.collators[0].filtrets)addFilter(filter.id)
-            LiotR.countCollatorReferences({ids:[ID]}, res => {
-              if(res.err || !res.collators.length) {
+            console.log(res.collators[0]);
+            grab("item-id").innerHTML = "[" + res.collators[0].id + "]";
+            grab("collator-name").value = res.collators[0].name || "";
+            for (var filter of res.collators[0].filtrets) addFilter(filter.id);
+            LiotR.countCollatorReferences({ ids: [ID] }, (res) => {
+              if (res.err || !res.collators.length) {
                 console.log(err || "No filter found.");
                 return;
               }
               var cool = res.collators[0];
-                grab('reference-count').innerHTML = "Used by " + (cool.refcount||"no") + " distributors."
+              grab("reference-count").innerHTML =
+                "Used by " + (cool.refcount || "no") + " distributors.";
               console.log(cool.refcount);
-              if(cool.refcount)addc('delete-button', 'disabled')
-              if(cool.refcount)grab('delete-button').innerHTML = "Undeletable";
-            })
-          })
+              if (cool.refcount) addc("delete-button", "disabled");
+              if (cool.refcount)
+                grab("delete-button").innerHTML = "Undeletable";
+            });
+          });
           //filters.push({id:filter.id,name:filter.name})
-        })
-      })
+        });
+      });
       function addFilter(id) {
-        var select = document.createElement('select');
-        for(var filter of filters) {
-          var option = document.createElement('option');
+        var select = document.createElement("select");
+        for (var filter of filters) {
+          var option = document.createElement("option");
           option.value = filter.id;
           option.innerHTML = filter.name;
           select.appendChild(option);
-          console.log(id)
-          if(id&&(filter.id==id))option.selected = true;
+          console.log(id);
+          if (id && filter.id == id) option.selected = true;
         }
-        var rem = document.createElement('label');
-        rem.innerHTML = '-';
-        var item = document.createElement('div');
-        item.appendChild(rem)
-        item.appendChild(select)
-        grab('filter-list').insertBefore(item, grab('add-filter'))
-        bind(rem, 'click', k=>{
+        var rem = document.createElement("label");
+        rem.innerHTML = "-";
+        var item = document.createElement("div");
+        item.appendChild(rem);
+        item.appendChild(select);
+        grab("filter-list").insertBefore(item, grab("add-filter"));
+        bind(rem, "click", (k) => {
           item.parentNode.removeChild(item);
-        })
+        });
       }
       function save() {
         //addc('save-button', 'disabled');
-        err('Creating collator...');
-        var name = grab('collator-name').value;
+        err("Creating collator...");
+        var name = grab("collator-name").value;
         var filtrets = [];
-        var selects = document.getElementsByTagName('select');
-        for(var i of selects)
-          filtrets.push(i.value);
-        LiotR.addCollators({
-          collators:[{
-          name: name,
-          filters: filtrets,
-          id: ID
-        }]}, res => {
-          if(res.err) {
-            console.log(res.err);
-            return;
+        var selects = document.getElementsByTagName("select");
+        for (var i of selects) filtrets.push(i.value);
+        LiotR.addCollators(
+          {
+            collators: [
+              {
+                name: name,
+                filters: filtrets,
+                id: ID,
+              },
+            ],
+          },
+          (res) => {
+            if (res.err) {
+              console.log(res.err);
+              return;
+            }
+            location.href = "/collators";
           }
-          location.href = "/collators";
-        })
+        );
       }
       function deletef() {
-        if(confirm("Are you sure you wish to delete this collator? This action cannot be undone.")) {
-          LiotR.deleteCollators({ids:[ID]},res=>{
-            location.href = '/collators';
-          })
+        if (
+          confirm(
+            "Are you sure you wish to delete this collator? This action cannot be undone."
+          )
+        ) {
+          LiotR.deleteCollators({ ids: [ID] }, (res) => {
+            location.href = "/collators";
+          });
         }
       }
       function err(text) {
-        grab('compile-errors').innerHTML = text||"Ready";
-        setc('compile-errors', 'invalid-json', text)
-        setc('save-button', 'disabled', text)
+        grab("compile-errors").innerHTML = text || "Ready";
+        setc("compile-errors", "invalid-json", text);
+        setc("save-button", "disabled", text);
       }
-      function xss(text) { return text.replace('<', '&lt') }
-      function nelem(type) { return document.createElement(type) }
+      function xss(text) {
+        return text.replace("<", "&lt");
+      }
+      function nelem(type) {
+        return document.createElement(type);
+      }
     </script>
   </head>
   <body>
@@ -123,7 +131,11 @@
       <div class="bubbles new-box" id="filter-box">
         <div class="bubble max-bubble">
           <label for="collator-name">Name:</label>
-          <input id="collator-name" placeholder="Unnamed Collator" type="text">
+          <input
+            id="collator-name"
+            placeholder="Unnamed Collator"
+            type="text"
+          />
           <label>Filters:</label>
           <div class="bubble max-bubble" id="filter-list">
             <a onclick="addFilter()" id="add-filter">+ Filter</a>

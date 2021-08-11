@@ -1,4 +1,4 @@
-var r = require('rethinkdb')
+var r = require("rethinkdb");
 /**
  * Retreive one or more packet collectors.
  * @name Database: Get Collectors
@@ -8,9 +8,11 @@ var r = require('rethinkdb')
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 function getCollectors(CONNECTION, collectors, callback) {
-  r.table('Collectors')
-    .filter(doc=>{return r.expr(collectors).contains(doc('id'))})
-      .coerceTo('array')
-        .run(CONNECTION, callback)
+  r.table("Collectors")
+    .filter((doc) => {
+      return r.expr(collectors).contains(doc("id"));
+    })
+    .coerceTo("array")
+    .run(CONNECTION, callback);
 }
-module.exports = getCollectors
+module.exports = getCollectors;

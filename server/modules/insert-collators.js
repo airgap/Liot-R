@@ -1,4 +1,4 @@
-var r = require('rethinkdb')
+var r = require("rethinkdb");
 /**
  * Inserts one or more filter collators.
  * @name Database: Insert Collators
@@ -8,6 +8,8 @@ var r = require('rethinkdb')
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 function insertCollators(CONNECTION, collators, callback) {
-  r.table('Collators').insert(collators, { conflict: 'replace' }).run(CONNECTION, callback)
+  r.table("Collators")
+    .insert(collators, { conflict: "replace" })
+    .run(CONNECTION, callback);
 }
-module.exports = insertCollators
+module.exports = insertCollators;

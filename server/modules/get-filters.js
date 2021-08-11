@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var r = require("rethinkdb");
 /**
  * Retreive the contents of one or more packet filters.
  * @name Database: Get Filters
@@ -8,12 +8,13 @@ var r = require('rethinkdb');
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 
-
-
 function getFilters(CONNECTION, filters, callback) {
-  var query = r.table('Filters')
-    .filter(doc=>{return r.expr(filters).contains(doc('id'))})
-        .coerceTo('array')
-          .run(CONNECTION, callback)
+  var query = r
+    .table("Filters")
+    .filter((doc) => {
+      return r.expr(filters).contains(doc("id"));
+    })
+    .coerceTo("array")
+    .run(CONNECTION, callback);
 }
-module.exports = getFilters
+module.exports = getFilters;

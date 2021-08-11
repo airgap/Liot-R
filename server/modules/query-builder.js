@@ -1,4 +1,4 @@
-var r = require('rethinkdb');
+var r = require("rethinkdb");
 /**
  * Builds a query for counting the number of collators referencing the specified filters.
  * Useful for determining whether specified filters can be safely deleted.
@@ -8,10 +8,25 @@ var r = require('rethinkdb');
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
 function buildFilterReferenceCounterQuery(ids) {
-  var query = r.table('Filters');
-  if(Array.isArray(ids))
-    query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
-  query = query.map(filt=>{return {id:filt('id'),refcount:r.table("Collators").group('id')('filters')(0).contains(filt('id')).ungroup()('reduction').filter(r=>{return r.eq(true)}).count()}})
+  var query = r.table("Filters");
+  if (Array.isArray(ids))
+    query = query.filter((d) => {
+      return r.expr(ids).contains(d("id"));
+    });
+  query = query.map((filt) => {
+    return {
+      id: filt("id"),
+      refcount: r
+        .table("Collators")
+        .group("id")("filters")(0)
+        .contains(filt("id"))
+        .ungroup()("reduction")
+        .filter((r) => {
+          return r.eq(true);
+        })
+        .count(),
+    };
+  });
   //query = query.filter(isReferencedFilter);
   return query;
 }
@@ -25,23 +40,25 @@ function buildFilterReferenceCounterQuery(ids) {
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
 function buildCollatorReferenceCounterQuery(ids) {
-  var query = r.table('Collators');
-  if(Array.isArray(ids))
-    query = query.filter(d=>{
-      return r.expr(ids).contains(d('id'))
+  var query = r.table("Collators");
+  if (Array.isArray(ids))
+    query = query.filter((d) => {
+      return r.expr(ids).contains(d("id"));
     });
-  query = query.map(filt=>{
+  query = query.map((filt) => {
     return {
-      id:filt('id'),
-      refcount:r.table("Distributors")
-        .group('id')('collators')(0)
-          .contains(filt('id'))
-            .ungroup()('reduction')
-              .filter(r=>{
-                return r.eq(true)
-              }).count()
-    }
-  })
+      id: filt("id"),
+      refcount: r
+        .table("Distributors")
+        .group("id")("collators")(0)
+        .contains(filt("id"))
+        .ungroup()("reduction")
+        .filter((r) => {
+          return r.eq(true);
+        })
+        .count(),
+    };
+  });
   return query;
 }
 
@@ -54,21 +71,31 @@ function buildCollatorReferenceCounterQuery(ids) {
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
 function buildFilterReferrerListerQuery(ids) {
-  var query = r.table('Filters');
-  if(Array.isArray(ids))
-    query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
-  query = query.map(filt=>{
+  var query = r.table("Filters");
+  if (Array.isArray(ids))
+    query = query.filter((d) => {
+      return r.expr(ids).contains(d("id"));
+    });
+  query = query.map((filt) => {
     return {
-      id:filt('id'),
-      referrers:r.db('LiotR')
+      id: filt("id"),
+      referrers: r
+        .db("LiotR")
         .table("Collators")
-            .filter(col=>{
-              return col('filters')
-                .contains(filt('id'))
-              }).merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
-              .coerceTo('array')
-    }
-  })
+        .filter((col) => {
+          return col("filters").contains(filt("id"));
+        })
+        .merge((doc) => {
+          return {
+            filtrets: r
+              .table("Filters")
+              .getAll(r.args(doc("filters")))
+              .coerceTo("array"),
+          };
+        })
+        .coerceTo("array"),
+    };
+  });
   return query;
 }
 
@@ -81,21 +108,31 @@ function buildFilterReferrerListerQuery(ids) {
  * @returns {object} - RethinkDB query for retreiving the reference list
  */
 function buildFilterDistributorListerQuery(ids) {
-  var query = r.table('Filters');
-  if(Array.isArray(ids))
-    query = query.filter(d=>{return r.expr(ids).contains(d('id'))});
-  query = query.map(filt=>{
+  var query = r.table("Filters");
+  if (Array.isArray(ids))
+    query = query.filter((d) => {
+      return r.expr(ids).contains(d("id"));
+    });
+  query = query.map((filt) => {
     return {
-      id:filt('id'),
-      referrers:r.db('LiotR')
+      id: filt("id"),
+      referrers: r
+        .db("LiotR")
         .table("Collators")
-            .filter(col=>{
-              return col('filters')
-                .contains(filt('id'))
-              }).merge(doc=>{return {filtrets:r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')}})
-              .coerceTo('array')
-    }
-  })
+        .filter((col) => {
+          return col("filters").contains(filt("id"));
+        })
+        .merge((doc) => {
+          return {
+            filtrets: r
+              .table("Filters")
+              .getAll(r.args(doc("filters")))
+              .coerceTo("array"),
+          };
+        })
+        .coerceTo("array"),
+    };
+  });
   return query;
 }
 
@@ -103,5 +140,5 @@ module.exports = {
   buildFilterReferrerListerQuery: buildFilterReferrerListerQuery,
   buildFilterReferenceCounterQuery: buildFilterReferenceCounterQuery,
   buildFilterDistributorListerQuery: buildFilterDistributorListerQuery,
-  buildCollatorReferenceCounterQuery: buildCollatorReferenceCounterQuery
-}
+  buildCollatorReferenceCounterQuery: buildCollatorReferenceCounterQuery,
+};

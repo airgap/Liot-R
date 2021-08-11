@@ -1,4 +1,4 @@
-var queryBuilder = require('./query-builder.js');
+var queryBuilder = require("./query-builder.js");
 /**
  * Lists the distributors referencing one or more filters, recursively building the reference tree.
  * @name Action: List Filter Distributors
@@ -9,13 +9,15 @@ var queryBuilder = require('./query-builder.js');
  * @param {object} res - Express response
  */
 function actionListFilterDistributors(DEBUG, CONNECTION, req, res) {
-  var query = queryBuilder.buildFilterReferrerListerQuery(Array.isArray(req.body.ids) ? req.body.ids : null);
-  query.coerceTo('array').run(CONNECTION, (err, filters) => {
-    if(err) {
-      res.send('Error listing filter referrers.');
+  var query = queryBuilder.buildFilterReferrerListerQuery(
+    Array.isArray(req.body.ids) ? req.body.ids : null
+  );
+  query.coerceTo("array").run(CONNECTION, (err, filters) => {
+    if (err) {
+      res.send("Error listing filter referrers.");
       return;
     }
-    res.send({filters:filters});
-  })
+    res.send({ filters: filters });
+  });
 }
 module.exports = actionListFilterDistributors;

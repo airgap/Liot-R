@@ -1,4 +1,4 @@
-var r = require('rethinkdb')
+var r = require("rethinkdb");
 /**
  * Inserts one or more packet filters.
  * @name Database: Insert Filters
@@ -8,6 +8,8 @@ var r = require('rethinkdb')
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
 function insertFilters(CONNECTION, filters, callback) {
-  r.table('Filters').insert(filters, { conflict: 'replace' }).run(CONNECTION, callback)
+  r.table("Filters")
+    .insert(filters, { conflict: "replace" })
+    .run(CONNECTION, callback);
 }
-module.exports = insertFilters
+module.exports = insertFilters;

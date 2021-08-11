@@ -1,4 +1,4 @@
-var queryBuilder = require('./query-builder.js');
+var queryBuilder = require("./query-builder.js");
 /**
  * Count the number of collators referencing one or more packet filters.
  * @name Action: Count Filter References
@@ -9,13 +9,15 @@ var queryBuilder = require('./query-builder.js');
  * @param {object} res - Express response
  */
 function actionCountFilterReferences(DEBUG, CONNECTION, req, res) {
-  query = queryBuilder.buildFilterReferenceCounterQuery(Array.isArray(req.body.ids) ? req.body.ids : null);
-  query.coerceTo('array').run(CONNECTION, (err, filters) => {
-    if(err) {
-      res.send('Error counting filter references.');
+  query = queryBuilder.buildFilterReferenceCounterQuery(
+    Array.isArray(req.body.ids) ? req.body.ids : null
+  );
+  query.coerceTo("array").run(CONNECTION, (err, filters) => {
+    if (err) {
+      res.send("Error counting filter references.");
       return;
     }
-    res.send({filters:filters});
-  })
+    res.send({ filters: filters });
+  });
 }
 module.exports = actionCountFilterReferences;

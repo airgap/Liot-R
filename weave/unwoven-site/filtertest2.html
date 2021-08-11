@@ -1,45 +1,38 @@
 <style>
-textarea {
-  width: 400px;
-  height: 400px;
-  font-size: 1em;
-}
+  textarea {
+    width: 400px;
+    height: 400px;
+    font-size: 1em;
+  }
 </style>
 
 <script>
-var COMPARATORS = [
-  "EQUALS",
-  "NEQUALS",
-  "TFNEQUALS",
-  "OVER",
-  "OVEROR",
-  "UNDER",
-  "UNDEROR",
-]
+  var COMPARATORS = [
+    "EQUALS",
+    "NEQUALS",
+    "TFNEQUALS",
+    "OVER",
+    "OVEROR",
+    "UNDER",
+    "UNDEROR",
+  ];
 
-var OPERATORS = [
-  "AND",
-  "OR",
-  "NAND",
-  "NOR",
-  "XOR",
-  "SAME",
-]
-function process() {
-  var inputbox = document.getElementById('input');
-  var input = inputbox.value;
-  var outputbox = document.getElementById('output');
-  var output = '';
-  output = JSON.parse(input);
-  console.log(output)
-}
-window.addEventListener('DOMContentLoaded',()=>{
-  process();
-})
+  var OPERATORS = ["AND", "OR", "NAND", "NOR", "XOR", "SAME"];
+  function process() {
+    var inputbox = document.getElementById("input");
+    var input = inputbox.value;
+    var outputbox = document.getElementById("output");
+    var output = "";
+    output = JSON.parse(input);
+    console.log(output);
+  }
+  window.addEventListener("DOMContentLoaded", () => {
+    process();
+  });
 </script>
 
-
-<textarea id="input">{
+<textarea id="input">
+{
   "AND": {
     "OR": {
       "UNDER": [
@@ -56,7 +49,8 @@ window.addEventListener('DOMContentLoaded',()=>{
       "AcuRite"
     ]
   }
-}</textarea>
+}</textarea
+>
 
 <div id="output"></div>
 
