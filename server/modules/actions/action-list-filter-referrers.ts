@@ -1,4 +1,3 @@
-var queryBuilder = require('../query-builder.ts');
 import {buildFilterReferrerListerQuery} from '../query-builder';
 /**
  * Lists the collators referencing one or more packet filters.
