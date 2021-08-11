@@ -14,7 +14,7 @@ export async function actionGetCollectors({ids}, r) {
         if (typeof id != 'string' || id.length > 55)
             return {err: 'Invalid (non-string) ID provided.'};
     try {
-        const collectors = await getCollectors(CONNECTION, ids);
+        const collectors = await getCollectors(r, ids);
         return {collectors};
     } catch (err) {
         return {err: 'Unable to get collectors.'};
