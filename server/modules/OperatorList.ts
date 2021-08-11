@@ -1,8 +1,8 @@
 export const OPERATORS = [
-    "AND",
-    "OR",
-    "NAND",
-    "NOR",
-    "XOR",
-    "SAME",
+	'AND',
+	'OR',
+	'NAND',
+	'NOR',
+	'XOR',
+	'SAME'
 ];

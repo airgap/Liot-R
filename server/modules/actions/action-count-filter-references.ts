@@ -1,4 +1,4 @@
-import {buildFilterReferenceCounterQuery} from '../query-builder';
+import { buildFilterReferenceCounterQuery } from '../query-builder';
 
 /**
  * Count the number of collators referencing one or more packet filters.
@@ -7,12 +7,18 @@ import {buildFilterReferenceCounterQuery} from '../query-builder';
  * @param {array} ids - I don't remember
  * @param {object} r - connection to the RethinkDB database
  */
-export async function actionCountFilterReferences({ids}, r) {
-    const query = buildFilterReferenceCounterQuery(Array.isArray(ids) ? ids : null, r);
-    try {
-        const filters = await query.coerceTo('array');
-        return {filters};
-    } catch(e) {
-        return {err: 'Error counting filter references.'};
-    }
+export async function actionCountFilterReferences(
+	{ ids },
+	r
+) {
+	const query = buildFilterReferenceCounterQuery(
+		Array.isArray(ids) ? ids : null,
+		r
+	);
+	try {
+		const filters = await query.coerceTo('array');
+		return { filters };
+	} catch (e) {
+		return { err: 'Error counting filter references.' };
+	}
 }

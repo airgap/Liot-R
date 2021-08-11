@@ -6,18 +6,20 @@
  * @param {array} distributors - List of distributors to retrieve
  */
 export const getDistributors = (r, distributors) =>
-    r.table('Distributors')
-        .filter(doc => {
-            return r.expr(distributors).contains(doc('id'))
-        })
-        .merge(doc => ({
-            collators:
-                r.table('Collators')
-                    .getAll(r.args(doc('collators')))
-                    .merge(doc => ({
-                        filters:
-                            r.table('Filters')
-                                .getAll(r.args(doc('filters')))
-                                .coerceTo('array')
-                    })).coerceTo('array')
-        }));
+	r
+		.table('Distributors')
+		.filter(doc => {
+			return r.expr(distributors).contains(doc('id'));
+		})
+		.merge(doc => ({
+			collators: r
+				.table('Collators')
+				.getAll(r.args(doc('collators')))
+				.merge(doc => ({
+					filters: r
+						.table('Filters')
+						.getAll(r.args(doc('filters')))
+						.coerceTo('array')
+				}))
+				.coerceTo('array')
+		}));

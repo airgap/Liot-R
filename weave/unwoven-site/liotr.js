@@ -1,4 +1,4 @@
-if(typeof XMLHttpRequest === 'undefined') {
+if (typeof XMLHttpRequest === 'undefined') {
 	XMLHttpRequest = require('XMLHttpRequest');
 }
 
@@ -11,11 +11,11 @@ function LiotR() {
 /**
  * The URL of the Liot R server to connect to.
  */
-LiotR.SERVER = "http://localhost:7474";//eye.lyku.org
+LiotR.SERVER = 'http://localhost:7474'; //eye.lyku.org
 
 /**
-* Session ID of the current login session. Currently unused.
-*/
+ * Session ID of the current login session. Currently unused.
+ */
 LiotR.SESSION = null;
 
 /**
@@ -28,26 +28,27 @@ LiotR.SESSION = null;
  */
 LiotR.post = (data, callback) => {
 	var xml = new XMLHttpRequest();
-	if(typeof callback == "function") {
-		xml.addEventListener('load', ()=> {
-	//alert(xml.response)
-			callback(JSON.parse(xml.responseText))
+	if (typeof callback == 'function') {
+		xml.addEventListener('load', () => {
+			//alert(xml.response)
+			callback(JSON.parse(xml.responseText));
 		});
 		xml.addEventListener('error', () => {
-			callback({err: 'Unable to contact server.'})
+			callback({ err: 'Unable to contact server.' });
 		});
 	}
 
-
-
-	if(LiotR.SESSION)data.sessionid = LiotR.SESSION;
+	if (LiotR.SESSION) data.sessionid = LiotR.SESSION;
 
 	//alert(JSON.stringify(data))
 	xml.open('POST', LiotR.SERVER);
-	xml.setRequestHeader("Content-type", "application/json")
+	xml.setRequestHeader(
+		'Content-type',
+		'application/json'
+	);
 	xml.send(JSON.stringify(data));
 	return xml;
-}
+};
 
 /**
  * Creates one or more packet collectors.
@@ -60,9 +61,9 @@ LiotR.post = (data, callback) => {
  */
 
 LiotR.addCollectors = (data, callback) => {
-	data.action = "add collectors";
+	data.action = 'add collectors';
 	return LiotR.post(data, callback);
-}
+};
 
 /**
  * Lists any packet collectors.
@@ -76,9 +77,9 @@ LiotR.addCollectors = (data, callback) => {
  */
 
 LiotR.listCollectors = (data, callback) => {
-	data.action = "list collectors";
+	data.action = 'list collectors';
 	return LiotR.post(data, callback);
-}
+};
 
 /**
  * Retreives specified packet collectors.
@@ -91,9 +92,9 @@ LiotR.listCollectors = (data, callback) => {
  */
 
 LiotR.getCollectors = (data, callback) => {
-	data.action = "get collectors";
+	data.action = 'get collectors';
 	return LiotR.post(data, callback);
-}
+};
 
 /**
  * Lists any packet collectors.
@@ -107,86 +108,86 @@ LiotR.getCollectors = (data, callback) => {
  */
 
 LiotR.deleteCollectors = (data, callback) => {
-	data.action = "delete collectors";
+	data.action = 'delete collectors';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.listFilters = (data, callback) => {
-	data.action = "list filters";
+	data.action = 'list filters';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.addFilters = (data, callback) => {
-	data.action = "add filters";
+	data.action = 'add filters';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.getFilters = (data, callback) => {
-	data.action = "get filters";
+	data.action = 'get filters';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.deleteFilters = (data, callback) => {
-	data.action = "delete filters";
+	data.action = 'delete filters';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.countFilterReferences = (data, callback) => {
-	data.action = "count filter references";
+	data.action = 'count filter references';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.listFilterReferrers = (data, callback) => {
-	data.action = "list filter referrers";
+	data.action = 'list filter referrers';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.addCollators = (data, callback) => {
-	data.action = "add collators";
+	data.action = 'add collators';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.listCollators = (data, callback) => {
-	data.action = "list collators";
+	data.action = 'list collators';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.getCollators = (data, callback) => {
-	data.action = "get collators";
+	data.action = 'get collators';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.deleteCollators = (data, callback) => {
-	data.action = "delete collators";
+	data.action = 'delete collators';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.countCollatorReferences = (data, callback) => {
-	data.action = "count collator references";
+	data.action = 'count collator references';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.addDistributors = (data, callback) => {
-	data.action = "add distributors";
+	data.action = 'add distributors';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.listDistributors = (data, callback) => {
-	data.action = "list distributors";
+	data.action = 'list distributors';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.getDistributors = (data, callback) => {
-	data.action = "get distributors";
+	data.action = 'get distributors';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.deleteDistributors = (data, callback) => {
-	data.action = "delete distributors";
+	data.action = 'delete distributors';
 	return LiotR.post(data, callback);
-}
+};
 
 LiotR.pushUpdate = (data, callback) => {
-	data.action = "push update";
+	data.action = 'push update';
 	return LiotR.post(data, callback);
-}
+};

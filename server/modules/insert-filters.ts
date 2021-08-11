@@ -6,5 +6,6 @@
  * @param {array} filters - List of filters to insert
  */
 export const insertFilters = (r, filters) =>
-    r.table('Filters').insert(filters, {conflict: 'replace'})
-
+	r
+		.table('Filters')
+		.insert(filters, { conflict: 'replace' });

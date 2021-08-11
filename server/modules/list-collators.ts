@@ -8,14 +8,23 @@
  * @param {string|object} order - key or method for sorting
  */
 
-export const listCollators = async (r, after, count, order) => {
-    const total = await r.table('Collators').count();
-    if (after < 0)
-        after += total;
-    after = Math.max(0, after);
-    return await r.table('Collators')
-        .orderBy(order)
-        .slice(after, after + count).merge(doc => ({
-            filtrets: r.table('Filters').getAll(r.args(doc('filters'))).coerceTo('array')
-        }));
-}
+export const listCollators = async (
+	r,
+	after,
+	count,
+	order
+) => {
+	const total = await r.table('Collators').count();
+	if (after < 0) after += total;
+	after = Math.max(0, after);
+	return await r
+		.table('Collators')
+		.orderBy(order)
+		.slice(after, after + count)
+		.merge(doc => ({
+			filtrets: r
+				.table('Filters')
+				.getAll(r.args(doc('filters')))
+				.coerceTo('array')
+		}));
+};
