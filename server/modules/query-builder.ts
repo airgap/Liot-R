@@ -4,6 +4,7 @@
  * @name Helper: Build Filter Reference Counter Query
  * @function
  * @param {array} ids - list of filter ids to run the query on
+ * @param {object} r - RethinkDB
  * @returns {object} - RethinkDB query for retreiving the reference count
  */
 export function buildFilterReferenceCounterQuery(ids, r) {
