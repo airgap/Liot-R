@@ -108,10 +108,12 @@ const publicActions = {};
 readConfig();
 
 async function readConfig() {
-	const text = await fs.readFile('liot-server-conf.json', 'utf8'),
-		json = JSON.parse(text);
-	if (json.port) CONFIG.port = json.port;
-	console.log('config', json);
+	try {
+		const text = await fs.readFile('liot-server-conf.json', 'utf8'),
+			json = JSON.parse(text);
+		if (json.port) CONFIG.port = json.port;
+		console.log('config', json);
+	} catch {}
 	await startRethinkServer();
 	await launchHttpServer();
 }
@@ -159,7 +161,12 @@ async function rcvdPost(req, res) {
 		{ action } = json;
 	res.header('Access-Control-Allow-Origin', '*');
 	if (!action) return;
+	//@ts-ignore
+	console.log('did', await Object.values(adminActions[action])[0](json, r));
 	if (isLocal && action in adminActions)
-		res.send(adminActions[action](json, r));
-	else if (action in publicActions) res.send(publicActions[action](json, r));
+		//@ts-ignore
+		res.send(await Object.values(adminActions[action])[0](json, r));
+	else if (action in publicActions)
+		//@ts-ignore
+		res.send(await Object.values(publicActions[action])[0](json, r));
 }

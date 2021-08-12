@@ -4,10 +4,8 @@ import { deleteCollators } from '../delete-collators';
  * Delete one or more filter collators. Exposed to API.
  * @name Action: Delete Collators
  * @function
- * @param {boolean} DEBUG - enable verbose logging
- * @param {object} CONNECTION - connection to the RethinkDB database
- * @param {object} req - Express request
- * @param {object} res - Express response
+ * @param {object} params - request params
+ * @param {object} r - connection to the RethinkDB database
  */
 export async function actionDeleteCollators({ ids }, r) {
 	if (!Array.isArray(ids)) return { err: 'No list of IDs provided.' };

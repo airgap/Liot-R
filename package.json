@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build-ui": "cd weave && node weave.js",
-    "clean": "rm -rf server/webui"
+    "clean": "rm -rf server/webui",
+    "start": "ts-node server/index.ts"
   },
   "devDependencies": {
     "@types/node": "^16.4.13",

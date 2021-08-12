@@ -42,7 +42,9 @@ export async function actionPushUpdate(params, r) {
 						{ return_changes: 'always' }
 					),
 				{ replaced: 0 }
-			)
+			),
+			newUpdate,
+			r
 		);
 		/*r.table('Collectors')
 		  .getAll(newUpdate.accessor,{index:"accessor"})
@@ -62,91 +64,91 @@ export async function actionPushUpdate(params, r) {
 				.update(
 					{ value: newUpdate.value },
 					{ return_changes: 'always' }
-				)
+				),
+			newUpdate,
+			r
 		);
 		/*r.table('Collectors')
 		  .getAll(newUpdate.accessor,{index:"accessor"})
 			.map({changes:[{new_val:r.row()}]})*/
 	}
 
-	async function updated(updated) {
-		if (updated && typeof updated.changes[0].new_val == 'object') {
-			var nv = updated.changes[0].new_val;
-			const rows = await r
-				.table('Distributors')
-				.without('name')
-				.merge(doc => ({
-					collators: r
-						.table('Collators')
-						.getAll(r.args(doc('collators')))
-						.pluck('id', 'filters')
-						.merge(doc => ({
-							filters: r
-								.table('Filters')
-								.getAll(r.args(doc('filters')))
-								.pluck('id', 'json', 'code')
-								.coerceTo('array')
-						}))
-						.coerceTo('array')
-				}));
-			//if(DEBUG)console.log(err || rows)
-			const filters = {};
-			const distributedData = [];
-			for (const distributor of rows)
-				for (const collator of distributor.collators)
-					for (const filter of collator.filters)
-						if (!filters.hasOwnProperty(filter.id))
-							filters[filter.id] = filter.json;
-			console.log(filters);
-			const keys = Object.keys(filters);
-			for (const k of keys)
-				if (recur(filters[k], nv, 'ROOT')) {
-					filters[k] = true;
-				}
-			for (const distributor of rows)
-				for (const collator of distributor.collators) {
-					let pass = false;
-					for (const filter of collator.filters)
-						if (filters[filter.id]) {
-							const data = JSON.parse(JSON.stringify(newUpdate));
-							if (distributor.accessor) {
-								data.accessor = distributor.accessor;
-							}
-							if (distributor.push && !distributor.queue)
-								data.id = r.uuid(
-									data.id + ' ' + distributor.id
-								);
-							data.distributor = distributor.id;
-							//dostributors.push({id:distributor.id,accessor:distributor.accessor})
-							distributedData.push(data);
-							if (
-								distributor.callback &&
-								validUrl.isUri(distributor.url)
-							) {
-								sendDataToCallback(data, distributor.url);
-							} else if (distributor.push) {
-								try {
-									const inserted = await r
-										.table('DistributedData')
-										.insert(distributedData);
-									console.log('inserted', inserted);
-								} catch (err) {
-									console.error(err);
-								}
-							}
-							pass = true;
-							break;
-						}
-					if (pass) break;
-				}
-			console.log('PASS');
-			return {};
-		}
-	}
-
 	/*r.table('Collectors').filter(collector=>{
 	  //if(collector('accessor').eq())
 	})*/
+}
+
+async function updated(updated, newUpdate, r) {
+	if (updated && typeof updated.changes[0].new_val == 'object') {
+		const nv = updated.changes[0].new_val;
+		const rows = await r
+			.table('Distributors')
+			.without('name')
+			.merge(doc => ({
+				collators: r
+					.table('Collators')
+					.getAll(r.args(doc('collators')))
+					.pluck('id', 'filters')
+					.merge(doc => ({
+						filters: r
+							.table('Filters')
+							.getAll(r.args(doc('filters')))
+							.pluck('id', 'json', 'code')
+							.coerceTo('array')
+					}))
+					.coerceTo('array')
+			}));
+		//if(DEBUG)console.log(err || rows)
+		const filters = {};
+		const distributedData = [];
+		for (const distributor of rows)
+			for (const collator of distributor.collators)
+				for (const filter of collator.filters)
+					if (!filters.hasOwnProperty(filter.id))
+						filters[filter.id] = filter.json;
+		console.log(filters);
+		const keys = Object.keys(filters);
+		for (const k of keys)
+			if (recur(filters[k], nv, 'ROOT')) {
+				filters[k] = true;
+			}
+		for (const distributor of rows)
+			for (const collator of distributor.collators) {
+				let pass = false;
+				for (const filter of collator.filters)
+					if (filters[filter.id]) {
+						const data = JSON.parse(JSON.stringify(newUpdate));
+						if (distributor.accessor) {
+							data.accessor = distributor.accessor;
+						}
+						if (distributor.push && !distributor.queue)
+							data.id = r.uuid(data.id + ' ' + distributor.id);
+						data.distributor = distributor.id;
+						//dostributors.push({id:distributor.id,accessor:distributor.accessor})
+						distributedData.push(data);
+						if (
+							distributor.callback &&
+							validUrl.isUri(distributor.url)
+						) {
+							sendDataToCallback(data, distributor.url);
+						} else if (distributor.push) {
+							try {
+								const inserted = await r
+									.table('DistributedData')
+									.insert(distributedData);
+								console.log('inserted', inserted);
+							} catch (err) {
+								console.error(err);
+							}
+						}
+						pass = true;
+						break;
+					}
+				if (pass) break;
+			}
+		console.log('PASS');
+		return {};
+	}
 }
 
 async function sendDataToCallback(data, url) {
