@@ -35,75 +35,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-const actions = {
-	collectors: {
-		list: require('./modules/actions/action-list-collectors'),
-		add: require('./modules/actions/action-add-collectors'),
-		get: require('./modules/actions/action-get-collectors'),
-		delete: require('./modules/actions/action-delete-collectors')
-	},
-	filters: {
-		list: require('./modules/actions/action-list-filters'),
-		add: require('./modules/actions/action-add-filters'),
-		get: require('./modules/actions/action-get-filters'),
-		delete: require('./modules/actions/action-delete-filters'),
-		references: {
-			count: require('./modules/actions/action-count-filter-references')
-		},
-		referrers: {
-			list: require('./modules/actions/action-list-filter-referrers')
-		}
-	},
-	collators: {
-		list: require('./modules/actions/action-list-collators'),
-		add: require('./modules/actions/action-add-collators'),
-		get: require('./modules/actions/action-get-collators'),
-		delete: require('./modules/actions/action-delete-collators'),
-		references: {
-			count: require('./modules/actions/action-count-collator-references')
-		}
-	},
-	distributors: {
-		list: require('./modules/actions/action-list-distributors'),
-		add: require('./modules/actions/action-add-distributors'),
-		get: require('./modules/actions/action-get-distributors'),
-		delete: require('./modules/actions/action-delete-distributors')
-	},
-	updates: {
-		push: require('./modules/actions/action-push-update')
-	}
-};
-
-const adminActions = {
-	/*Collectors*/
-	'list collectors': actions.collectors.list,
-	'add collectors': actions.collectors.add,
-	'get collectors': actions.collectors.get,
-	'delete collectors': actions.collectors.delete,
-	//"get referenced collectors": actionGetReferencedCollectors,
-	/*Filters*/
-	'list filters': actions.filters.list,
-	'add filters': actions.filters.add,
-	'get filters': actions.filters.get,
-	'delete filters': actions.filters.delete,
-	'count filter references': actions.filters.references.count,
-	'list filter referrers': actions.filters.referrers.list,
-	/*Collators*/
-	'list collators': actions.collators.list,
-	'add collators': actions.collators.add,
-	'get collators': actions.collators.get,
-	'delete collators': actions.collators.delete,
-	'count collator references': actions.collators.references.count,
-	/*Distributors*/
-	'list distributors': actions.distributors.list,
-	'add distributors': actions.distributors.add,
-	'get distributors': actions.distributors.get,
-	'delete distributors': actions.distributors.delete,
-	/*Misc*/
-	'push update': actions.updates.push
-};
-
-const publicActions = {};
+import * as actions from './modules/actions/actions';
 
 readConfig();
 
@@ -160,13 +92,10 @@ async function rcvdPost(req, res) {
 		json = req.body,
 		{ action } = json;
 	res.header('Access-Control-Allow-Origin', '*');
-	if (!action) return;
-	//@ts-ignore
-	console.log('did', await Object.values(adminActions[action])[0](json, r));
-	if (isLocal && action in adminActions)
-		//@ts-ignore
-		res.send(await Object.values(adminActions[action])[0](json, r));
-	else if (action in publicActions)
-		//@ts-ignore
-		res.send(await Object.values(publicActions[action])[0](json, r));
+	if (
+		typeof action === 'string' &&
+		action in actions &&
+		(isLocal || actions[action].public)
+	)
+		res.send(await actions[action].perform(json, r));
 }

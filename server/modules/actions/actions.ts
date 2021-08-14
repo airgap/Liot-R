@@ -1,22 +1,22 @@
-export { actionAddCollators } from './action-add-collators';
-export { actionAddCollectors } from './action-add-collectors';
-export { actionAddDistributors } from './action-add-distributors';
-export { actionAddFilters } from './action-add-filters';
+export { AddCollators } from './AddCollators';
+export { AddCollectors } from './AddCollectors';
+export { AddDistributors } from './AddDistributors';
+export { AddFilters } from './AddFilters';
 
-export { actionCountCollatorReferences } from './action-count-collator-references';
-export { actionCountFilterReferences } from './action-count-filter-references';
+export { CountCollatorReferences } from './CountCollatorReferences';
+export { CountFilterReferences } from './CountFilterReferences';
 
-export { actionDeleteCollators } from './action-delete-collators';
-export { actionDeleteCollectors } from './action-delete-collectors';
-export { actionDeleteDistributors } from './action-delete-distributors';
-export { actionDeleteFilters } from './action-delete-filters';
+export { DeleteCollators } from './DeleteCollators';
+export { DeleteCollectors } from './DeleteCollectors';
+export { DeleteDistributors } from './DeleteDistributors';
+export { DeleteFilters } from './DeleteFilters';
 
-export { actionListCollators } from './action-list-collators';
-export { actionListCollectors } from './action-list-collectors';
-export { actionListDistributors } from './action-list-distributors';
-export { actionListFilterDistributors } from './action-list-filter-distributors';
-export { actionListFilterReferrers } from './action-list-filter-referrers';
-export { actionListFilters } from './action-list-filters';
+export { ListCollators } from './ListCollators';
+export { ListCollectors } from './ListCollectors';
+export { ListDistributors } from './ListDistributors';
+export { ListFilterDistributors } from './ListFilterDistributors';
+export { ListFilterReferrers } from './ListFilterReferrers';
+export { ListFilters } from './ListFilters';
 
-export { actionPushUpdate } from './action-push-update';
-export { actionPushUpdates } from './action-push-updates';
+export { PushUpdate } from './PushUpdate';
+export { PushUpdates } from './PushUpdates';
