@@ -4,7 +4,7 @@
   "scripts": {
     "build-ui": "cd weave && node weave.js",
     "clean": "rm -rf server/webui",
-    "start": "ts-node server/index.ts"
+    "start": "cd server && ts-node index.ts"
   },
   "devDependencies": {
     "@types/node": "^16.4.13",

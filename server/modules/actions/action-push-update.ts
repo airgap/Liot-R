@@ -77,7 +77,7 @@ export async function actionPushUpdate(params, r) {
 	  //if(collector('accessor').eq())
 	})*/
 }
-
+// TO-DO: bake filters and distributors into each filter if filter has Hypercaching enabled
 async function updated(updated, newUpdate, r) {
 	if (updated && typeof updated.changes[0].new_val == 'object') {
 		const nv = updated.changes[0].new_val;
