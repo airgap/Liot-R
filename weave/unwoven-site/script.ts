@@ -1,12 +1,8 @@
-import { addc, togc } from './bonus.js';
+import { addc, bind, togc } from './bonus.js';
 export function grab(elem, root?) {
 	return typeof elem === 'string'
 		? (grab(root) || document).getElementById(elem)
 		: elem;
-}
-
-export function bind(elem, trigger, func) {
-	elem.addEventListener(trigger, func);
 }
 
 export function xss(text) {
@@ -37,25 +33,25 @@ export function namify(rec, type, editing = false) {
 }
 
 export function appendCollators(collators, to, id?) {
-	for (var i = 0; i < collators.length; i++) {
-		var rec = collators[i];
-		var bubble = nelem('div');
+	for (let i = 0; i < collators.length; i++) {
+		const rec = collators[i];
+		const bubble = nelem('div');
 		addc(bubble, 'bubble');
-		var top = nelem('div');
+		const top = nelem('div');
 		addc(top, 'bubble-top');
 		bubble.appendChild(top);
-		var nameBox = nelem('label');
+		const nameBox = nelem('label');
 		nameBox.innerHTML = namify(rec, 'collator', id == rec.id);
 		//xss((rec.name || "["+rec.id+"]") + "");
-		var idBox = nelem('label');
+		const idBox = nelem('label');
 		idBox.innerHTML = xss(rec.id);
 
-		var valBox = nelem('label');
+		const valBox = nelem('label');
 		//addc(valBox, 'filters-tooltip');
-		var filternames = '';
-		var filterNodes = [];
-		for (var filtret of rec.filtrets) {
-			filternames += (filtret.name || filtret.id.substring(0, 10)) + ', ';
+		let filterNames = '';
+		const filterNodes = [];
+		for (const filtret of rec.filtrets) {
+			filterNames += (filtret.name ?? filtret.id.substring(0, 10)) + ', ';
 			/*var filterBox = nelem('div');
 			addc(filterBox, 'bubble');
 			addc(filterBox, 'subble');
@@ -68,12 +64,12 @@ export function appendCollators(collators, to, id?) {
 			filterNodes.push(filterBox);
 			appendDropper(filterBox);*/
 		}
-		filternames =
-			'(' + filternames.substring(0, filternames.length - 2) + ')';
-		valBox.innerHTML = xss(filternames);
+		filterNames =
+			'(' + filterNames.substring(0, filterNames.length - 2) + ')';
+		valBox.innerHTML = xss(filterNames);
 		top.appendChild(nameBox);
 		//top.appendChild(valBox);
-		for (var n of filterNodes) bubble.appendChild(n);
+		for (const n of filterNodes) bubble.appendChild(n);
 		//bubble.appendChild(idBox);
 		//console.log(filtret.code)
 		to.appendChild(bubble);
@@ -86,26 +82,26 @@ export function appendCollators(collators, to, id?) {
 }
 
 export function appendPlaceholder(type, to) {
-	var span = nelem('div');
+	const span = nelem('div');
 	addc(span, 'placehodler');
 	span.innerHTML = 'No ' + type;
 	to.appendChild(span);
 }
 
 export function appendFilters(filters, filterList, id?) {
-	for (var i = 0; i < filters.length; i++) {
-		var rec = filters[i];
-		var bubble = nelem('div');
+	for (let i = 0; i < filters.length; i++) {
+		const rec = filters[i];
+		const bubble = nelem('div');
 		addc(bubble, 'bubble');
-		var top = nelem('div');
+		const top = nelem('div');
 		addc(top, 'bubble-top');
 		bubble.appendChild(top);
-		var nameBox = nelem('label');
+		const nameBox = nelem('label');
 		nameBox.innerHTML = namify(rec, 'filter', id == rec.id); //xss((rec.name || rec.id));
-		var idBox = nelem('label');
+		const idBox = nelem('label');
 		idBox.innerHTML = xss(rec.id);
 
-		var valBox = nelem('pre');
+		const valBox = nelem('pre');
 		valBox.innerHTML = codify(xss(rec.code));
 		top.appendChild(nameBox);
 		bubble.appendChild(valBox);
@@ -119,19 +115,19 @@ export function appendFilters(filters, filterList, id?) {
 }
 
 export function appendCollectors(filters, filterList, id?) {
-	for (var i = 0; i < filters.length; i++) {
-		var rec = filters[i];
-		var bubble = nelem('div');
+	for (let i = 0; i < filters.length; i++) {
+		const rec = filters[i];
+		const bubble = nelem('div');
 		addc(bubble, 'bubble');
-		var top = nelem('div');
+		const top = nelem('div');
 		addc(top, 'bubble-top');
 		bubble.appendChild(top);
-		var nameBox = nelem('label');
+		const nameBox = nelem('label');
 		nameBox.innerHTML = namify(rec, 'collector', id == rec.id); //xss((rec.name || rec.id));
-		var idBox = nelem('label');
+		const idBox = nelem('label');
 		idBox.innerHTML = xss(rec.id);
 
-		var valBox = nelem('pre');
+		const valBox = nelem('pre');
 		valBox.innerHTML = valify(xss(JSON.stringify(rec, null, 3)));
 		top.appendChild(nameBox);
 		bubble.appendChild(valBox);
@@ -154,21 +150,18 @@ export function appendSpecifics(bubble, id, type) {
 	bubble.appendChild(bottom);*/
 }
 
-export function stringValue(value) {
+export function stringValue(value: unknown) {
+	const valType = typeof value;
+	if (valType === 'object') value = JSON.stringify(value);
 	switch (typeof value) {
-		case 'object':
-			value = JSON.stringify(value);
 		case 'string':
-			if (value.length < 30) {
-				if (value.length == 0) value = 'NO VALUE';
-				return value;
-			} else {
-				return value.substring(0, 27) + '...';
-			}
-			break;
+			return value.length < 30
+				? value.length === 0
+					? 'NO VALUE'
+					: value
+				: value.substring(0, 27) + '...';
 		case 'number':
-			return value + '';
-			break;
+			return value.toString();
 	}
 	return value;
 }
@@ -190,8 +183,8 @@ export function codify(string) {
 	.replace(/(?!<span class=|^\s+)(".+?")(?!>|: [{\[])/g,'<span class="string">$1</span>')*/
 }
 
-export function valify(string) {
-	string = string
+export const valify = (text: string) =>
+	text
 		.replace(/([:,]) ([0-9]+)(,|\n| \])/g, '$1 %%n%%$2%%n%%$3')
 		.replace(/"(\$.+?)"/g, '%%v%%$1%%v%%')
 		//.replace(/(?:^\s+)([^%])("[^$].+?")([^%])/g, "$1%%s%%$2%%s%%$3")
@@ -209,13 +202,9 @@ export function valify(string) {
 			/([:,]) (true|false)(,|\n| \])/g,
 			'$1 <span class="binary">$2$3</span>'
 		);
-	return string;
-	/*.replace(/([0-9])+/g,'<span class="number">$1</span>')
-	.replace(/(?!<span class=|^\s+)(".+?")(?!>|: [{\[])/g,'<span class="string">$1</span>')*/
-}
 
 export function appendDropper(bubble) {
-	var dropper = nelem('div');
+	const dropper = nelem('div');
 	dropper.innerHTML = 'V';
 	addc(dropper, 'dropper');
 	bind(bubble.children[0], 'click', e => {
@@ -226,13 +215,7 @@ export function appendDropper(bubble) {
 	bubble.appendChild(dropper);
 }
 
-export function bindBubble(bubble, rec) {
-	bind(bubble, 'click', () => {
-		location.href = '/filters/edit?id=' + rec.id;
-	});
-}
+export const bindBubble = (bubble, { id }) =>
+	bind(bubble, 'click', () => (location.href = `/filters/edit?id=${id}`));
 
-export function getPageId() {
-	var id = location.href.match(/\?id=(.+)$/);
-	return id ? id[1] : 0;
-}
+export const getPageId = () => location.href.match(/\?id=(.+)$/)?.[1] ?? 0;
