@@ -42,7 +42,3 @@ export const gotoNext = () =>
 	(location.href = '/filters?after=' + Math.max(0, after + 30));
 
 export const gotoLast = () => (location.href = '/filters?after=-30');
-
-export const xss = text => text.replace('<', '&lt');
-
-export const nelem = type => document.createElement(type);

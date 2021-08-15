@@ -179,11 +179,3 @@ function err(text = '') {
 	console.log(text);
 	setc('save-button', 'disabled', text);
 }
-//Prevent tags from being embedded anywhere
-function xss(text) {
-	return text.replace('<', '&lt');
-}
-//Create a new element
-function nelem(type) {
-	return document.createElement(type);
-}

@@ -5,7 +5,9 @@ import {
 	appendDropper,
 	appendPlaceholder,
 	appendSpecifics,
-	namify
+	namify,
+	nelem,
+	xss
 } from '../script';
 
 var distributorList;
@@ -83,10 +85,4 @@ function gotoNext() {
 }
 function gotoLast() {
 	location.href = '/distributors?after=-30';
-}
-function xss(text) {
-	return text.replace('<', '&lt');
-}
-function nelem(type) {
-	return document.createElement(type);
 }

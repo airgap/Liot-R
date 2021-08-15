@@ -64,9 +64,3 @@ function gotoNext() {
 function gotoLast() {
 	location.href = '/collectors?after=-30';
 }
-function xss(text) {
-	return text.replace('<', '&lt');
-}
-function nelem(type) {
-	return document.createElement(type);
-}

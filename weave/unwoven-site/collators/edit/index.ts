@@ -114,9 +114,3 @@ function err(text) {
 	setc('compile-errors', 'invalid-json', text);
 	setc('save-button', 'disabled', text);
 }
-function xss(text) {
-	return text.replace('<', '&lt');
-}
-function nelem(type) {
-	return document.createElement(type);
-}

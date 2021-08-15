@@ -45,9 +45,3 @@ function gotoNext() {
 function gotoLast() {
 	location.href = '/collators?after=-30';
 }
-function xss(text) {
-	return text.replace('<', '&lt');
-}
-function nelem(type) {
-	return document.createElement(type);
-}
