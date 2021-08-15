@@ -50,8 +50,7 @@ export class LiotRClient {
 	 * @param {object} data - The parameters of the query
 	 * @param {number} [data.after = 0] - Skip this many collectors. Default 0.
 	 * @param {number} [data.count = 100] - Return up to this many collectors. Default 100.
-	 * @param {function} callback - The function to call when the post completes or errors.
-	 * @returns {object} The XMLHttpRequest creating for the post.
+	 * @returns {object} The server response
 	 */
 
 	listCollectors = data => this.post('listCollectors', data);
