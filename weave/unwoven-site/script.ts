@@ -9,10 +9,6 @@ export function bind(elem, trigger, func) {
 	elem.addEventListener(trigger, func);
 }
 
-export function load(func) {
-	bind(window, 'DOMContentLoaded', func);
-}
-
 export function xss(text) {
 	return text.replace('<', '&lt');
 }
