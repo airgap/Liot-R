@@ -12,18 +12,20 @@ load(() => {
 		collators = res.collators;
 		//for(var collator of res.collators)collators.push({id:collator.id,name:collator.name})
 	});
+	bind('add-collator', 'click', addCollator);
+	bind('save', 'click', save);
 });
 function addCollator() {
-	var select = document.createElement('select');
+	const select = document.createElement('select');
 	for (var collator of collators) {
-		var option = document.createElement('option');
+		const option = document.createElement('option');
 		option.value = collator.id;
 		option.innerHTML = collator.name || `[ ${collator.id} ]`;
 		select.appendChild(option);
 	}
-	var rem = document.createElement('label');
+	const rem = document.createElement('label');
 	rem.innerHTML = '-';
-	var item = document.createElement('div');
+	const item = document.createElement('div');
 	item.appendChild(rem);
 	item.appendChild(select);
 	grab('filter-list').insertBefore(item, grab('add-filter'));
