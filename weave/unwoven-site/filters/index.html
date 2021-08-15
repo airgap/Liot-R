@@ -1,24 +1,23 @@
 <html>
-  <head>
-    <title>Liot R: Filters</title>
-    @@/head.html
-    <script src='index.js' type='module'>
-
-    </script>
-  </head>
-  <body>
-    <div id="content">
-      @@/nav.html
-      <h1>Filters <a href="new">New</a></h1>
-      <div class="bubbles" id="filter-list">
-      </div>
-      <div class="botnav">
-        <a onclick="gotoStart()">&lt;&lt;</a>
-        <a onclick="gotoPrevious()">&lt;</a>
-        <a onclick="gotoNext()">&gt;</a>
-        <a onclick="gotoLast()">&gt;&gt;</a>
-      </div>
-      <button onclick="populate()">Populate</button>
-    </div>
-  </body>
-</html>
+	<head>
+		<title>Liot R: Filters</title>
+		@@/head.html
+		<script src="index.js" type="module"></script>
+	</head>
+	<body>
+		<div id="content">
+			@@/nav.html
+			<h1>
+				Filters <a href="new">New</a>
+			</h1>
+			<div class="bubbles" id="filter-list"></div>
+			<div class="botnav">
+				<a onclick="gotoStart()">&lt;&lt;</a>
+				<a onclick="gotoPrevious()">&lt;</a>
+				<a onclick="gotoNext()">&gt;</a>
+				<a onclick="gotoLast()">&gt;&gt;</a>
+			</div>
+			<button onclick="populate()">Populate</button>
+		</div>
+	</body>
+</html>;
