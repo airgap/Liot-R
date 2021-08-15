@@ -1,6 +1,6 @@
-import { LiotR } from '../liotr';
-import { appendCollectors } from '../script';
-import { grab, load } from '../bonus';
+import { LiotR } from '../liotr.js';
+import { appendCollectors } from '../script.js';
+import { grab, load } from '../bonus.js';
 
 var collectorList;
 var reg = location.href.match(/after=(-?[0-9]+)/);

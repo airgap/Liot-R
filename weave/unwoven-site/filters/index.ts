@@ -1,6 +1,6 @@
-import { LiotR } from '../liotr';
-import { appendFilters } from '../script';
-import { grab, load } from '../bonus';
+import { LiotR } from '../liotr.js';
+import { appendFilters } from '../script.js';
+import { grab, load } from '../bonus.js';
 
 const liotR = new LiotR();
 var filterList;

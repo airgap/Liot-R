@@ -1,6 +1,6 @@
-import { LiotR } from '../../liotr';
-import { grab, load, setc } from '../../bonus';
-import { getPageId } from '../../script';
+import { LiotR } from '../../liotr.js';
+import { grab, load, setc } from '../../bonus.js';
+import { getPageId } from '../../script.js';
 
 var ID = getPageId();
 const liotR = new LiotR();

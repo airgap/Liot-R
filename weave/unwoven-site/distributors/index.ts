@@ -1,5 +1,5 @@
-import { addc, grab, load } from '../bonus';
-import { LiotR } from '../liotr';
+import { addc, grab, load } from '../bonus.js';
+import { LiotR } from '../liotr.js';
 import {
 	appendCollators,
 	appendDropper,

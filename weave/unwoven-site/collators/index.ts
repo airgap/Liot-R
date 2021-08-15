@@ -1,5 +1,5 @@
-import { grab, load } from '../bonus';
-import { LiotR } from '../liotr';
+import { grab, load } from '../bonus.js';
+import { LiotR } from '../liotr.js';
 import { appendCollators } from '../script';
 
 var collatorList;

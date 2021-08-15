@@ -1,7 +1,7 @@
 //The filter ID from the URL
-import { appendCollators, getPageId } from '../../script';
-import { addc, bind, grab, load, setc } from '../../bonus';
-import { LiotR } from '../../liotr';
+import { appendCollators, getPageId } from '../../script.js';
+import { addc, bind, grab, load, setc } from '../../bonus.js';
+import { LiotR } from '../../liotr.js';
 const liotR = new LiotR();
 var ID = getPageId();
 

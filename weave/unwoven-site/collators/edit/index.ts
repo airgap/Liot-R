@@ -1,6 +1,6 @@
-import { load, grab, bind, setc, addc } from '../../bonus';
-import { LiotR } from '../../liotr';
-import { getPageId } from '../../script';
+import { load, grab, bind, setc, addc } from '../../bonus.js';
+import { LiotR } from '../../liotr.js';
+import { getPageId } from '../../script.js';
 const liotR = new LiotR();
 var ID = getPageId();
 var COMPARATORS = [

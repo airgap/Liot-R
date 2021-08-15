@@ -1,5 +1,5 @@
-import { LiotR } from '../../liotr';
-import { grab, setc } from '../../bonus';
+import { LiotR } from '../../liotr.js';
+import { grab, setc } from '../../bonus.js';
 const liotR = new LiotR();
 function save() {
 	//addc('save-button', 'disabled');

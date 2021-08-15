@@ -1,4 +1,4 @@
-import { addc, togc } from './bonus';
+import { addc, togc } from './bonus.js';
 export function grab(elem, root?) {
 	return typeof elem === 'string'
 		? (grab(root) || document).getElementById(elem)

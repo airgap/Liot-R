@@ -1,4 +1,4 @@
-import { load, grab, setc, bind } from '../../bonus';
+import { load, grab, setc, bind } from '../../bonus.js';
 import { LiotR } from '../../liotr';
 const liotR = new LiotR();
 var COMPARATORS = [

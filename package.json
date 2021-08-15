@@ -2,7 +2,7 @@
   "name": "liot-r",
   "version": "0.0.0",
   "scripts": {
-    "build-ui": "cd weave && node weave.js",
+    "build-ui": "./build.sh",
     "clean": "rm -rf server/webui",
     "start": "cd server && ts-node index.ts"
   },
