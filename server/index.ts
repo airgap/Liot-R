@@ -54,11 +54,11 @@ async function startRethinkServer() {
 	r = dash({});
 	await r
 		.dbList()
-		.contains('LiotR')
+		.contains('Liotr')
 		.do(exists => {
-			return r.branch(exists, { dbs_created: 0 }, r.dbCreate('LiotR'));
+			return r.branch(exists, { dbs_created: 0 }, r.dbCreate('Liotr'));
 		});
-	r = dash({ db: 'LiotR' });
+	r = dash({ db: 'Liotr' });
 	console.log('Connected to database for Liot R.');
 	for (const t of TABLES) await ensureTable(t);
 	return true;

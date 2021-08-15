@@ -2,50 +2,8 @@
   <head>
     <title>Liot R: Filters</title>
     @@/head.html
-    <script>
-      var filterList;
-      var reg = location.href.match(/after=(-?[0-9]+)/);
-      var after = reg ? reg[1]*1 : 0;
-      load(()=>{
-        filterList = grab('filter-list');
-        LiotR.listFilters({after: after, count: 30},res => {
-          if(res.err) {
-            alert(res.err);
-          } else {
-            console.log(res.filters);
-            appendFilters(res.filters, filterList);
-          }
-        })
-      })
-      function populate() {
-        var filters = [];
-        for(var i = 0; i < 100; i ++)
-          filters.push({name:'OUTTHERM_'+i,
-            device_info:
-             { manufacture_date: 'UNKNOWN',
-               manufacturer: 'AcuRite',
-               model: 'UNKNOWN',
-               series: 'UNKNOWN'
-             }
-           });
-        LiotR.addFilters({filters: filters}, res => {
-          console.log(res.err || res)
-        })
-      }
-      function gotoStart() {
-        location.href = "/filters?after=0";
-      }
-      function gotoPrevious() {
-        location.href = "/filters?after=" + Math.max(0,after-30);
-      }
-      function gotoNext() {
-        location.href = "/filters?after=" + Math.max(0,after+30);
-      }
-      function gotoLast() {
-        location.href = "/filters?after=-30";
-      }
-      function xss(text) { return text.replace('<', '&lt') }
-      function nelem(type) { return document.createElement(type) }
+    <script src='index.js' type='module'>
+
     </script>
   </head>
   <body>

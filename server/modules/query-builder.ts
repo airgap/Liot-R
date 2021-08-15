@@ -69,7 +69,7 @@ export function buildFilterReferrerListerQuery(ids, r) {
 	query = query.map(filt => ({
 		id: filt('id'),
 		referrers: r
-			.db('LiotR')
+			.db('Liotr')
 			.table('Collators')
 			.filter(col => {
 				return col('filters').contains(filt('id'));
@@ -99,7 +99,7 @@ export function buildFilterDistributorListerQuery(ids, r) {
 	query = query.map(filt => ({
 		id: filt('id'),
 		referrers: r
-			.db('LiotR')
+			.db('Liotr')
 			.table('Collators')
 			.filter(col => {
 				return col('filters').contains(filt('id'));

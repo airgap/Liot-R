@@ -2,30 +2,8 @@
   <head>
     <title>Liot R: New Collector</title>
     @@/head.html
-    <script>
-      function save() {
-        //addc('save-button', 'disabled');
-        err('Creating collector...');
-        var collector = {name:grab('collector-name').value,device_info:{}}
-        for(var t of 'manufacturer model series'.split(' ')) {
-          collector.device_info[t] = grab('collector-'+t).value
-        }
-        LiotR.addCollectors({
-          collectors:[collector]}, res => {
-          if(res.err) {
-            console.log(res.err);
-            return;
-          }
-          location.href = "/collectors";
-        })
-      }
-      function err(text) {
-        grab('compile-errors').innerHTML = text||"Ready";
-        setc('compile-errors', 'invalid-json', text)
-        setc('save-button', 'disabled', text)
-      }
-      function xss(text) { return text.replace('<', '&lt') }
-      function nelem(type) { return document.createElement(type) }
+    <script type='module' src='index.js'>
+
     </script>
   </head>
   <body>

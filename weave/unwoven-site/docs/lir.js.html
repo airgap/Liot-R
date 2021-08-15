@@ -28,7 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>/* YupDev API v0 */
 
-function LiotR() {
+function Liotr() {
 	//var SERVER = "https://1.db.yup.place:4430";
 	//var SESSION;
 	//return self;
@@ -37,12 +37,12 @@ function LiotR() {
 /**
  * The URL of the Liot R server to connect to.
  */
-LiotR.SERVER = "http://localhost:7474";//eye.lyku.org
+Liotr.SERVER = "http://localhost:7474";//eye.lyku.org
 
 /**
 * Session ID of the current login session. Currently unused.
 */
-LiotR.SESSION = null;
+Liotr.SESSION = null;
 
 /**
  * Post data to the Liot R server
@@ -52,7 +52,7 @@ LiotR.SESSION = null;
  * @param {function} callback - the function to call when the post completes or errors (response = {err: 'Description'}).
  * @returns {object} the XMLHttpRequest creating for the post.
  */
-LiotR.post = (data, callback) => {
+Liotr.post = (data, callback) => {
 	var xml = new XMLHttpRequest();
 	if(typeof callback == "function") {
 		xml.addEventListener('load', ()=> {
@@ -66,10 +66,10 @@ LiotR.post = (data, callback) => {
 
 
 
-	if(LiotR.SESSION)data.sessionid = LiotR.SESSION;
+	if(Liotr.SESSION)data.sessionid = Liotr.SESSION;
 
 	//alert(JSON.stringify(data))
-	xml.open('POST', LiotR.SERVER);
+	xml.open('POST', Liotr.SERVER);
 	xml.setRequestHeader("Content-type", "application/json")
 	xml.send(JSON.stringify(data));
 	return xml;
@@ -85,9 +85,9 @@ LiotR.post = (data, callback) => {
  * @returns {object} the XMLHttpRequest creating for the post.
  */
 
-LiotR.addCollectors = (data, callback) => {
+Liotr.addCollectors = (data, callback) => {
 	data.action = "add collectors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
 /**
@@ -101,99 +101,99 @@ LiotR.addCollectors = (data, callback) => {
  * @returns {object} The XMLHttpRequest creating for the post.
  */
 
-LiotR.listCollectors = (data, callback) => {
+Liotr.listCollectors = (data, callback) => {
 	data.action = "list collectors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.getCollectors = (data, callback) => {
+Liotr.getCollectors = (data, callback) => {
 	data.action = "get collectors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.deleteCollectors = (data, callback) => {
+Liotr.deleteCollectors = (data, callback) => {
 	data.action = "delete collectors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.listFilters = (data, callback) => {
+Liotr.listFilters = (data, callback) => {
 	data.action = "list filters";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.addFilters = (data, callback) => {
+Liotr.addFilters = (data, callback) => {
 	data.action = "add filters";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.getFilters = (data, callback) => {
+Liotr.getFilters = (data, callback) => {
 	data.action = "get filters";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.deleteFilters = (data, callback) => {
+Liotr.deleteFilters = (data, callback) => {
 	data.action = "delete filters";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.countFilterReferences = (data, callback) => {
+Liotr.countFilterReferences = (data, callback) => {
 	data.action = "count filter references";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.listFilterReferrers = (data, callback) => {
+Liotr.listFilterReferrers = (data, callback) => {
 	data.action = "list filter referrers";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.addCollators = (data, callback) => {
+Liotr.addCollators = (data, callback) => {
 	data.action = "add collators";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.listCollators = (data, callback) => {
+Liotr.listCollators = (data, callback) => {
 	data.action = "list collators";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.getCollators = (data, callback) => {
+Liotr.getCollators = (data, callback) => {
 	data.action = "get collators";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.deleteCollators = (data, callback) => {
+Liotr.deleteCollators = (data, callback) => {
 	data.action = "delete collators";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.countCollatorReferences = (data, callback) => {
+Liotr.countCollatorReferences = (data, callback) => {
 	data.action = "count collator references";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.addDistributors = (data, callback) => {
+Liotr.addDistributors = (data, callback) => {
 	data.action = "add distributors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.listDistributors = (data, callback) => {
+Liotr.listDistributors = (data, callback) => {
 	data.action = "list distributors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.getDistributors = (data, callback) => {
+Liotr.getDistributors = (data, callback) => {
 	data.action = "get distributors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.deleteDistributors = (data, callback) => {
+Liotr.deleteDistributors = (data, callback) => {
 	data.action = "delete distributors";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 
-LiotR.pushUpdate = (data, callback) => {
+Liotr.pushUpdate = (data, callback) => {
 	data.action = "push update";
-	return LiotR.post(data, callback);
+	return Liotr.post(data, callback);
 }
 </code></pre>
         </article>
