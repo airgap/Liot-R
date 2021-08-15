@@ -12,35 +12,23 @@ export class LiotRClient {
 	/**
 	 * Session ID of the current login session. Currently unused.
 	 */
-	SESSION = null;
+	SESSION;
 
 	/**
 	 * Post data to the Liot R server
 	 * @namespace API
 	 * @function post
-	 * @param {object} data - the JSON to send to the server. Should contain an action.
-	 * @param {function} callback - the function to call when the post completes or errors (response = {err: 'Description'}).
-	 * @returns {object} the XMLHttpRequest creating for the post.
+	 * @param {string} action - the server action to perform.
+	 * @param {object} data - the JSON to send to the server.
+	 * @returns {object} the server response, e.g. {err: 'Description'}.
 	 */
-	post = (data, callback) => {
-		const xml = new XMLHttpRequest();
-		if (typeof callback == 'function') {
-			xml.addEventListener('load', () => {
-				//alert(xml.response)
-				callback(JSON.parse(xml.responseText));
-			});
-			xml.addEventListener('error', () => {
-				callback({ err: 'Unable to contact server.' });
-			});
-		}
-
-		if (this.SESSION) data.sessionid = this.SESSION;
-
-		//alert(JSON.stringify(data))
-		xml.open('POST', this.SERVER);
-		xml.setRequestHeader('Content-type', 'application/json');
-		xml.send(JSON.stringify(data));
-		return xml;
+	post = async (action: string, data: any) => {
+		return await (
+			await fetch(`${this.SERVER}/${action}`, {
+				method: 'POST',
+				body: JSON.stringify({ ...data, sessionid: this.SESSION })
+			})
+		).json();
 	};
 
 	/**
@@ -53,10 +41,7 @@ export class LiotRClient {
 	 * @returns {object} the XMLHttpRequest creating for the post.
 	 */
 
-	addCollectors = (data, callback) => {
-		data.action = 'add collectors';
-		return this.post(data, callback);
-	};
+	addCollectors = data => this.post('addCollectors', data);
 
 	/**
 	 * Lists any packet collectors.
@@ -69,10 +54,7 @@ export class LiotRClient {
 	 * @returns {object} The XMLHttpRequest creating for the post.
 	 */
 
-	listCollectors = (data, callback) => {
-		data.action = 'list collectors';
-		return this.post(data, callback);
-	};
+	listCollectors = data => this.post('listCollectors', data);
 
 	/**
 	 * Retreives specified packet collectors.
@@ -84,10 +66,7 @@ export class LiotRClient {
 	 * @returns {object} The XMLHttpRequest creating for the post.
 	 */
 
-	getCollectors = (data, callback) => {
-		data.action = 'get collectors';
-		return this.post(data, callback);
-	};
+	getCollectors = data => this.post('getCollectors', data);
 
 	/**
 	 * Lists any packet collectors.
@@ -96,92 +75,40 @@ export class LiotRClient {
 	 * @param {object} data - The parameters of the query
 	 * @param {number} [data.after = 0] - Skip this many collectors. Default 0.
 	 * @param {number} [data.count = 100] - Return up to this many collectors. Default 100.
-	 * @param {function} callback - The function to call when the post completes or errors.
-	 * @returns {object} The XMLHttpRequest creating for the post.
+	 * @returns {object} The deleted collectors.
 	 */
+	deleteCollectors = data => this.post('deleteCollectors', data);
 
-	deleteCollectors = (data, callback) => {
-		data.action = 'delete collectors';
-		return this.post(data, callback);
-	};
+	listFilters = data => this.post('listFilters', data);
 
-	listFilters = (data, callback) => {
-		data.action = 'list filters';
-		return this.post(data, callback);
-	};
+	addFilters = data => this.post('addFilters', data);
 
-	addFilters = (data, callback) => {
-		data.action = 'add filters';
-		return this.post(data, callback);
-	};
+	getFilters = data => this.post('getFilters', data);
 
-	getFilters = (data, callback) => {
-		data.action = 'get filters';
-		return this.post(data, callback);
-	};
+	deleteFilters = data => this.post('deleteFilters', data);
 
-	deleteFilters = (data, callback) => {
-		data.action = 'delete filters';
-		return this.post(data, callback);
-	};
+	countFilterReferences = data => this.post('countFilterReferences', data);
 
-	countFilterReferences = (data, callback) => {
-		data.action = 'count filter references';
-		return this.post(data, callback);
-	};
+	listFilterReferrers = data => this.post('listFilterReferrers', data);
 
-	listFilterReferrers = (data, callback) => {
-		data.action = 'list filter referrers';
-		return this.post(data, callback);
-	};
+	addCollators = data => this.post('addCollators', data);
 
-	addCollators = (data, callback) => {
-		data.action = 'add collators';
-		return this.post(data, callback);
-	};
+	listCollators = data => this.post('listCollators', data);
 
-	listCollators = (data, callback) => {
-		data.action = 'list collators';
-		return this.post(data, callback);
-	};
+	getCollators = data => this.post('getCollators', data);
 
-	getCollators = (data, callback) => {
-		data.action = 'get collators';
-		return this.post(data, callback);
-	};
+	deleteCollators = data => this.post('deleteCollators', data);
 
-	deleteCollators = (data, callback) => {
-		data.action = 'delete collators';
-		return this.post(data, callback);
-	};
+	countCollatorReferences = data =>
+		this.post('countCollatorReferences', data);
 
-	countCollatorReferences = (data, callback) => {
-		data.action = 'count collator references';
-		return this.post(data, callback);
-	};
+	addDistributors = data => this.post('addDistributors', data);
 
-	addDistributors = (data, callback) => {
-		data.action = 'add distributors';
-		return this.post(data, callback);
-	};
+	listDistributors = data => this.post('listDistributors', data);
 
-	listDistributors = (data, callback) => {
-		data.action = 'list distributors';
-		return this.post(data, callback);
-	};
+	getDistributors = data => this.post('getDistributors', data);
 
-	getDistributors = (data, callback) => {
-		data.action = 'get distributors';
-		return this.post(data, callback);
-	};
+	deleteDistributors = data => this.post('deleteDistributors', data);
 
-	deleteDistributors = (data, callback) => {
-		data.action = 'delete distributors';
-		return this.post(data, callback);
-	};
-
-	pushUpdate = (data, callback) => {
-		data.action = 'push update';
-		return this.post(data, callback);
-	};
+	pushUpdate = data => this.post('pushUpdate', data);
 }
