@@ -28,9 +28,9 @@ function addCollator() {
 	const item = document.createElement('div');
 	item.appendChild(rem);
 	item.appendChild(select);
-	const filterList = grab('filter-list');
-	filterList.insertBefore(item, grab('add-filter'));
-	bind(rem, 'click', () => filterList.removeChild(item));
+	const collatorList = grab('collator-list');
+	collatorList.insertBefore(item, grab('add-collator'));
+	bind(rem, 'click', () => collatorList.removeChild(item));
 }
 function save() {
 	//addc('save-button', 'disabled');
