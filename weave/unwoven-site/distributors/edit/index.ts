@@ -1,8 +1,8 @@
-import { LiotR } from '../../liotr.js';
+import { LiotRClient } from '../../liotRClient.js';
 import { bind, grab, load, setc } from '../../bonus.js';
 import { getPageId } from '../../script.js';
 
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 const ID = getPageId();
 
 let collators = [];

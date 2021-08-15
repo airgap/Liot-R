@@ -1,6 +1,6 @@
-import { LiotR } from '../../liotr.js';
+import { LiotRClient } from '../../liotRClient.js';
 import { grab, setc } from '../../bonus.js';
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 function save() {
 	//addc('save-button', 'disabled');
 	err('Creating collector...');

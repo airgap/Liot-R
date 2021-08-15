@@ -1,7 +1,7 @@
 import { load, grab, bind, setc, addc } from '../../bonus.js';
-import { LiotR } from '../../liotr.js';
+import { LiotRClient } from '../../liotRClient.js';
 import { getPageId } from '../../script.js';
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 var ID = getPageId();
 var COMPARATORS = [
 	'EQUALS',

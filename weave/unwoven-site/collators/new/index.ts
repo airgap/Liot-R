@@ -1,6 +1,6 @@
 import { load, grab, setc, bind } from '../../bonus.js';
-import { LiotR } from '../../liotr';
-const liotR = new LiotR();
+import { LiotRClient } from '../../liotRClient';
+const liotR = new LiotRClient();
 var COMPARATORS = [
 	'EQUALS',
 	'NEQUALS',

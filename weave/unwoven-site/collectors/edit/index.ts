@@ -1,9 +1,9 @@
-import { LiotR } from '../../liotr.js';
+import { LiotRClient } from '../../liotRClient.js';
 import { grab, load, setc } from '../../bonus.js';
 import { getPageId } from '../../script.js';
 
 var ID = getPageId();
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 load(() => {
 	liotR.getCollectors({ ids: [ID] }, res => {
 		if (res.err) err('Error retreiving collector.');

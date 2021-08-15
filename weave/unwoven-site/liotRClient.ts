@@ -3,7 +3,7 @@ if (typeof XMLHttpRequest === 'undefined') {
 	XMLHttpRequest = require('XMLHttpRequest');
 }
 
-export class LiotR {
+export class LiotRClient {
 	/**
 	 * The URL of the Liot R server to connect to.
 	 */

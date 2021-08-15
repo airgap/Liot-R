@@ -1,7 +1,7 @@
 import { grab, setc } from './bonus.js';
-import { LiotR } from './liotr.js';
+import { LiotRClient } from './liotRClient.js';
 
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 
 function save() {
 	//addc('save-button', 'disabled');

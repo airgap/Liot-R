@@ -1,5 +1,5 @@
 import { addc, grab, load } from '../bonus.js';
-import { LiotR } from '../liotr.js';
+import { LiotRClient } from '../liotRClient.js';
 import {
 	appendCollators,
 	appendDropper,
@@ -13,7 +13,7 @@ import {
 var distributorList;
 var reg = location.href.match(/after=(-?[0-9]+)/);
 var after = reg ? parseInt(reg[1]) : 0;
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 load(() => {
 	distributorList = grab('distributor-list');
 	liotR.listDistributors({ after: after, count: 30 }, res => {

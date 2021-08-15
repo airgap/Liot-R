@@ -1,8 +1,8 @@
-import { LiotR } from '../liotr.js';
+import { LiotRClient } from '../liotRClient.js';
 import { appendFilters } from '../script.js';
 import { grab, load } from '../bonus.js';
 
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 var filterList;
 var reg = location.href.match(/after=(-?[0-9]+)/);
 var after = reg ? parseInt(reg[1]) : 0;

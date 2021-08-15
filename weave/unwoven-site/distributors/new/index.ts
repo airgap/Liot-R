@@ -1,7 +1,7 @@
 import { bind, grab, load, setc } from '../../bonus';
-import { LiotR } from '../../liotr';
+import { LiotRClient } from '../../liotRClient';
 
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 let collators = [];
 load(() => {
 	liotR.listCollators({}, res => {

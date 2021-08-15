@@ -1,11 +1,11 @@
-import { LiotR } from '../liotr.js';
+import { LiotRClient } from '../liotRClient.js';
 import { appendCollectors } from '../script.js';
 import { grab, load } from '../bonus.js';
 
 var collectorList;
 var reg = location.href.match(/after=(-?[0-9]+)/);
 var after = reg ? parseInt(reg[1]) : 0;
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 load(() => {
 	collectorList = grab('collector-list');
 	liotR.listCollectors({ after: after, count: 30 }, res => {

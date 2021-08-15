@@ -1,7 +1,7 @@
-import { LiotR } from '../../liotr';
+import { LiotRClient } from '../../liotRClient';
 import { bind, grab, load, setc } from '../../bonus';
 
-const liotR = new LiotR();
+const liotR = new LiotRClient();
 var COMPARATORS = [
 	'EQUALS',
 	'NEQUALS',
