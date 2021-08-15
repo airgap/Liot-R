@@ -6,6 +6,8 @@ A brief overview of the advantages Linky's Intranets of Things provides over tra
 
 [![DeepSource](https://deepsource.io/gh/airgap/Liot-R.svg/?label=active+issues&show_trend=true&token=LvH-S1YIm9NOdj7lz47GtA-s)](https://deepsource.io/gh/airgap/Liot-R/?ref=repository-badge)
 
+[![DeepSource](https://deepsource.io/gh/airgap/Liot-R.svg/?label=resolved+issues&show_trend=true&token=LvH-S1YIm9NOdj7lz47GtA-s)](https://deepsource.io/gh/airgap/Liot-R/?ref=repository-badge)
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
