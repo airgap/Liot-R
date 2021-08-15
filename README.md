@@ -4,6 +4,8 @@ A brief overview of the advantages Linky's Intranets of Things provides over tra
 
 **Please note that Liot R is still heavily in development and as such not all features are available or stable. Application and prerequisite installation must be performed manually.** Documentation is far from complete as well.
 
+[![DeepSource](https://deepsource.io/gh/airgap/Liot-R.svg/?label=active+issues&show_trend=true&token=LvH-S1YIm9NOdj7lz47GtA-s)](https://deepsource.io/gh/airgap/Liot-R/?ref=repository-badge)
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
