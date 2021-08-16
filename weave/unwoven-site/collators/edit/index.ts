@@ -2,69 +2,41 @@ import { load, grab, bind, setc, addc } from '../../bonus.js';
 import { LiotRClient } from '../../liotRClient.js';
 import { getPageId } from '../../script.js';
 const liotR = new LiotRClient();
-var ID = getPageId();
-var COMPARATORS = [
-	'EQUALS',
-	'NEQUALS',
-	'TFNEQUALS',
-	'OVER',
-	'OVEROR',
-	'UNDER',
-	'UNDEROR'
-];
+const ID = getPageId();
+let filters = [];
+load(async () => {
+	({ filters } = await liotR.listFilters({}));
+	const collator = (await liotR.getCollators({ ids: [ID] }))?.collators?.[0];
+	if (!collator) throw 'Unable to find a collator with that ID';
 
-var OPERATORS = ['AND', 'OR', 'NAND', 'NOR', 'XOR', 'SAME'];
-
-var filterList;
-var reg = location.href.match(/after=(-?[0-9]+)/);
-var after = reg ? parseInt(reg[1]) : 0;
-var filters = [];
-load(() => {
-	liotR.listFilters({}, res => {
-		if (res.err) {
-			console.log(res.err);
-			return;
-		}
-		filters = res.filters;
-		liotR.getCollators({ ids: [ID] }, res => {
-			if (res.err || !res.collators || !res.collators.length) {
-				console.log(res.err);
-				return;
-			}
-			console.log(res.collators[0]);
-			grab('item-id').innerHTML = '[' + res.collators[0].id + ']';
-			grab('collator-name').value = res.collators[0].name || '';
-			for (var filter of res.collators[0].filtrets) addFilter(filter.id);
-			liotR.countCollatorReferences({ ids: [ID] }, res => {
-				if (res.err || !res.collators.length) {
-					console.log(err || 'No filter found.');
-					return;
-				}
-				var cool = res.collators[0];
-				grab('reference-count').innerHTML =
-					'Used by ' + (cool.refcount || 'no') + ' distributors.';
-				console.log(cool.refcount);
-				if (cool.refcount) addc('delete-button', 'disabled');
-				if (cool.refcount)
-					grab('delete-button').innerHTML = 'Undeletable';
-			});
-		});
-		//filters.push({id:filter.id,name:filter.name})
-	});
+	console.log(collator);
+	grab('item-id').innerHTML = '[' + collator.id + ']';
+	grab('collator-name').value = collator.name || '';
+	for (var filter of collator.filtrets) addFilter(filter.id);
+	const refcount = (await liotR.countCollatorReferences({ ids: [ID] }))
+		?.collators?.[0]?.refcount;
+	if (typeof refcount !== 'number')
+		throw 'Cannot count collator reference count';
+	grab('reference-count').innerHTML =
+		'Used by ' + (refcount || 'no') + ' distributors.';
+	console.log(refcount);
+	if (refcount) addc('delete-button', 'disabled');
+	if (refcount) grab('delete-button').innerHTML = 'Undeletable';
+	//filters.push({id:filter.id,name:filter.name})
 });
 function addFilter(id) {
-	var select = document.createElement('select');
-	for (var filter of filters) {
-		var option = document.createElement('option');
+	const select = document.createElement('select');
+	for (const filter of filters) {
+		const option = document.createElement('option');
 		option.value = filter.id;
 		option.innerHTML = filter.name;
 		select.appendChild(option);
 		console.log(id);
 		if (id && filter.id == id) option.selected = true;
 	}
-	var rem = document.createElement('label');
+	const rem = document.createElement('label');
 	rem.innerHTML = '-';
-	var item = document.createElement('div');
+	const item = document.createElement('div');
 	item.appendChild(rem);
 	item.appendChild(select);
 	grab('filter-list').insertBefore(item, grab('add-filter'));
@@ -72,43 +44,32 @@ function addFilter(id) {
 		item.parentNode.removeChild(item);
 	});
 }
-function save() {
+const save = async () => {
 	//addc('save-button', 'disabled');
 	err('Creating collator...');
-	var name = grab('collator-name').value;
-	var filtrets = [];
-	var selects = document.getElementsByTagName('select');
-	for (var i of selects) filtrets.push(i.value);
-	liotR.addCollators(
-		{
-			collators: [
-				{
-					name: name,
-					filters: filtrets,
-					id: ID
-				}
-			]
-		},
-		res => {
-			if (res.err) {
-				console.log(res.err);
-				return;
+	await liotR.addCollators({
+		collators: [
+			{
+				name: grab('collator-name').value,
+				filters: Array.from(
+					document.getElementsByTagName('select')
+				).map(({ value }) => value),
+				id: ID
 			}
-			location.href = '/collators';
-		}
-	);
-}
-function deletef() {
+		]
+	});
+	location.href = '/collators';
+};
+const deletef = async () => {
 	if (
 		confirm(
 			'Are you sure you wish to delete this collator? This action cannot be undone.'
 		)
 	) {
-		liotR.deleteCollators({ ids: [ID] }, res => {
-			location.href = '/collators';
-		});
+		await liotR.deleteCollators({ ids: [ID] });
+		location.href = '/collators';
 	}
-}
+};
 function err(text) {
 	grab('compile-errors').innerHTML = text || 'Ready';
 	setc('compile-errors', 'invalid-json', text);
