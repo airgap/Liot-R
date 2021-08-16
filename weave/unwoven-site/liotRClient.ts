@@ -23,12 +23,14 @@ export class LiotRClient {
 	 * @returns {object} the server response, e.g. {err: 'Description'}.
 	 */
 	post = async (action: string, data: any) => {
-		return await (
+		const res = await (
 			await fetch(`${this.SERVER}/${action}`, {
 				method: 'POST',
 				body: JSON.stringify({ ...data, sessionid: this.SESSION })
 			})
 		).json();
+		if (res.err) throw res.err;
+		return res;
 	};
 
 	/**
