@@ -1,5 +1,5 @@
 import { addc, grab, load } from '../bonus.js';
-import { LiotRClient } from '../liotRClient.js';
+import { Client } from '../Client.js';
 import {
 	appendCollators,
 	appendDropper,
@@ -13,17 +13,14 @@ import {
 var distributorList;
 var reg = location.href.match(/after=(-?[0-9]+)/);
 var after = reg ? parseInt(reg[1]) : 0;
-const liotR = new LiotRClient();
-load(() => {
+const liotR = new Client();
+load(async () => {
 	distributorList = grab('distributor-list');
-	liotR.listDistributors({ after: after, count: 30 }, res => {
-		if (res.err) {
-			alert(res.err);
-		} else {
-			console.log(res.distributors);
-			appendDistributors(res.distributors);
-		}
+	const distributors = await liotR.listDistributors({
+		after,
+		count: 30
 	});
+	appendDistributors(distributors);
 });
 function appendDistributors(distributors) {
 	for (var i = 0; i < distributors.length; i++) {
@@ -57,22 +54,6 @@ function appendDistributors(distributors) {
 		//bindBubble(bubble,rec)
 	}
 	if (!distributors.length) appendPlaceholder('filters', distributorList);
-}
-function populate() {
-	var distributors = [];
-	for (var i = 0; i < 100; i++)
-		distributors.push({
-			name: 'OUTTHERM_' + i,
-			device_info: {
-				manufacture_date: 'UNKNOWN',
-				manufacturer: 'AcuRite',
-				model: 'UNKNOWN',
-				series: 'UNKNOWN'
-			}
-		});
-	liotR.addDistributors({ distributors: distributors }, res => {
-		console.log(res.err || res);
-	});
 }
 function gotoStart() {
 	location.href = '/distributors?after=0';

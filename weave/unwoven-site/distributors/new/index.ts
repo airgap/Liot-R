@@ -1,21 +1,14 @@
 import { bind, grab, load, setc } from '../../bonus';
-import { LiotRClient } from '../../liotRClient';
+import { Client } from '../../Client';
 
-const liotR = new LiotRClient();
+const liotR = new Client();
 let collators = [];
-load(() => {
-	liotR.listCollators({}, res => {
-		if (res.err) {
-			console.log(res.err);
-			return;
-		}
-		collators = res.collators;
-		//for(var collator of res.collators)collators.push({id:collator.id,name:collator.name})
-	});
+load(async () => {
+	collators = await liotR.listCollators({});
 	bind('add-collator', 'click', addCollator);
 	bind('save', 'click', save);
 });
-function addCollator() {
+const addCollator = () => {
 	const select = document.createElement('select');
 	for (const collator of collators) {
 		const option = document.createElement('option');
@@ -31,34 +24,22 @@ function addCollator() {
 	const collatorList = grab('collator-list');
 	collatorList.insertBefore(item, grab('add-collator'));
 	bind(rem, 'click', () => collatorList.removeChild(item));
-}
-function save() {
+};
+const save = async () => {
 	//addc('save-button', 'disabled');
 	err('Creating distributor...');
-	liotR.addDistributors(
-		{
-			distributors: [
-				{
-					name: grab('distributor-name').value,
-					push: grab('distributor-push').checked,
-					queue: grab('distributor-queue').checked,
-					callback: grab('distributor-callback').checked,
-					url: grab('distributor-url').value,
-					collators: Array.from(
-						document.getElementsByTagName('select')
-					).map(({ value }) => value)
-				}
-			]
-		},
-		res => {
-			if (res.err) {
-				console.log(res.err);
-				return;
-			}
-			location.href = '/distributors';
-		}
-	);
-}
+	await liotR.addDistributor({
+		name: grab('distributor-name').value,
+		push: grab('distributor-push').checked,
+		queue: grab('distributor-queue').checked,
+		callback: grab('distributor-callback').checked,
+		url: grab('distributor-url').value,
+		collators: Array.from(document.getElementsByTagName('select')).map(
+			({ value }) => value
+		)
+	});
+	location.href = '/distributors';
+};
 function err(text) {
 	grab('compile-errors').innerHTML = text || 'Ready';
 	setc('compile-errors', 'invalid-json', text);

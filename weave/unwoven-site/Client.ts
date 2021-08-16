@@ -1,9 +1,13 @@
 // just `npm i XMLHttpRequest` if you're running this in Node.js
+import { NewCollector } from '../../types/Collector';
+import { Collator, NewCollator } from '../../types/Collator';
+import { Distributor, NewDistributor } from '../../types/Distributor';
+
 if (typeof XMLHttpRequest === 'undefined') {
 	XMLHttpRequest = require('XMLHttpRequest');
 }
 
-export class LiotRClient {
+export class Client {
 	/**
 	 * The URL of the Liot R server to connect to.
 	 */
@@ -37,13 +41,13 @@ export class LiotRClient {
 	 * Creates one or more packet collectors.
 	 * @namespace API
 	 * @function addCollectors
-	 * @param {object} data - the parameters of the query
 	 * @param {array} data.filters - the details of the filters to insert
-	 * @param {function} callback - the function to call when the post completes or errors.
 	 * @returns {object} the XMLHttpRequest creating for the post.
+	 * @param collectors
 	 */
 
-	addCollectors = data => this.post('addCollectors', data);
+	addCollectors = (collectors: NewCollector[]) =>
+		this.post('addCollectors', { collectors });
 
 	/**
 	 * Lists any packet collectors.
@@ -67,7 +71,7 @@ export class LiotRClient {
 	 * @returns {object} The XMLHttpRequest creating for the post.
 	 */
 
-	getCollectors = data => this.post('getCollectors', data);
+	getCollectors = (ids: string[]) => this.post('getCollectors', { ids });
 
 	/**
 	 * Lists any packet collectors.
@@ -94,29 +98,41 @@ export class LiotRClient {
 
 	listFilterReferrers = data => this.post('listFilterReferrers', data);
 
-	addCollators = (collators: any[]) => this.post('addCollators', collators);
+	addCollators = (collators: (Collator | NewCollator)[]) =>
+		this.post('addCollators', collators);
 
-	addCollator = collator => this.addCollators([collator]);
+	addCollator = (collator: Collator | NewCollator) =>
+		this.addCollators([collator]);
 
 	listCollators = data => this.post('listCollators', data);
 
-	getCollators = (ids: string[]) => this.post('getCollators', { ids });
+	getCollators = (ids: string[]): Promise<Collator[]> =>
+		this.post('getCollators', { ids });
 
-	getCollator = (id: string) => this.getCollators([id]);
+	getCollator = async (id: string): Promise<Collator> =>
+		(await this.getCollators([id]))[0];
 
 	deleteCollators = (ids: string[]) => this.post('deleteCollators', { ids });
 
-	countCollatorReferences = (ids: any[]) =>
+	countCollatorReferences = (ids: string[]) =>
 		this.post('countCollatorReferences', { ids });
 
-	addDistributors = data => this.post('addDistributors', data);
+	addDistributors = (distributors: (NewDistributor | Distributor)[]) =>
+		this.post('addDistributors', { distributors });
+
+	addDistributor = (distributor: NewDistributor | Distributor) =>
+		this.addDistributors([distributor]);
 
 	listDistributors = data => this.post('listDistributors', data);
 
 	getDistributors = (ids: string[]) => this.post('getDistributors', { ids });
+	getDistributor = async (id: string) =>
+		(await this.getDistributors([id]))?.[0];
 
 	deleteDistributors = (ids: string[]) =>
 		this.post('deleteDistributors', { ids });
+
+	deleteDistributor = (id: string) => this.deleteDistributors([id]);
 
 	pushUpdate = data => this.post('pushUpdate', data);
 }

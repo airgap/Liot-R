@@ -1,8 +1,8 @@
 //The filter ID from the URL
 import { appendCollators, getPageId } from '../../script.js';
 import { addc, bind, grab, load, setc } from '../../bonus.js';
-import { LiotRClient } from '../../liotRClient.js';
-const liotR = new LiotRClient();
+import { Client } from '../../Client.js';
+const liotR = new Client();
 var ID = getPageId();
 
 //Comparators for the Liot filter code JSON parser

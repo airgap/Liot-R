@@ -1,4 +1,4 @@
-import { addc, bind, togc } from './bonus.js';
+import { addc, bind, setc, togc } from './bonus.js';
 export function grab(elem, root?) {
 	return typeof elem === 'string'
 		? (grab(root) || document).getElementById(elem)
@@ -219,3 +219,9 @@ export const bindBubble = (bubble, { id }) =>
 	bind(bubble, 'click', () => (location.href = `/filters/edit?id=${id}`));
 
 export const getPageId = () => location.href.match(/\?id=(.+)$/)?.[1];
+
+export const err = (text: string) => {
+	grab('compile-errors').innerHTML = text || 'Ready';
+	setc('compile-errors', 'invalid-json', text);
+	setc('save-button', 'disabled', text);
+};

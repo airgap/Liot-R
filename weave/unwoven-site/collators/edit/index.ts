@@ -1,18 +1,18 @@
 import { load, grab, bind, setc, addc } from '../../bonus.js';
-import { LiotRClient } from '../../liotRClient.js';
-import { getPageId } from '../../script.js';
-const liotR = new LiotRClient();
+import { Client } from '../../Client.js';
+import { err, getPageId } from '../../script.js';
+const liotR = new Client();
 const id = getPageId();
 let filters = [];
 load(async () => {
 	({ filters } = await liotR.listFilters({}));
-	const collator = (await liotR.getCollators([id]))?.collators?.[0];
+	const collator = await liotR.getCollator(id);
 	if (!collator) throw 'Unable to find a collator with that ID';
 
 	console.log(collator);
 	grab('item-id').innerHTML = '[' + collator.id + ']';
 	grab('collator-name').value = collator.name || '';
-	for (var filter of collator.filtrets) addFilter(filter.id);
+	for (var filter of collator.filters) addFilter(filter);
 	const refcount = (await liotR.countCollatorReferences([id]))?.collators?.[0]
 		?.refcount;
 	if (typeof refcount !== 'number')
@@ -50,7 +50,7 @@ const save = async () => {
 		filters: Array.from(document.getElementsByTagName('select')).map(
 			({ value }) => value
 		),
-		id: id
+		id
 	});
 	location.href = '/collators';
 };
@@ -64,8 +64,3 @@ const deletef = async () => {
 		location.href = '/collators';
 	}
 };
-function err(text) {
-	grab('compile-errors').innerHTML = text || 'Ready';
-	setc('compile-errors', 'invalid-json', text);
-	setc('save-button', 'disabled', text);
-}
