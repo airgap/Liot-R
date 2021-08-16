@@ -220,7 +220,7 @@ export const bindBubble = (bubble, { id }) =>
 
 export const getPageId = () => location.href.match(/\?id=(.+)$/)?.[1];
 
-export const err = (text: string) => {
+export const err = (text: string = '') => {
 	grab('compile-errors').innerHTML = text || 'Ready';
 	setc('compile-errors', 'invalid-json', text);
 	setc('save-button', 'disabled', text);

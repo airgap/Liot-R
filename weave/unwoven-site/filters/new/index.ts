@@ -32,6 +32,7 @@ load(() => {
 		}
 		var queued = 0;
 		recur(json);
+
 		function recur(tree, current?) {
 			//console.log(tree, current);
 			queued++;
@@ -98,29 +99,14 @@ load(() => {
 		}
 	});
 });
-function save() {
-	//addc('save-button', 'disabled');
-	err('Creating filter...');
-	var name = grab('filter-name').value;
-	var code = grab('filter-code').value;
-	liotR.addFilters(
-		{
-			filters: [
-				{
-					name: name,
-					code: code
-				}
-			]
-		},
-		res => {
-			if (res.err) {
-				console.log(res.err);
-				return;
-			}
-			location.href = '/filters';
-		}
-	);
-}
+const save = async () => {
+	await liotR.addFilter({
+		name: grab('filter-name').value,
+		code: grab('filter-code').value
+	});
+	location.href = '/filters';
+};
+
 function err(text?) {
 	grab('compile-errors').innerHTML = text || 'Ready';
 	setc('compile-errors', 'invalid-json', text);

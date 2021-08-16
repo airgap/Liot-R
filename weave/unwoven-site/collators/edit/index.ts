@@ -12,7 +12,7 @@ load(async () => {
 	console.log(collator);
 	grab('item-id').innerHTML = '[' + collator.id + ']';
 	grab('collator-name').value = collator.name || '';
-	for (var filter of collator.filters) addFilter(filter);
+	for (var filter of collator.filterIds) addFilter(filter);
 	const refcount = (await liotR.countCollatorReferences([id]))?.collators?.[0]
 		?.refcount;
 	if (typeof refcount !== 'number')
@@ -47,7 +47,7 @@ const save = async () => {
 	err('Creating collator...');
 	await liotR.addCollator({
 		name: grab('collator-name').value,
-		filters: Array.from(document.getElementsByTagName('select')).map(
+		filterIds: Array.from(document.getElementsByTagName('select')).map(
 			({ value }) => value
 		),
 		id

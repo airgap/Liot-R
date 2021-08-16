@@ -1,5 +1,5 @@
 //The filter ID from the URL
-import { appendCollators, getPageId } from '../../script.js';
+import { appendCollators, err, getPageId } from '../../script.js';
 import { addc, bind, grab, load, setc } from '../../bonus.js';
 import { Client } from '../../Client.js';
 const liotR = new Client();
@@ -21,38 +21,28 @@ var COMPARATORS = [
 var OPERATORS = ['AND', 'OR', 'NAND', 'NOR', 'XOR', 'SAME'];
 
 //Prep form when page is loaded
-load(() => {
+load(async () => {
 	//Get the details for the selected filter
-	liotR.getFilters({ ids: [ID] }, res => {
-		var filter;
-		//Ensure a filter was actually returned; if so, populate form
-		if (res.filters && (filter = res.filters[0])) {
-			grab('item-id').innerHTML = '[' + filter.id + ']';
-			grab('filter-name').value = filter.name || '';
-			grab('filter-code').value = filter.code || '{}';
-		}
-		//List all the collators referring to the filter
-		liotR.listFilterReferrers({ ids: [ID] }, res => {
-			if (res.err || !res.filters.length) {
-				console.log(err || 'No filter found.');
-				return;
-			}
-			//Dump the list to console
-			console.log(res);
-			//Only one filter was queried; select it
-			var filt = res.filters[0];
-			//Count the number of collators referencing it
-			grab('reference-count').innerHTML =
-				'Used by ' + filt.referrers.length + ' collators.';
-			//List and link to the collators referencing it
-			var referrerList = grab('referrer-list');
-			appendCollators(filt.referrers, referrerList, ID);
-			//disable the delete button if the filter is referenced by any
-			if (filt.referrers.length) addc('delete-button', 'disabled');
-			if (filt.referrers.length)
-				grab('delete-button').innerHTML = 'Undeletable';
-		});
-	});
+	const filter = await liotR.getFilter(ID);
+	//Ensure a filter was actually returned; if so, populate form
+	grab('item-id').innerHTML = '[' + filter.id + ']';
+	grab('filter-name').value = filter.name || '';
+	grab('filter-code').value = filter.code || '{}';
+	//List all the collators referring to the filter
+	const { referrers } = await liotR.listFiltersReferrers([ID]);
+	if (!referrers) {
+		console.log(err || 'No filter found.');
+		return;
+	}
+	//Count the number of collators referencing it
+	grab('reference-count').innerHTML =
+		'Used by ' + referrers.length + ' collators.';
+	//List and link to the collators referencing it
+	var referrerList = grab('referrer-list');
+	appendCollators(referrers, referrerList, ID);
+	//disable the delete button if the filter is referenced by any
+	if (referrers.length) addc('delete-button', 'disabled');
+	if (referrers.length) grab('delete-button').innerHTML = 'Undeletable';
 	//Get the filter's code box in the form
 	var codeBox = grab('filter-code');
 	//Validate the filter code
@@ -108,10 +98,7 @@ load(() => {
 					}
 				} else {
 					err(
-						'Operator ' +
-							current +
-							' expects 2 parameters, not ' +
-							keys.length
+						`Operator ${current} expects 2 parameters, not ${keys.length}`
 					);
 					return;
 				}
@@ -135,47 +122,26 @@ load(() => {
 	});
 });
 //Save the filter to the database
-function save() {
+const save = async () => {
 	//addc('save-button', 'disabled');
 	err('Updating filter...');
 	var name = grab('filter-name').value;
 	var code = grab('filter-code').value;
-	liotR.addFilters(
-		{
-			filters: [
-				{
-					name: name,
-					code: code,
-					id: ID
-				}
-			]
-		},
-		res => {
-			if (res.err) {
-				console.log(res.err);
-				return;
-			}
-			location.href = '/filters';
-		}
-	);
-}
+	await liotR.addFilter({
+		name: name,
+		code: code,
+		id: ID
+	});
+	location.href = '/filters';
+};
 //Delete the filter
-function deletef() {
+const deletef = async () => {
 	if (
 		confirm(
 			'Are you sure you wish to delete this filter? This action cannot be undone.'
 		)
 	) {
-		liotR.deleteFilters({ ids: [ID] }, res => {
-			location.href = 'filters';
-		});
+		await liotR.deleteFilter(ID);
+		location.href = 'filters';
 	}
-}
-
-//Logging
-function err(text = '') {
-	/*grab('compile-errors').innerHTML = text||"Ready";
-	setc('compile-errors', 'invalid-json', text)*/
-	console.log(text);
-	setc('save-button', 'disabled', text);
-}
+};

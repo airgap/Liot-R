@@ -1,7 +1,16 @@
 // just `npm i XMLHttpRequest` if you're running this in Node.js
 import { NewCollector } from '../../types/Collector';
-import { Collator, NewCollator } from '../../types/Collator';
+import {
+	Collator,
+	CollatorWithFilters,
+	NewCollator
+} from '../../types/Collator';
 import { Distributor, NewDistributor } from '../../types/Distributor';
+import {
+	Filter,
+	FilterWithReferenceCount,
+	NewFilter
+} from '../../types/Filter';
 
 if (typeof XMLHttpRequest === 'undefined') {
 	XMLHttpRequest = require('XMLHttpRequest');
@@ -87,16 +96,24 @@ export class Client {
 
 	listFilters = data => this.post('listFilters', data);
 
-	addFilters = data => this.post('addFilters', data);
+	addFilters = (filters: (Filter | NewFilter)[]) =>
+		this.post('addFilters', { filters });
+
+	addFilter = (filter: Filter | NewFilter) => this.addFilters([filter]);
 
 	getFilters = (ids: string[]) => this.post('getFilters', { ids });
+	getFilter = (id: string) => this.getFilters([id]);
 
 	deleteFilters = (ids: string[]) => this.post('deleteFilters', { ids });
 
-	countFilterReferences = (ids: string[]) =>
+	deleteFilter = (id: string) => this.deleteFilters([id]);
+
+	countFilterReferences = (
+		ids: string[]
+	): Promise<FilterWithReferenceCount[]> =>
 		this.post('countFilterReferences', { ids });
 
-	listFilterReferrers = data => this.post('listFilterReferrers', data);
+	listFiltersReferrers = data => this.post('listFilterReferrers', data);
 
 	addCollators = (collators: (Collator | NewCollator)[]) =>
 		this.post('addCollators', collators);
@@ -106,10 +123,10 @@ export class Client {
 
 	listCollators = data => this.post('listCollators', data);
 
-	getCollators = (ids: string[]): Promise<Collator[]> =>
+	getCollators = (ids: string[]): Promise<CollatorWithFilters[]> =>
 		this.post('getCollators', { ids });
 
-	getCollator = async (id: string): Promise<Collator> =>
+	getCollator = async (id: string): Promise<CollatorWithFilters> =>
 		(await this.getCollators([id]))[0];
 
 	deleteCollators = (ids: string[]) => this.post('deleteCollators', { ids });
