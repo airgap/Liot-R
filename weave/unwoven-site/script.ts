@@ -218,4 +218,4 @@ export function appendDropper(bubble) {
 export const bindBubble = (bubble, { id }) =>
 	bind(bubble, 'click', () => (location.href = `/filters/edit?id=${id}`));
 
-export const getPageId = () => location.href.match(/\?id=(.+)$/)?.[1] ?? 0;
+export const getPageId = () => location.href.match(/\?id=(.+)$/)?.[1];

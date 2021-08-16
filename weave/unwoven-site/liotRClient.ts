@@ -78,38 +78,45 @@ export class LiotRClient {
 	 * @param {number} [data.count = 100] - Return up to this many collectors. Default 100.
 	 * @returns {object} The deleted collectors.
 	 */
-	deleteCollectors = data => this.post('deleteCollectors', data);
+	deleteCollectors = (ids: string[]) =>
+		this.post('deleteCollectors', { ids });
 
 	listFilters = data => this.post('listFilters', data);
 
 	addFilters = data => this.post('addFilters', data);
 
-	getFilters = data => this.post('getFilters', data);
+	getFilters = (ids: string[]) => this.post('getFilters', { ids });
 
-	deleteFilters = data => this.post('deleteFilters', data);
+	deleteFilters = (ids: string[]) => this.post('deleteFilters', { ids });
 
-	countFilterReferences = data => this.post('countFilterReferences', data);
+	countFilterReferences = (ids: string[]) =>
+		this.post('countFilterReferences', { ids });
 
 	listFilterReferrers = data => this.post('listFilterReferrers', data);
 
-	addCollators = data => this.post('addCollators', data);
+	addCollators = (collators: any[]) => this.post('addCollators', collators);
+
+	addCollator = collator => this.addCollators([collator]);
 
 	listCollators = data => this.post('listCollators', data);
 
-	getCollators = data => this.post('getCollators', data);
+	getCollators = (ids: string[]) => this.post('getCollators', { ids });
 
-	deleteCollators = data => this.post('deleteCollators', data);
+	getCollator = (id: string) => this.getCollators([id]);
 
-	countCollatorReferences = data =>
-		this.post('countCollatorReferences', data);
+	deleteCollators = (ids: string[]) => this.post('deleteCollators', { ids });
+
+	countCollatorReferences = (ids: any[]) =>
+		this.post('countCollatorReferences', { ids });
 
 	addDistributors = data => this.post('addDistributors', data);
 
 	listDistributors = data => this.post('listDistributors', data);
 
-	getDistributors = data => this.post('getDistributors', data);
+	getDistributors = (ids: string[]) => this.post('getDistributors', { ids });
 
-	deleteDistributors = data => this.post('deleteDistributors', data);
+	deleteDistributors = (ids: string[]) =>
+		this.post('deleteDistributors', { ids });
 
 	pushUpdate = data => this.post('pushUpdate', data);
 }

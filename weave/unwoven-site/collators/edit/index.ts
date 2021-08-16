@@ -2,19 +2,19 @@ import { load, grab, bind, setc, addc } from '../../bonus.js';
 import { LiotRClient } from '../../liotRClient.js';
 import { getPageId } from '../../script.js';
 const liotR = new LiotRClient();
-const ID = getPageId();
+const id = getPageId();
 let filters = [];
 load(async () => {
 	({ filters } = await liotR.listFilters({}));
-	const collator = (await liotR.getCollators({ ids: [ID] }))?.collators?.[0];
+	const collator = (await liotR.getCollators([id]))?.collators?.[0];
 	if (!collator) throw 'Unable to find a collator with that ID';
 
 	console.log(collator);
 	grab('item-id').innerHTML = '[' + collator.id + ']';
 	grab('collator-name').value = collator.name || '';
 	for (var filter of collator.filtrets) addFilter(filter.id);
-	const refcount = (await liotR.countCollatorReferences({ ids: [ID] }))
-		?.collators?.[0]?.refcount;
+	const refcount = (await liotR.countCollatorReferences([id]))?.collators?.[0]
+		?.refcount;
 	if (typeof refcount !== 'number')
 		throw 'Cannot count collator reference count';
 	grab('reference-count').innerHTML =
@@ -40,23 +40,17 @@ function addFilter(id) {
 	item.appendChild(rem);
 	item.appendChild(select);
 	grab('filter-list').insertBefore(item, grab('add-filter'));
-	bind(rem, 'click', k => {
-		item.parentNode.removeChild(item);
-	});
+	bind(rem, 'click', () => item.parentNode.removeChild(item));
 }
 const save = async () => {
 	//addc('save-button', 'disabled');
 	err('Creating collator...');
-	await liotR.addCollators({
-		collators: [
-			{
-				name: grab('collator-name').value,
-				filters: Array.from(
-					document.getElementsByTagName('select')
-				).map(({ value }) => value),
-				id: ID
-			}
-		]
+	await liotR.addCollator({
+		name: grab('collator-name').value,
+		filters: Array.from(document.getElementsByTagName('select')).map(
+			({ value }) => value
+		),
+		id: id
 	});
 	location.href = '/collators';
 };
@@ -66,7 +60,7 @@ const deletef = async () => {
 			'Are you sure you wish to delete this collator? This action cannot be undone.'
 		)
 	) {
-		await liotR.deleteCollators({ ids: [ID] });
+		await liotR.deleteCollators([id]);
 		location.href = '/collators';
 	}
 };
