@@ -5,5 +5,8 @@
  * @param {object} r - Connection to the RethinkDB database
  * @param {array} filters - List of filters to insert
  */
-export const insertFilters = (r, filters) =>
+import { Filter } from '../../types/Filter';
+import { WriteResult } from 'rethinkdb';
+
+export const insertFilters = (r, filters: Filter[]): Promise<WriteResult> =>
 	r.table('Filters').insert(filters, { conflict: 'replace' });

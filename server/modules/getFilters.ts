@@ -6,6 +6,7 @@
  * @param {array} filters - list of filters to retrieve
  * @param {function} callback - Function(error, result) to execute upon success or error
  */
+import { Filter } from '../../types/Filter';
 
-export const getFilters = async (r, filters) =>
+export const getFilters = async (r, filters: string[]): Promise<Filter[]> =>
 	r.table('Filters').filter(doc => r.expr(filters).contains(doc('id')));
