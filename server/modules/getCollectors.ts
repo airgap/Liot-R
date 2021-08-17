@@ -5,7 +5,10 @@
  * @param {object} r - Connection to the RethinkDB database
  * @param {array} collectors - List of collectors to retrieve
  */
-export const getCollectors = async (r, collectors) =>
-	r.table('Collectors').filter(doc => {
-		return r.expr(collectors).contains(doc('id'));
-	});
+import { Collector } from '../../types/Collector';
+
+export const getCollectors = async (
+	r,
+	collectors: string[]
+): Promise<Collector[]> =>
+	r.table('Collectors').filter(doc => r.expr(collectors).contains(doc('id')));

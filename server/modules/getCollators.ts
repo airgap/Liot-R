@@ -5,14 +5,15 @@
  * @param {object} r - Connection to the RethinkDB database
  * @param {array} collators - List of collators to retrieve
  */
-export const getCollators = (r, collators) =>
+import { CollatorWithFilters } from '../../types/Collator';
+
+export const getCollators = (r, collators): Promise<CollatorWithFilters[]> =>
 	r
 		.table('Collators')
 		.filter(doc => r.expr(collators).contains(doc('id')))
 		.merge(doc => ({
-			filtrets: r
+			filters: r
 				.table('Filters')
-				.getAll(r.args(doc('filters')))
+				.getAll(r.args(doc('filterIds')))
 				.coerceTo('array')
-		}))
-		.coerceTo('array');
+		}));

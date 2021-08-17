@@ -1,6 +1,11 @@
 export const getAfterCountOrderDirection = (
 	r,
-	{ after, count, order, direction }
+	{
+		after,
+		count,
+		order,
+		direction
+	}: { after: number; count: number; order: number; direction: string }
 ): [any, number, number, any] => [
 	r,
 	// after
