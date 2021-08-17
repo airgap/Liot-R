@@ -1,3 +1,5 @@
+import { WriteResult } from 'rethinkdb';
+
 /**
  * Delete one or more packet distributors.
  * @name Database: Delete Distributors
@@ -5,7 +7,10 @@
  * @param {object} r - Connection to the RethinkDB database
  * @param {array} distributors - List of distributor IDs to delete
  */
-export const deleteDistributors = (r, distributors) =>
+export const deleteDistributors = (
+	r,
+	distributors: string[]
+): Promise<WriteResult> =>
 	r
 		.table('Distributors')
 		.filter(doc => r.expr(distributors).contains(doc('id')))

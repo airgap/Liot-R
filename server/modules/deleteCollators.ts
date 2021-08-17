@@ -1,3 +1,5 @@
+import { WriteResult } from 'rethinkdb';
+
 /**
  * Delete one or more filter collators.
  * @name Database: Delete Collators
@@ -5,7 +7,7 @@
  * @param {object} r - Connection to the RethinkDB database
  * @param {array} collators - List of collator IDs to delete
  */
-export const deleteCollators = (r, collators) =>
+export const deleteCollators = (r, collators): Promise<WriteResult> =>
 	r
 		.table('Collators')
 		.filter(doc => {
