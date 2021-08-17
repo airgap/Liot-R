@@ -5,7 +5,8 @@
  * @param {object} r - Connection to the RethinkDB database
  * @param {array} filters - List of filter IDs to delete
  */
-export const deleteFilters = (r, filters) =>
+import { WriteResult } from 'rethinkdb';
+export const deleteFilters = (r, filters: string[]): Promise<WriteResult> =>
 	r
 		.table('Filters')
 		.filter(doc => {
