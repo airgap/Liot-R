@@ -7,7 +7,15 @@
  * @param {number} count - number of distributors to return
  * @param {string|object} order - key or method for sorting
  */
-export const listDistributors = async (r, after, count, order) => {
+import { DistributorWithCollators } from '../../types/Distributor';
+import { CollatorWithFilters } from '../../types/Collator';
+
+export const listDistributors = async (
+	r,
+	after,
+	count,
+	order
+): Promise<DistributorWithCollators<CollatorWithFilters>[]> => {
 	const total = await r.table('Distributors').count();
 	if (after < 0) after += total;
 	after = Math.max(0, after);
@@ -16,13 +24,13 @@ export const listDistributors = async (r, after, count, order) => {
 		.orderBy(order)
 		.slice(after, after + count)
 		.merge(doc => ({
-			collets: r
+			collators: r
 				.table('Collators')
-				.getAll(r.args(doc('collators')))
+				.getAll(r.args(doc('collatorIds')))
 				.merge(doc => ({
-					filtrets: r
+					filters: r
 						.table('Filters')
-						.getAll(r.args(doc('filters')))
+						.getAll(r.args(doc('filterIds')))
 						.coerceTo('array')
 				}))
 				.coerceTo('array')
